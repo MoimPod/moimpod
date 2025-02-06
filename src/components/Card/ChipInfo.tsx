@@ -1,3 +1,5 @@
+// components/Card/ChipInfo.tsx
+
 type ChipInfoProps = {
   dateTime: string;
   registrationEnd: string;

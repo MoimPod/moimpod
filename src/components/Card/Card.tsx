@@ -35,21 +35,27 @@ export default function Card({ name, location, dateTime, registrationEnd, partic
 
       {/* 카드 내용 */}
       <div className="flex-1 pb-3 pl-6 pr-6 pt-4">
-        {/* 카드 제목 */}
+        {/* 모임 제목 */}
         <div className="mb-2 flex items-center gap-2">
           <h2 className="text-lg font-bold">{name} |</h2>
           <p className="text-sm text-gray-500">{location}</p>
           <p className="ml-auto">❤️</p>
         </div>
+
+        {/* 날짜 정보 */}
         <ChipInfo dateTime={dateTime} registrationEnd={registrationEnd} />
 
-        {/* 카드 인원 정보 */}
+        {/* 인원 정보 */}
         <p className="mt-5 text-sm text-gray-500">
           {participantCount}/{capacity}
         </p>
-        <div className="mb-3 flex items-center gap-8">
+
+        <div className="mb-3 flex items-center gap-x-5">
           <ProgressBar progress={progress} />
-          <button className="whitespace-nowrap font-semibold text-orange-500">join now</button>
+          <button className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-orange-500">
+            join now
+            <Image src={"/images/card_arrow.svg"} alt={"화살표  ic"} width={24} height={24} />
+          </button>
         </div>
       </div>
     </div>
