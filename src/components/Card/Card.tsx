@@ -1,5 +1,3 @@
-// components/Card/Card.tsx
-
 import React from "react";
 import Image from "next/image";
 import ProgressBar from "./ProgressBar";

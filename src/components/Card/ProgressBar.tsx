@@ -1,5 +1,3 @@
-// components/Card/ProgressBar.tsx
-
 type ProgressBarProps = {
   progress: number;
 };
