@@ -1,5 +1,3 @@
-// components/Card/Tag.tsx
-
 import Image from "next/image";
 
 type TagProps = {
