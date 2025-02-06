@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   webpack(config) {
     // Grab the existing rule that handles SVG imports
-    const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.(".svg"));
+    const fileLoaderRule = config.module.rules.find((rule: any) => rule.test?.test?.(".svg"));
 
     config.module.rules.push(
       // Reapply the existing rule, but only for svg imports ending in ?url
