@@ -1,7 +1,11 @@
 import Heart from "@/images/heart.svg";
 import { useState } from "react";
 
-export default function LikeButton({ onClick }: { onClick: () => void }) {
+type LikeButtonProps = {
+  onClick: () => void;
+};
+
+export default function LikeButton({ onClick, ...rest }: LikeButtonProps) {
   const [clicked, setClicked] = useState(false);
   const handleClick = () => {
     setClicked(!clicked);
@@ -9,7 +13,7 @@ export default function LikeButton({ onClick }: { onClick: () => void }) {
   };
   return (
     <button
-      className="flex size-12 items-center justify-center rounded-full border-2 border-gray-200 bg-white"
+      className={`flex size-12 items-center justify-center rounded-full border-2 transition-all ${clicked ? "border-0 bg-orange-50" : "bg-white"} border-gray-200`}
       onClick={handleClick}
     >
       <Heart
