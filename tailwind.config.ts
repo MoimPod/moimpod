@@ -14,7 +14,7 @@ export default {
       },
       animation: {
         "heart-scale-up": "heart-scale-up 0.6s cubic-bezier(.77,1.74,.97,1.65)",
-        "hand-wave": "hand-wave 1s ",
+        "hand-wave": "hand-wave 1s ease-in-out",
       },
       keyframes: {
         "heart-scale-up": {
@@ -36,6 +36,9 @@ export default {
           },
           "75%": {
             transform: "rotate(20deg)",
+          },
+          "100%": {
+            transform: "rotate(0deg)",
           },
         },
       },
