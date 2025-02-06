@@ -1,3 +1,90 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+
 export default function SignIn() {
-  return <div>Welcome to 같이 달램!</div>;
+  const [email, setEmail] = useState("");
+  const [emailHelper, setEmailHelper] = useState(false);
+  const [password, setPassword] = useState("");
+  const [passwordHelper, setPasswordHelper] = useState(false);
+  const [passwordOpen, setPasswordOpen] = useState(false);
+
+  const handleLogin = () => {
+    setEmailHelper(email !== "rrrr");
+    setPasswordHelper(password !== "0000");
+  };
+  return (
+    <div className="flex min-h-screen flex-col bg-gray-100 px-4 pb-[72px] pt-8 xl:min-h-[calc(100vh-60px)] xl:flex-row xl:items-center xl:justify-center xl:gap-[100px]">
+      <div className="flex flex-col items-center gap-6">
+        <div className="flex flex-col items-center justify-center gap-2 text-center">
+          <p className="text-xl font-semibold text-gray-800 md:text-2xl">Welcome to 같이 달램!</p>
+          <p className="text-sm font-medium text-gray-800 md:text-base">
+            바쁜 일상 속 잠깐의 휴식, <br />
+            이제는 같이 달램과 함께 해보세요
+          </p>
+        </div>
+        <div className="relative aspect-[290/250] w-full md:max-w-[410px] xl:w-[590px]">
+          <Image src={"/images/auth_main_img.png"} alt={""} fill className="object-cover" />
+        </div>
+      </div>
+      <div className="m-auto flex w-full flex-col rounded-3xl bg-white px-4 py-8 md:max-w-[608px] xl:m-0 xl:max-w-[510px]">
+        <p className="text-center text-xl font-semibold text-gray-800">로그인</p>
+        <div className="m-auto w-full max-w-[500px]">
+          <div className="flex flex-col gap-2 pt-8">
+            <p className="text-sm font-semibold text-gray-800">아이디</p>
+            <input
+              type="text"
+              placeholder="이메일을 입력해주세요."
+              className="rounded-xl bg-gray-50 px-4 py-2.5 text-sm placeholder:text-gray-400"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            {emailHelper ? <p className="text-sm font-semibold text-red-600">존재하지 않는 아이디입니다.</p> : <></>}
+          </div>
+          <div className="flex flex-col gap-2 pt-6">
+            <p className="text-sm font-semibold text-gray-800">비밀번호</p>
+            <div className="relative">
+              <input
+                type={!passwordOpen ? "password" : "text"}
+                placeholder="비밀번호를 입력해주세요."
+                className="w-full rounded-xl bg-gray-50 px-4 py-2.5 text-sm placeholder:text-gray-400"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                className="absolute right-4 top-1/2 -translate-y-1/2"
+                onClick={() => {
+                  setPasswordOpen((prev) => !prev);
+                }}
+              >
+                {!passwordOpen ? (
+                  <Image src={"/images/password_off.svg"} alt={""} width={24} height={24} />
+                ) : (
+                  <Image src={"/images/password_on.svg"} alt={""} width={24} height={24} />
+                )}
+              </button>
+            </div>
+            {passwordHelper ? (
+              <p className="text-sm font-semibold text-red-600">비밀번호가 일치하지 않습니다.</p>
+            ) : (
+              <></>
+            )}
+          </div>
+          <button
+            className="mt-10 h-10 w-full rounded-xl bg-orange-600 text-base font-semibold text-white disabled:bg-gray-400"
+            disabled={!email || !password}
+            onClick={handleLogin}
+          >
+            로그인
+          </button>
+          <div className="flex-ro mt-6 flex justify-center">
+            <p className="text-[15px] font-medium text-gray-800">같이 달램이 처음이신가요?</p>
+            <Link href={"/auth/sign-up"} className="border-b border-orange-600 text-[15px] font-medium text-orange-600">
+              회원가입
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
