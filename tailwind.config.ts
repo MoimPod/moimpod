@@ -13,7 +13,7 @@ export default {
         foreground: "var(--foreground)",
       },
       animation: {
-        "heart-scale-up": "heart-scale-up 0.5s cubic-bezier(.77,1.74,.97,1.65)",
+        "heart-scale-up": "heart-scale-up 0.6s cubic-bezier(.77,1.74,.97,1.65)",
       },
       keyframes: {
         "heart-scale-up": {
