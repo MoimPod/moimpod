@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export function useEscapeKey(isOpen: boolean, onClose: () => void) {
+export const useEscapeKey = (isOpen: boolean, onClose: () => void) => {
   useEffect(() => {
     if (isOpen) {
       const handleKeyDown = (e: KeyboardEvent) => {
@@ -16,4 +16,4 @@ export function useEscapeKey(isOpen: boolean, onClose: () => void) {
       };
     }
   }, [isOpen, onClose]);
-}
+};
