@@ -23,7 +23,7 @@ export default function ListItem() {
             개설 확정
           </div>
         </div>
-        <div className="mb-[5px] flex w-full max-w-[311px] items-center">
+        <div className="mb-[5px] flex w-full max-w-[311px] items-center md:max-w-max">
           <span className="text-lg font-semibold">
             달램핏 오피스 스트레칭 | <span className="text-sm">을지로 3가</span>
           </span>
