@@ -30,6 +30,14 @@ export default function ListItem() {
           <Heart className="fill-red-600" />
           <Heart className="fill-red-600" />
         </div>
+        <div className="mb-2">
+          <p className="over w-full break-words text-sm text-gray-700">
+            이 속성은 처음에 마이크로소프트에서 표준이 아니고 접두어가 없는 word-wrap으로 나왔고, 대부분 브라우저에서
+            똑같은 이름으로 구현되었습니다. 요즘은 overflow-wrap으로 다시 지어지고, word-wrap은 동의어가 되었습니다.이
+            속성은 처음에 마이크로소프트에서 표준이 아니고 접두어가 없는 word-wrap으로 나왔고, 대부분 브라우저에서
+            똑같은 이름으로 구현되었습니다. 요즘은 overflow-wrap으로 다시 지어지고, word-wrap은 동의어가 되었습니다.
+          </p>
+        </div>
         <div className="mb-[5px] flex w-full max-w-[311px] items-center md:max-w-max">
           <span className="text-lg font-semibold">
             달램핏 오피스 스트레칭 | <span className="text-sm">을지로 3가</span>
@@ -111,4 +119,14 @@ ListItem.MeetingScore = ({ score }: MeetingScoreProps) => {
   );
 };
 
+type ReviewCommentProps = {
+  comment: string;
+};
+ListItem.ReviewComment = ({ comment }: ReviewCommentProps) => {
+  return (
+    <div className="mb-2">
+      <p className="over w-full break-words text-sm text-gray-700">{comment}</p>
+    </div>
+  );
+};
 // score comment, createdAt, User.id, User.name, User.image
