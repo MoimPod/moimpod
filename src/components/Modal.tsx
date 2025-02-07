@@ -21,7 +21,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="relative rounded-lg bg-white p-[24px] shadow-lg">
-        <button className="absolute right-[24px] top-[24px]" onClick={onClose}>
+        <button className="absolute right-[24px] top-[24px] cursor-pointer" onClick={onClose}>
           <Close />
         </button>
         {children}
