@@ -56,6 +56,9 @@ export default function ListItem() {
             예약 취소하기
           </Button>
         </div> */}
+        <div className="mb-2 flex w-full max-w-[311px] items-center md:max-w-max">
+          <span className="text-xs text-gray-700">달램핏 오피스 스트레칭 이용 · 을지로 3가</span>
+        </div>
         <div className="flex items-center gap-3 text-xs text-gray-500">
           <div className="flex items-center gap-3">
             <Profile width="24" height="24" />
@@ -154,6 +157,21 @@ ListItem.ReviewInfo = ({ dateTime, username }: ReviewDate) => {
       </div>
       <span className="text-gray-700">|</span>
       <span>{formattedDate}</span>
+    </div>
+  );
+};
+
+ListItem.ReviewLocation = ({ location, meetingType }: MeetingLocationProps) => {
+  const meetingTypes = {
+    OFFICE_STRETCHING: "달램핏 오피스 스트레칭",
+    MINDFULNESS: "달램핏 마인드풀니스",
+    WORKATION: "워케이션",
+  };
+  return (
+    <div className="mb-2 flex w-full max-w-[311px] items-center md:max-w-max">
+      <span className="text-xs text-gray-700">
+        {meetingTypes[meetingType]} 이용 · {location}
+      </span>
     </div>
   );
 };
