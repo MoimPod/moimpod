@@ -23,14 +23,13 @@ export default function ListItem() {
             개설 확정
           </div>
         </div>
-        <div className="mb-[5px] flex items-center">
-          <span className="text-lg font-semibold">달램핏 오피스 스트레칭 | </span>
-          {/*이 부분 공백{' '}이 린트에 걸려서 &nbsp 로 처리했는데 어떠신가요  **/}
-          &nbsp;
-          <span className="text-sm">을지로 3가</span>
+        <div className="mb-[5px] flex w-full max-w-[311px] items-center">
+          <span className="text-lg font-semibold">
+            달램핏 오피스 스트레칭 | <span className="text-sm">을지로 3가</span>
+          </span>
         </div>
         <div className="mb-4 flex items-center gap-3 text-sm">
-          <div>1월 7일 · 17:30 </div>
+          <span>1월 7일 · 17:30 </span>
           <div className="flex items-center gap-[2px] text-gray-700">
             <Person />
             <span>20/20</span>
