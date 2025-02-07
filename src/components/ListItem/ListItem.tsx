@@ -175,4 +175,18 @@ ListItem.ReviewLocation = ({ location, meetingType }: MeetingLocationProps) => {
     </div>
   );
 };
-// score comment, createdAt, User.id, User.name, User.image
+
+type ImageProps = {
+  imageSrc: string;
+};
+ListItem.Image = ({ imageSrc }: ImageProps) => {
+  return (
+    <Image
+      src={imageSrc}
+      alt="모임 이미지"
+      width={280}
+      height={156}
+      className="h-[156px] w-full max-w-[311px] rounded-3xl md:w-[280px]"
+    />
+  );
+};
