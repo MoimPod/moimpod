@@ -3,6 +3,7 @@ import testImg from "@/images/auth_main_img.png";
 import Person from "@/images/person.svg";
 import Button from "@/components/Button";
 import MeetingStatusChip from "@/components/ListItem/MeetingStatusChip";
+import Heart from "@/images/heart.svg";
 
 export default function ListItem() {
   return (
@@ -16,11 +17,18 @@ export default function ListItem() {
       />
       {/* 모임 정보 **/}
       <div className="flex flex-col">
-        <div className="mb-[11px] flex gap-2">
+        {/* <div className="mb-[11px] flex gap-2">
           <MeetingStatusChip styleType="upcoming">이용 예정</MeetingStatusChip>
           <MeetingStatusChip styleType="confirmed">개설확정</MeetingStatusChip>
           <MeetingStatusChip styleType="waiting">개설 대기</MeetingStatusChip>
           <MeetingStatusChip styleType="completed">이용 완료</MeetingStatusChip>
+        </div> */}
+        <div className="flex gap-0.5">
+          <Heart className="fill-red-600" />
+          <Heart className="fill-red-600" />
+          <Heart className="fill-red-600" />
+          <Heart className="fill-red-600" />
+          <Heart className="fill-red-600" />
         </div>
         <div className="mb-[5px] flex w-full max-w-[311px] items-center md:max-w-max">
           <span className="text-lg font-semibold">
@@ -89,3 +97,18 @@ ListItem.MeetingDetails = ({ dateTime, capacity, participantCount }: MeetingDeta
     </div>
   );
 };
+
+type MeetingScoreProps = {
+  score: number;
+};
+ListItem.MeetingScore = ({ score }: MeetingScoreProps) => {
+  return (
+    <div className="flex gap-0.5">
+      {Array.from({ length: score }, (_, index) => (
+        <Heart key={index} />
+      ))}
+    </div>
+  );
+};
+
+// score comment, createdAt, User.id, User.name, User.image
