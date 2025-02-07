@@ -8,12 +8,12 @@ import { HTMLAttributes } from "react";
 // participantCount가 >= 5 면 개설 확정
 // participantCount가 <= 5 면 개설 대기
 
-type MeetingStatusChipProps = {
+type StatusChipProps = {
   styleType: "upcoming" | "completed" | "confirmed" | "waiting";
   children: React.ReactNode;
 } & HTMLAttributes<HTMLDivElement>;
 
-export default function MeetingStatusChip({ styleType, children, className, ...rest }: MeetingStatusChipProps) {
+export default function StatusChip({ styleType, children, className, ...rest }: StatusChipProps) {
   const baseStyles = "break-keep rounded-3xl px-3 py-[6px] text-sm";
 
   const variantStyles = {
@@ -23,7 +23,7 @@ export default function MeetingStatusChip({ styleType, children, className, ...r
     waiting: "border border-gray-200 bg-white text-gray-500",
   };
   return (
-    <div className={cn(baseStyles, variantStyles[styleType], className)}>
+    <div className={cn(baseStyles, variantStyles[styleType], className)} {...rest}>
       {styleType === "confirmed" && <Check />}
       {children}
     </div>
