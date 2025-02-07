@@ -1,20 +1,22 @@
 "use client";
 
+import Input from "@/components/Input";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
-  const [emailHelper, setEmailHelper] = useState(false);
   const [password, setPassword] = useState("");
-  const [passwordHelper, setPasswordHelper] = useState(false);
-  const [passwordOpen, setPasswordOpen] = useState(false);
+  const [emailHelper, setEmailHelper] = useState("");
+  const [passwordHelper, setPasswordHelper] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleLogin = () => {
-    setEmailHelper(email !== "rrrr");
-    setPasswordHelper(password !== "0000");
+    setEmailHelper(email !== "rrrr@gmail.com" ? "존재하지 않는 아이디입니다." : "");
+    setPasswordHelper(password !== "0000" ? "비밀번호가 일치하지 않습니다." : "");
   };
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 px-4 pb-[72px] pt-8 xl:min-h-[calc(100vh-60px)] xl:flex-row xl:items-center xl:justify-center xl:gap-[100px]">
       <div className="flex flex-col items-center gap-6">
@@ -34,41 +36,37 @@ export default function SignIn() {
         <div className="m-auto w-full max-w-[500px]">
           <div className="flex flex-col gap-2 pt-8">
             <p className="text-sm font-semibold text-gray-800">아이디</p>
-            <input
-              type="text"
+            <Input
+              type={"email"}
               placeholder="이메일을 입력해주세요."
-              className="rounded-xl bg-gray-50 px-4 py-2.5 text-sm placeholder:text-gray-400"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
+              helperText={emailHelper}
             />
-            {emailHelper ? <p className="text-sm font-semibold text-red-600">존재하지 않는 아이디입니다.</p> : <></>}
           </div>
           <div className="flex flex-col gap-2 pt-6">
             <p className="text-sm font-semibold text-gray-800">비밀번호</p>
             <div className="relative">
-              <input
-                type={!passwordOpen ? "password" : "text"}
+              <Input
+                type={passwordVisible ? "text" : "password"}
                 placeholder="비밀번호를 입력해주세요."
-                className="w-full rounded-xl bg-gray-50 px-4 py-2.5 text-sm placeholder:text-gray-400"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                helperText={passwordHelper}
               />
               <button
-                className="absolute right-4 top-1/2 -translate-y-1/2"
-                onClick={() => {
-                  setPasswordOpen((prev) => !prev);
-                }}
+                type="button"
+                className="absolute right-4 top-[8.8px]"
+                onClick={() => setPasswordVisible((prev) => !prev)}
               >
-                {!passwordOpen ? (
-                  <Image src={"/images/password_off.svg"} alt={""} width={24} height={24} />
-                ) : (
-                  <Image src={"/images/password_on.svg"} alt={""} width={24} height={24} />
-                )}
+                <img
+                  src={passwordVisible ? "/images/password_on.svg" : "/images/password_off.svg"}
+                  alt="비밀번호 보기 토글"
+                  width={24}
+                  height={24}
+                />
               </button>
             </div>
-            {passwordHelper ? (
-              <p className="text-sm font-semibold text-red-600">비밀번호가 일치하지 않습니다.</p>
-            ) : (
-              <></>
-            )}
           </div>
           <button
             className="mt-10 h-10 w-full rounded-xl bg-orange-600 text-base font-semibold text-white disabled:bg-gray-400"
