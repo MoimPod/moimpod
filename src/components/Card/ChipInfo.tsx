@@ -16,13 +16,11 @@ export default function ChipInfo({ dateTime, registrationEnd }: ChipInfoProps) {
     <div className="flex gap-2">
       <div className="h-[24px] w-[58px] rounded-sm bg-gray-900">
         {/* dateTime */}
-        <div className="font-pretendard mt-1 text-center text-xs font-medium text-white">{formatDate(dateTime)}</div>
+        <div className="mt-1 text-center text-xs font-medium text-white">{formatDate(dateTime)}</div>
       </div>
       <div className="h-[24px] w-[58px] rounded-sm bg-gray-900">
         {/* registrationEnd */}
-        <div className="font-pretendard mt-1 text-center text-xs font-medium text-orange-500">
-          {formatDate(registrationEnd)}
-        </div>
+        <div className="mt-1 text-center text-xs font-medium text-orange-500">{formatDate(registrationEnd)}</div>
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ export default function Card({ name, location, dateTime, registrationEnd, partic
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
 
   return (
-    <div className="m-3 items-center rounded-3xl border-0 shadow md:flex md:h-[156px] lg:flex lg:h-[156px]">
+    <div className="my-5 items-center rounded-3xl border-0 shadow md:flex md:h-[156px] lg:flex lg:h-[156px]">
       {/* 카드 이미지 */}
       <div className="relative">
         <Tag text="오늘 21시 마감" />
@@ -35,8 +35,8 @@ export default function Card({ name, location, dateTime, registrationEnd, partic
       <div className="flex-1 pb-3 pl-6 pr-6 pt-4">
         {/* 모임 제목 */}
         <div className="mb-2 flex items-center gap-2">
-          <h2 className="font-pretendard text-lg font-bold">{name} |</h2>
-          <p className="font-pretendard text-sm text-gray-500">{location}</p>
+          <h2 className="text-lg font-bold">{name} |</h2>
+          <p className="text-sm text-gray-500">{location}</p>
           <p className="ml-auto">❤️</p>
         </div>
 
@@ -44,13 +44,13 @@ export default function Card({ name, location, dateTime, registrationEnd, partic
         <ChipInfo dateTime={dateTime} registrationEnd={registrationEnd} />
 
         {/* 인원 정보 */}
-        <p className="font-pretendard mt-5 text-sm text-gray-500">
+        <p className="mt-5 text-sm text-gray-500">
           {participantCount}/{capacity}
         </p>
 
         <div className="mb-3 flex items-center gap-x-5">
           <ProgressBar progress={progress} />
-          <button className="font-pretendard mr-4 flex gap-1 whitespace-nowrap font-semibold text-orange-500">
+          <button className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-orange-500">
             join now
             <Image src={"/images/card_arrow.svg"} alt={"화살표  ic"} width={24} height={24} />
           </button>

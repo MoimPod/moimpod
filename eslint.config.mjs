@@ -7,8 +7,8 @@ import tailwindPlugin from "eslint-plugin-tailwindcss";
 export default [
   js.configs.recommended,
   {
-    files: ["src/**/*.tsx"],
-    ignores: ["**/*.test.ts", "**/*.test.tsx", ".config.*", ".next/**", "node_modules/*","build/**/*"],
+    files: ["src//*.tsx"],
+    ignores: ["/.test.ts", "**/.test.tsx", ".config.", ".next/**", "node_modules/", "build/*/"],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -16,6 +16,9 @@ export default [
         tsconfigRootDir: import.meta.dirname,
       },
       sourceType: "module",
+      globals: {
+        React: "readonly",
+      },
     },
     plugins: {
       "@typescript-eslint": tsPlugin,
@@ -24,11 +27,16 @@ export default [
     },
     rules: {
       ...tsPlugin.configs.recommended.rules,
-      "prettier/prettier": "error",
       "@typescript-eslint/no-unused-vars": "warn",
       "no-console": "warn",
       "tailwindcss/no-custom-classname": "off",
       "tailwindcss/classnames-order": "warn",
+      "prettier/prettier": [
+        "error",
+        {
+          endOfLine: "auto",
+        },
+      ],
     },
   },
 ];
