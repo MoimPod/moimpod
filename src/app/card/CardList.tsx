@@ -1,14 +1,32 @@
 "use client";
 
 import React, { useEffect } from "react";
+import axios from "axios";
 import { useCardStore, CardData } from "@/stores/useCardStore";
 import Card from "@/components/Card/Card";
 import Image from "next/image";
 import CategoryButton from "./CategoryButton";
 import LocationSelect from "./LocationSelect";
+import ServiceTab from "./ServiceTab";
+import DateSelect from "./DateSelect";
 
 export default function CardList() {
   const { cards, setCards } = useCardStore();
+
+  const teamId = 3;
+
+  useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        const response = await axios.get<CardData[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}/${teamId}/gatherings`);
+        setCards(response.data);
+      } catch (error) {
+        console.error("목록 조회 데이터 가져오는 중 오류 발생", error);
+      }
+    };
+
+    fetchCards();
+  }, [setCards]);
 
   return (
     <div className="px-20 pt-10">
@@ -21,33 +39,18 @@ export default function CardList() {
       </div>
 
       <div>
-        <div className="flex gap-6">
-          <div>달램핏</div>
-          <div>위케이션</div>
-        </div>
+        <ServiceTab />
         <CategoryButton />
       </div>
       <hr />
       <div>
         <div>
           <LocationSelect />
+          <DateSelect />
         </div>
-        <Card
-          name="달빛 오피스 스트레칭"
-          dateTime="2025-02-06T17:30:00"
-          registrationEnd="2025-02-06T17:30:00"
-          location="서울 강남구"
-          participantCount={16}
-          capacity={20}
-        />
-        <Card
-          name="달빛 오피스 스트레칭"
-          dateTime="2025-02-06T17:30:00"
-          registrationEnd="2025-02-06T17:30:00"
-          location="서울 강남구"
-          participantCount={16}
-          capacity={20}
-        />
+        {cards.map((card) => (
+          <Card key={card.id} {...card} />
+        ))}
       </div>
     </div>
   );

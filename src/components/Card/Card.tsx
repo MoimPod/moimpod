@@ -7,21 +7,7 @@ import ProgressBar from "./ProgressBar";
 import ChipInfo from "./ChipInfo";
 import Tag from "./Tag";
 import testCard from "./testCard.png";
-
-type CardProps = {
-  teamId: number;
-  id: number;
-  type: string;
-  name: string;
-  dateTime: string;
-  registrationEnd: string;
-  location: string;
-  participantCount: number;
-  capacity: number;
-  image: string;
-  createdBy: number;
-  canceledAt: string | null;
-};
+import { CardData } from "@/stores/useCardStore";
 
 export default function Card({
   id,
@@ -32,7 +18,7 @@ export default function Card({
   participantCount,
   capacity,
   image,
-}: CardProps) {
+}: CardData) {
   const router = useRouter();
 
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;

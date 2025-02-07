@@ -5,6 +5,7 @@ import Image from "next/image";
 
 export default function LocationSelect() {
   const cities: Record<string, string[]> = {
+    지역전체: [],
     서울시: ["강남구", "서초구", "송파구"],
     경기도: ["수원시", "용인시", "성남시"],
     부산광역시: ["해운대구", "남구", "동구"],

@@ -19,6 +19,7 @@ export default [
       globals: {
         React: "readonly",
         console: "readonly",
+        process: "readonly",
       },
     },
     plugins: {
