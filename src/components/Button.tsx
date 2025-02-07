@@ -20,17 +20,17 @@ export default function Button({
   ...rest
 }: ButtonProps) {
   const baseStyles =
-    "w-full py-[10px] inline-flex items-center justify-center rounded-[12px] disabled:cursor-not-allowed";
+    "w-full py-[10px] inline-flex items-center justify-center rounded-[12px] font-semibold disabled:cursor-not-allowed";
 
   const variantStyles = {
-    solid: "bg-orange-600 text-white hover:bg-orange-700 disabled:bg-gray-400",
+    solid: "bg-orange-600 text-white hover:bg-orange-700 active:bg-orange-800 disabled:bg-gray-400",
     outline:
-      "border border-orange-600 text-orange-600 hover:text-orange-500 disabled:border-gray-400 disabled:text-gray-400",
+      "border border-orange-600 text-orange-600 hover:border-orange-500 hover:text-orange-500 active:text-orange-700 active:border-orange-700 disabled:border-gray-400 disabled:text-gray-400",
   };
 
   const sizeStyles = {
-    sm: "text-sm font-semibold",
-    lg: "text-base font-semibold",
+    sm: "text-sm",
+    lg: "text-base",
   };
 
   return (
@@ -39,7 +39,7 @@ export default function Button({
       disabled={loading || rest.disabled}
       {...rest}
     >
-      {loading ? <Spinner styleType={styleType} /> : <>{children}</>}
+      {loading ? <Spinner color={styleType === "solid" ? "white" : "gray"} /> : <>{children}</>}
     </button>
   );
 }
