@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 export default function LocationSelect() {
   const cities: Record<string, string[]> = {
@@ -13,44 +14,99 @@ export default function LocationSelect() {
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
 
+  const [isCityDropdownOpen, setCityDropdownOpen] = useState(false);
+  const [isDistrictDropdownOpen, setDistrictDropdownOpen] = useState(false);
+
   // 시,도 상태 업데이트
-  const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCity(e.target.value);
+  const handleCitySelect = (city: string) => {
+    setSelectedCity(city);
     setSelectedDistrict(""); // 시가 변경되면 구 선택 초기화
+    setCityDropdownOpen(false);
   };
 
   // 구, 군 상태 업데이트
-  const handleDistrictChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedDistrict(e.target.value);
+  const handleDistrictSelect = (district: string) => {
+    setSelectedDistrict(district);
+    setDistrictDropdownOpen(false);
   };
 
   return (
     <div className="my-3 flex gap-3">
-      <select
-        id="cities"
-        className="block w-[110px] rounded-lg border border-gray-100 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-        onChange={handleCityChange}
-      >
-        <option selected>시/도 선택</option>
-        {Object.keys(cities).map((city) => (
-          <option key={city} value={city}>
-            {city}
-          </option>
-        ))}
-      </select>
-      <select
-        id="districts"
-        className="block w-[110px] rounded-lg border border-gray-100 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-        onChange={handleDistrictChange}
-      >
-        <option selected>구/군 선택</option>
-        {selectedCity &&
-          cities[selectedCity]?.map((district) => (
-            <option key={district} value={district}>
-              {district}
-            </option>
-          ))}
-      </select>
+      <div className="relative">
+        <div
+          className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isCityDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} `}
+          onClick={() => setCityDropdownOpen(!isCityDropdownOpen)}
+        >
+          {selectedCity || "시/도 선택"}
+          {!isCityDropdownOpen ? (
+            <Image
+              src={"/images/dropdown_down_arrow_black.svg"}
+              alt={"화살표  ic"}
+              width={24}
+              height={24}
+              className="ml-auto"
+            />
+          ) : (
+            <Image
+              src={"/images/dropdown_down_arrow_white.svg"}
+              alt={"화살표  ic"}
+              width={24}
+              height={24}
+              className="ml-auto"
+            />
+          )}
+        </div>
+        {isCityDropdownOpen && (
+          <div className="absolute z-10 w-[110px] rounded-lg border bg-white p-2 text-sm font-medium shadow-md">
+            {Object.keys(cities).map((city) => (
+              <div key={city} onClick={() => handleCitySelect(city)} className="rounded-lg p-2 hover:bg-orange-100">
+                {city}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* District Dropdown */}
+      <div className="relative">
+        <div
+          className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isDistrictDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} `}
+          onClick={() => selectedCity && setDistrictDropdownOpen(!isDistrictDropdownOpen)}
+        >
+          {selectedDistrict || "구/군 선택"}
+          {!isDistrictDropdownOpen ? (
+            <Image
+              src={"/images/dropdown_down_arrow_black.svg"}
+              alt={"화살표  ic"}
+              width={24}
+              height={24}
+              className="ml-auto"
+            />
+          ) : (
+            <Image
+              src={"/images/dropdown_down_arrow_white.svg"}
+              alt={"화살표  ic"}
+              width={24}
+              height={24}
+              className="ml-auto"
+            />
+          )}
+        </div>
+        {isDistrictDropdownOpen && (
+          <div className="absolute z-10 w-[110px] rounded-lg border bg-white p-2 text-sm font-medium shadow-md">
+            {selectedCity &&
+              cities[selectedCity]?.map((district) => (
+                <div
+                  key={district}
+                  onClick={() => handleDistrictSelect(district)}
+                  className="rounded-lg p-2 hover:bg-orange-100"
+                >
+                  {district}
+                </div>
+              ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

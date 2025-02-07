@@ -7,8 +7,8 @@ import tailwindPlugin from "eslint-plugin-tailwindcss";
 export default [
   js.configs.recommended,
   {
-    files: ["src//*.tsx"],
-    ignores: ["/.test.ts", "**/.test.tsx", ".config.", ".next/**", "node_modules/", "build/*/"],
+    files: ["src/**/*.tsx"],
+    ignores: ["**/*.test.ts", "**/*.test.tsx", ".config.*", ".next/**", "node_modules/*", "build/**/*"],
     languageOptions: {
       parser: tsParser,
       parserOptions: {

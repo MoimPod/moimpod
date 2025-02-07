@@ -52,7 +52,7 @@ export default function Card({ name, location, dateTime, registrationEnd, partic
           <ProgressBar progress={progress} />
           <button className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-orange-500">
             join now
-            <Image src={"/images/card_arrow.svg"} alt={"화살표  ic"} width={24} height={24} />
+            <Image src={"/images/join_now_arrow.svg"} alt={"화살표  ic"} width={24} height={24} />
           </button>
         </div>
       </div>
