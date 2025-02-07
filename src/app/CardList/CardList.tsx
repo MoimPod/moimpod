@@ -1,9 +1,15 @@
+"use client";
+
+import React, { useEffect } from "react";
+import { useCardStore, CardData } from "@/stores/useCardStore";
 import Card from "@/components/Card/Card";
 import Image from "next/image";
 import CategoryButton from "./CategoryButton";
 import LocationSelect from "./LocationSelect";
 
 export default function CardList() {
+  const { cards, setCards } = useCardStore();
+
   return (
     <div className="px-20 pt-10">
       <div className="mb-5 flex gap-6">
