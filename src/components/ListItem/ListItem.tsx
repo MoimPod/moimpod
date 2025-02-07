@@ -4,6 +4,7 @@ import Person from "@/images/person.svg";
 import Button from "@/components/Button";
 import MeetingStatusChip from "@/components/ListItem/MeetingStatusChip";
 import Heart from "@/images/heart.svg";
+import Profile from "@/images/profile.svg";
 
 export default function ListItem() {
   return (
@@ -50,10 +51,18 @@ export default function ListItem() {
             <span>20/20</span>
           </div>
         </div>
-        <div>
+        {/* <div>
           <Button className="w-[120px]" size="sm" styleType="outline">
             예약 취소하기
           </Button>
+        </div> */}
+        <div className="flex items-center gap-3 text-xs text-gray-500">
+          <div className="flex items-center gap-3">
+            <Profile width="24" height="24" />
+            <span>닉네임이에요~</span>
+          </div>
+          <span className="text-gray-700">|</span>
+          <span>2024.12.14</span>
         </div>
       </div>
     </div>
@@ -126,6 +135,25 @@ ListItem.ReviewComment = ({ comment }: ReviewCommentProps) => {
   return (
     <div className="mb-2">
       <p className="over w-full break-words text-sm text-gray-700">{comment}</p>
+    </div>
+  );
+};
+
+type ReviewDate = {
+  dateTime: string;
+  username: string;
+};
+ListItem.ReviewInfo = ({ dateTime, username }: ReviewDate) => {
+  const date = new Date(dateTime);
+  const formattedDate = date.toLocaleDateString("ko-KR").replaceAll("-", ".");
+  return (
+    <div className="flex items-center gap-3 text-xs text-gray-500">
+      <div className="flex items-center gap-3">
+        <Profile width="24" height="24" />
+        <span>{username}</span>
+      </div>
+      <span className="text-gray-700">|</span>
+      <span>{formattedDate}</span>
     </div>
   );
 };
