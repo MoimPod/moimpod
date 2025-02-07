@@ -62,3 +62,30 @@ ListItem.MeetingLocation = ({ location, meetingType }: MeetingLocationProps) => 
     </div>
   );
 };
+
+type MeetingDetailsProps = {
+  dateTime: string;
+  capacity: number;
+  participantCount: number;
+};
+ListItem.MeetingDetails = ({ dateTime, capacity, participantCount }: MeetingDetailsProps) => {
+  const date = new Date(dateTime);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  return (
+    <div className="mb-4 flex items-center gap-3 text-sm">
+      <span>
+        {month}월 {day}일 · {hours}:{minutes}
+      </span>
+      <div className="flex items-center gap-[2px] text-gray-700">
+        <Person />
+        <span>
+          {participantCount}/{capacity}
+        </span>
+      </div>
+    </div>
+  );
+};
