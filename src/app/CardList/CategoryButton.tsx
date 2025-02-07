@@ -13,7 +13,7 @@ export default function CategoryButton() {
   };
 
   return (
-    <div className="flex gap-3">
+    <div className="mb-3 mt-2 flex gap-3">
       {categories.map((category, i) => {
         return (
           <div

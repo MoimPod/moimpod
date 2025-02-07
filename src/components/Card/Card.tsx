@@ -1,3 +1,6 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import React from "react";
 import Image from "next/image";
 import ProgressBar from "./ProgressBar";
@@ -6,19 +9,43 @@ import Tag from "./Tag";
 import testCard from "./testCard.png";
 
 type CardProps = {
+  teamId: number;
+  id: number;
+  type: string;
   name: string;
   dateTime: string;
   registrationEnd: string;
   location: string;
   participantCount: number;
   capacity: number;
+  image: string;
+  createdBy: number;
+  canceledAt: string | null;
 };
 
-export default function Card({ name, location, dateTime, registrationEnd, participantCount, capacity }: CardProps) {
+export default function Card({
+  id,
+  name,
+  location,
+  dateTime,
+  registrationEnd,
+  participantCount,
+  capacity,
+  image,
+}: CardProps) {
+  const router = useRouter();
+
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
 
+  const handleCardClick = () => {
+    router.push(`/card/${id}`);
+  };
+
   return (
-    <div className="my-5 items-center rounded-3xl border-0 shadow md:flex md:h-[156px] lg:flex lg:h-[156px]">
+    <div
+      onClick={handleCardClick}
+      className="my-5 items-center rounded-3xl border-0 shadow md:flex md:h-[156px] lg:flex lg:h-[156px]"
+    >
       {/* 카드 이미지 */}
       <div className="relative">
         <Tag text="오늘 21시 마감" />
