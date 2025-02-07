@@ -18,6 +18,7 @@ export default [
       sourceType: "module",
       globals: {
         React: "readonly",
+        console: "readonly",
       },
     },
     plugins: {
@@ -28,7 +29,7 @@ export default [
     rules: {
       ...tsPlugin.configs.recommended.rules,
       "@typescript-eslint/no-unused-vars": "warn",
-      "no-console": "warn",
+      "no-console": ["warn", { allow: ["warn", "error"] }],
       "tailwindcss/no-custom-classname": "off",
       "tailwindcss/classnames-order": "warn",
       "prettier/prettier": [
