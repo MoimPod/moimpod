@@ -15,7 +15,7 @@ export default function SignUp() {
   // helperText
   const [nameHelper, setNameHelper] = useState("");
   const [emailHelper, setEmailHelper] = useState("");
-  const [companyHelper, setCompnayHelper] = useState("");
+  const [companyHelper, setCompanyHelper] = useState("");
   const [passwordHelper, setPasswordHelper] = useState("");
   const [passwordCheckHelper, setPasswordCheckHelper] = useState("");
 
@@ -26,7 +26,7 @@ export default function SignUp() {
   const handleSignUp = () => {
     setNameHelper(name !== "홍길동" ? "이름을 입력해주세요." : "");
     setEmailHelper(email !== "rrrr@gmail.com" ? "중복된 이메일입니다." : "");
-    setCompnayHelper(company !== "코드잇" ? "회사명을 정확하게 입력해주세요" : "");
+    setCompanyHelper(company !== "코드잇" ? "회사명을 정확하게 입력해주세요" : "");
     setPasswordHelper(password !== "0000" ? "비밀번호를 입력해주세요." : "");
     setPasswordCheckHelper(passwordCheck !== "0000" ? "비밀번호가 일치하지 않습니다." : "");
   };
