@@ -1,8 +1,8 @@
 import Image from "next/image";
 import testImg from "@/images/auth_main_img.png";
-import Check from "@/images/check.svg";
 import Person from "@/images/person.svg";
 import Button from "@/components/Button";
+import MeetingStatusChip from "@/components/ListItem/MeetingStatusChip";
 
 export default function ListItem() {
   return (
@@ -17,11 +17,10 @@ export default function ListItem() {
       {/* 모임 정보 **/}
       <div className="flex flex-col">
         <div className="mb-[11px] flex gap-2">
-          <div className="break-keep rounded-3xl bg-orange-100 px-3 py-[6px] text-sm text-orange-600">이용 예정</div>
-          <div className="flex items-center gap-1 break-keep rounded-3xl border border-orange-100 bg-white px-3 py-[6px] text-sm text-orange-600">
-            <Check />
-            개설 확정
-          </div>
+          <MeetingStatusChip styleType="upcoming">이용 예정</MeetingStatusChip>
+          <MeetingStatusChip styleType="confirmed">개설확정</MeetingStatusChip>
+          <MeetingStatusChip styleType="waiting">개설 대기</MeetingStatusChip>
+          <MeetingStatusChip styleType="completed">이용 완료</MeetingStatusChip>
         </div>
         <div className="mb-[5px] flex w-full max-w-[311px] items-center md:max-w-max">
           <span className="text-lg font-semibold">
@@ -44,3 +43,22 @@ export default function ListItem() {
     </div>
   );
 }
+
+type MeetingLocationProps = {
+  location: "건대입구" | "을지로 3가" | "신림" | "홍대입구";
+  meetingType: "OFFICE_STRETCHING" | "MINDFULNESS" | "WORKATION";
+};
+ListItem.MeetingLocation = ({ location, meetingType }: MeetingLocationProps) => {
+  const meetingTypes = {
+    OFFICE_STRETCHING: "달램핏 오피스 스트레칭",
+    MINDFULNESS: "달램핏 마인드풀니스",
+    WORKATION: "워케이션",
+  };
+  return (
+    <div className="mb-[5px] flex w-full max-w-[311px] items-center md:max-w-max">
+      <span className="text-lg font-semibold">
+        {meetingTypes[meetingType]} | <span className="text-sm">{location}</span>
+      </span>
+    </div>
+  );
+};
