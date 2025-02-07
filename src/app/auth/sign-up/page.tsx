@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Image from "next/image";
 import Link from "next/link";
@@ -126,13 +127,13 @@ export default function SignUp() {
               </button>
             </div>
           </div>
-          <button
-            className="mt-10 h-10 w-full rounded-xl bg-orange-600 text-base font-semibold text-white disabled:bg-gray-400"
-            disabled={!name || !email || !company || !password || !passwordCheck}
+          <Button
+            children={"확인"}
+            size="lg"
             onClick={handleSignUp}
-          >
-            확인
-          </button>
+            disabled={!name || !email || !company || !password || !passwordCheck}
+            className="mt-10"
+          />
           <div className="flex-ro mt-6 flex justify-center">
             <p className="text-[15px] font-medium text-gray-800">이미 회원이신가요?</p>
             <Link href={"/auth/sign-in"} className="border-b border-orange-600 text-[15px] font-medium text-orange-600">
