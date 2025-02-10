@@ -6,9 +6,9 @@ import Image from "next/image";
 import ProgressBar from "./ProgressBar";
 import ChipInfo from "./ChipInfo";
 import Tag from "./Tag";
-import testCard from "./testCard.png";
+import testCard from "../../public/images/testCard.png";
 import { CardData } from "@/stores/useCardStore";
-import LikeButton from "../LikeButton";
+import LikeButton from "./LikeButton";
 
 export default function Card({
   id,

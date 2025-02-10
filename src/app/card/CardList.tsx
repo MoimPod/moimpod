@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useCardStore, CardData } from "@/stores/useCardStore";
-import Card from "@/components/Card/Card";
+import Card from "@/components/Card";
 import Image from "next/image";
 import CategoryButton from "./CategoryButton";
 import LocationSelect from "./LocationSelect";
