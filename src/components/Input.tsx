@@ -1,7 +1,8 @@
+import { HTMLInputTypeAttribute } from "react";
 import { FieldValues, UseFormRegister } from "react-hook-form";
 
 type InputProps<T extends FieldValues> = {
-  type?: string;
+  type?: HTMLInputTypeAttribute;
   placeholder: string;
   helperText?: string;
   register?: ReturnType<UseFormRegister<T>>;
