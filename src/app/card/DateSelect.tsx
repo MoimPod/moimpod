@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
-import Datepicker from "@/components/Datepicker";
+import { SimpleDatepicker } from "@/components/Datepicker";
 import { format } from "date-fns";
 
 export default function DateSelect() {
@@ -54,7 +54,7 @@ export default function DateSelect() {
       {/* 날짜 선택 */}
       {isDateDropdownOpen && (
         <div className="absolute rounded-lg border bg-white p-6 px-8 shadow-md">
-          <Datepicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
+          <SimpleDatepicker />
           {/* 버튼 */}
           <div className="mt-4 flex justify-center">
             <Button
@@ -72,6 +72,7 @@ export default function DateSelect() {
               styleType="solid"
               size="sm"
               className="m-2 h-[40px] w-[118px]"
+              disabled={!selectedDate} // 날짜가 선택되지 않으면 비활성화
               onClick={() => {
                 setDateDropdownOpen(false);
               }}
