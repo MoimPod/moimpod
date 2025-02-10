@@ -88,7 +88,9 @@ export default function SignIn() {
               </button>
             </div>
           </div>
-          <Button children={"로그인"} size="lg" disabled={!isValid} className="mt-10" type="submit" />
+          <Button size="lg" disabled={!isValid} className="mt-10" type="submit">
+            로그인
+          </Button>
           <div className="flex-ro mt-6 flex justify-center">
             <p className="text-[15px] font-medium text-gray-800">같이 달램이 처음이신가요?</p>
             <Link href={"/sign-up"} className="border-b border-orange-600 text-[15px] font-medium text-orange-600">

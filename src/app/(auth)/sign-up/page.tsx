@@ -150,7 +150,9 @@ export default function SignUp() {
               </button>
             </div>
           </div>
-          <Button children={"확인"} size="lg" disabled={!isValid} className="mt-10" />
+          <Button size="lg" disabled={!isValid} className="mt-10">
+            확인
+          </Button>
           <div className="flex-ro mt-6 flex justify-center">
             <p className="text-[15px] font-medium text-gray-800">이미 회원이신가요?</p>
             <Link href={"/sign-in"} className="border-b border-orange-600 text-[15px] font-medium text-orange-600">
