@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
+import ArrowDownBlackIcon from "@/images/dropdown_down_arrow_black.svg";
+import ArrowDownWhiteIcon from "@/images/dropdown_down_arrow_white.svg";
 
 export default function LocationSelect() {
   const cities: Record<string, string[]> = {
@@ -59,23 +60,7 @@ export default function LocationSelect() {
           onClick={() => setCityDropdownOpen(!isCityDropdownOpen)}
         >
           {selectedCity || "시/도 선택"}
-          {!isCityDropdownOpen ? (
-            <Image
-              src={"/images/dropdown_down_arrow_black.svg"}
-              alt={"화살표  ic"}
-              width={24}
-              height={24}
-              className="ml-auto"
-            />
-          ) : (
-            <Image
-              src={"/images/dropdown_down_arrow_white.svg"}
-              alt={"화살표  ic"}
-              width={24}
-              height={24}
-              className="ml-auto"
-            />
-          )}
+          {!isCityDropdownOpen ? <ArrowDownBlackIcon /> : <ArrowDownWhiteIcon />}
         </div>
         {isCityDropdownOpen && (
           <div className="absolute z-10 w-[110px] rounded-lg border bg-white p-2 text-sm font-medium shadow-md">
@@ -97,23 +82,7 @@ export default function LocationSelect() {
           onClick={() => selectedCity && setDistrictDropdownOpen(!isDistrictDropdownOpen)}
         >
           {selectedDistrict || "구/군 선택"}
-          {!isDistrictDropdownOpen ? (
-            <Image
-              src={"/images/dropdown_down_arrow_black.svg"}
-              alt={"화살표  ic"}
-              width={24}
-              height={24}
-              className="ml-auto"
-            />
-          ) : (
-            <Image
-              src={"/images/dropdown_down_arrow_white.svg"}
-              alt={"화살표  ic"}
-              width={24}
-              height={24}
-              className="ml-auto"
-            />
-          )}
+          {!isDistrictDropdownOpen ? <ArrowDownBlackIcon /> : <ArrowDownWhiteIcon />}
         </div>
         {isDistrictDropdownOpen && (
           <div className="absolute z-10 w-[110px] rounded-lg border bg-white p-2 text-sm font-medium shadow-md">

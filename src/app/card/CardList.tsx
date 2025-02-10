@@ -38,7 +38,6 @@ export default function CardList() {
           <div className="text-2xl font-semibold text-gray-900">지금 모임에 참여해보세요</div>
         </div>
       </div>
-
       <div>
         <ServiceTab />
         <CategoryButton />

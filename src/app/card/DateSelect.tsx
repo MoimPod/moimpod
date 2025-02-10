@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import Button from "@/components/Button";
-import { SimpleDatepicker } from "@/components/Datepicker";
+import { SimpleDatepicker, DatepickerWithTime } from "@/components/Datepicker";
 import { format } from "date-fns";
+import ArrowDownBlackIcon from "@/images/dropdown_down_arrow_black.svg";
+import ArrowDownWhiteIcon from "@/images/dropdown_down_arrow_white.svg";
 
 export default function DateSelect() {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -32,29 +33,14 @@ export default function DateSelect() {
         onClick={() => setDateDropdownOpen(!isDateDropdownOpen)}
       >
         {selectedDate ? format(selectedDate, "yy/MM/dd") : "날짜 선택"}
-        {!isDateDropdownOpen ? (
-          <Image
-            src={"/images/dropdown_down_arrow_black.svg"}
-            alt={"화살표  ic"}
-            width={24}
-            height={24}
-            className="ml-auto"
-          />
-        ) : (
-          <Image
-            src={"/images/dropdown_down_arrow_white.svg"}
-            alt={"화살표  ic"}
-            width={24}
-            height={24}
-            className="ml-auto"
-          />
-        )}
+        {!isDateDropdownOpen ? <ArrowDownBlackIcon /> : <ArrowDownWhiteIcon />}
       </div>
 
       {/* 날짜 선택 */}
       {isDateDropdownOpen && (
         <div className="absolute rounded-lg border bg-white p-6 px-8 shadow-md">
           <SimpleDatepicker />
+          <DatepickerWithTime />
           {/* 버튼 */}
           <div className="mt-4 flex justify-center">
             <Button
