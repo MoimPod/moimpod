@@ -2,16 +2,15 @@
 
 import Heart from "@/images/heart.svg";
 import Bye from "@/images/bye.svg";
-import { useState } from "react";
+import { ButtonHTMLAttributes, useState } from "react";
 
 type LikeButtonProps = {
   onClick: () => void;
   isClosed: boolean;
-};
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function LikeButton({ onClick, ...rest }: LikeButtonProps) {
+export default function LikeButton({ onClick, isClosed, ...rest }: LikeButtonProps) {
   // 모임이 마감, 취소된 경우
-  const { isClosed } = rest;
   const [clicked, setClicked] = useState(false);
   const handleClick = () => {
     setClicked(!clicked);
@@ -21,6 +20,7 @@ export default function LikeButton({ onClick, ...rest }: LikeButtonProps) {
     <button
       className={`group flex ${isClosed ? "h-9 w-full max-w-[116px] sm:size-12" : "size-12"} items-center justify-center rounded-full ${clicked || isClosed ? "border-0 bg-orange-50" : "border-2 bg-white"} border-gray-200`}
       onClick={handleClick}
+      {...rest}
     >
       {/* 모임이 마감, 취소된 경우 Bye와 span을, 아닌 경우 Heart를 렌더링  */}
       {isClosed ? (
