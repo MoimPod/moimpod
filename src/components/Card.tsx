@@ -10,6 +10,17 @@ import testCard from "../../public/images/testCard.png";
 import { CardData } from "@/stores/useCardStore";
 import LikeButton from "./LikeButton";
 
+type CardProps = {
+  id: number;
+  name: string;
+  location: string;
+  dateTime: string;
+  registrationEnd: string;
+  participantCount: number;
+  capacity: number;
+  image: string;
+};
+
 export default function Card({
   id,
   name,
@@ -19,7 +30,7 @@ export default function Card({
   participantCount,
   capacity,
   image,
-}: CardData) {
+}: CardProps) {
   const router = useRouter();
 
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;

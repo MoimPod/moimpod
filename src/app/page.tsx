@@ -1,4 +1,6 @@
-import CardList from "./card/CardList";
+"use client";
+
+import CardList from "./_card/CardList";
 
 export default function Home() {
   return (

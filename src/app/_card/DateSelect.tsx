@@ -39,8 +39,7 @@ export default function DateSelect() {
       {/* 날짜 선택 */}
       {isDateDropdownOpen && (
         <div className="absolute rounded-lg border bg-white p-6 px-8 shadow-md">
-          <SimpleDatepicker />
-          <DatepickerWithTime />
+          <SimpleDatepicker selectedDate={selectedDate} onDateChange={(date) => setSelectedDate(date)} />
           {/* 버튼 */}
           <div className="mt-4 flex justify-center">
             <Button
