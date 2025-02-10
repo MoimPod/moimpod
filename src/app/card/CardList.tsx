@@ -15,6 +15,7 @@ export default function CardList() {
 
   const teamId = 3;
 
+  // API 호출 후 zustand에 데이터 저장
   useEffect(() => {
     const fetchCards = async () => {
       try {

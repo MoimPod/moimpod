@@ -4,15 +4,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
 import Datepicker from "@/components/Card/Datepicker";
+import { format } from "date-fns";
 
 export default function DateSelect() {
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isDateDropdownOpen, setDateDropdownOpen] = useState(false);
-
-  // 날짜 상태 업데이트
-  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedDate(event.target.value); // 선택된 날짜를 상태로 설정
-  };
 
   return (
     <div className="relative max-w-sm">
@@ -21,7 +17,7 @@ export default function DateSelect() {
         className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isDateDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} `}
         onClick={() => setDateDropdownOpen(!isDateDropdownOpen)}
       >
-        {selectedDate ? selectedDate : "날짜 선택"}
+        {selectedDate ? format(selectedDate, "yy/MM/dd") : "날짜 선택"}
         {!isDateDropdownOpen ? (
           <Image
             src={"/images/dropdown_down_arrow_black.svg"}
@@ -44,7 +40,7 @@ export default function DateSelect() {
       {/* 날짜 선택 */}
       {isDateDropdownOpen && (
         <div className="absolute rounded-lg border bg-white p-6 px-8 shadow-md">
-          <Datepicker />
+          <Datepicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
           {/* 버튼 */}
           <div className="mt-4 flex justify-center">
             <Button

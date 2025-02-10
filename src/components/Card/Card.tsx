@@ -8,6 +8,7 @@ import ChipInfo from "./ChipInfo";
 import Tag from "./Tag";
 import testCard from "./testCard.png";
 import { CardData } from "@/stores/useCardStore";
+import LikeButton from "../LikeButton";
 
 export default function Card({
   id,
@@ -22,9 +23,14 @@ export default function Card({
   const router = useRouter();
 
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
+  const isClosed = !!registrationEnd; //모집이 마감되었는지
 
   const handleCardClick = () => {
     router.push(`/card/${id}`);
+  };
+
+  const handleLikeClick = () => {
+    console.log(`좋아요 버튼 클릭됨! 카드 ID: ${id}`);
   };
 
   return (
@@ -50,7 +56,7 @@ export default function Card({
         <div className="mb-2 flex items-center gap-2">
           <h2 className="text-lg font-bold">{name} |</h2>
           <p className="text-sm text-gray-500">{location}</p>
-          <p className="ml-auto">❤️</p>
+          <LikeButton onClick={handleLikeClick} isClosed={isClosed} />
         </div>
 
         {/* 날짜 정보 */}
