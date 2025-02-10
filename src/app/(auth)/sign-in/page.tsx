@@ -5,17 +5,35 @@ import Input from "@/components/Input";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+type FormValues = {
+  email: string;
+  password: string;
+};
 
 export default function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailHelper, setEmailHelper] = useState("");
-  const [passwordHelper, setPasswordHelper] = useState("");
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    formState: { errors, isValid },
+  } = useForm<FormValues>({ mode: "onChange" });
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const handleLogin = () => {
-    setEmailHelper(email !== "rrrr@gmail.com" ? "존재하지 않는 아이디입니다." : "");
-    setPasswordHelper(password !== "0000" ? "비밀번호가 일치하지 않습니다." : "");
+  const handleLogin = (data: FormValues) => {
+    const { email, password } = data;
+    if (email !== "rrrr@gmail.com") {
+      setError("email", { type: "manual", message: "존재하지 않는 아이디입니다." });
+    } else {
+      clearErrors("email");
+    }
+    if (password !== "0000") {
+      setError("password", { type: "manual", message: "비밀번호가 일치하지 않습니다." });
+    } else {
+      clearErrors("password");
+    }
   };
 
   return (
@@ -32,7 +50,10 @@ export default function SignIn() {
           <Image src={"/images/auth_main_img.png"} alt={""} fill className="object-cover" />
         </div>
       </div>
-      <div className="m-auto flex w-full flex-col rounded-3xl bg-white px-4 py-8 md:max-w-[608px] xl:m-0 xl:max-w-[510px]">
+      <form
+        onSubmit={handleSubmit(handleLogin)}
+        className="m-auto flex w-full flex-col rounded-3xl bg-white px-4 py-8 md:max-w-[608px] xl:m-0 xl:max-w-[510px]"
+      >
         <p className="text-center text-xl font-semibold text-gray-800">로그인</p>
         <div className="m-auto w-full max-w-[500px]">
           <div className="flex flex-col gap-2 pt-8">
@@ -40,9 +61,8 @@ export default function SignIn() {
             <Input
               type={"email"}
               placeholder="이메일을 입력해주세요."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              helperText={emailHelper}
+              register={register("email", { required: "존재하지 않는 아이디입니다." })}
+              helperText={errors.email?.message}
             />
           </div>
           <div className="flex flex-col gap-2 pt-6">
@@ -51,9 +71,8 @@ export default function SignIn() {
               <Input
                 type={passwordVisible ? "text" : "password"}
                 placeholder="비밀번호를 입력해주세요."
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                helperText={passwordHelper}
+                register={register("password", { required: "비밀번호가 일치하지 않습니다." })}
+                helperText={errors.password?.message}
               />
               <button
                 type="button"
@@ -69,21 +88,15 @@ export default function SignIn() {
               </button>
             </div>
           </div>
-          <Button
-            children={"로그인"}
-            size="lg"
-            disabled={!email || !password}
-            onClick={handleLogin}
-            className="mt-10"
-          />
+          <Button children={"로그인"} size="lg" disabled={!isValid} className="mt-10" type="submit" />
           <div className="flex-ro mt-6 flex justify-center">
             <p className="text-[15px] font-medium text-gray-800">같이 달램이 처음이신가요?</p>
-            <Link href={"/auth/sign-up"} className="border-b border-orange-600 text-[15px] font-medium text-orange-600">
+            <Link href={"/sign-up"} className="border-b border-orange-600 text-[15px] font-medium text-orange-600">
               회원가입
             </Link>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

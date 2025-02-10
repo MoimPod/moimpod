@@ -24,7 +24,7 @@ export default function Header() {
             모든 리뷰
           </Link>
         </nav>
-        <Link href={"/auth/sign-in"} className="header-link">
+        <Link href={"/sign-in"} className="header-link">
           로그인
         </Link>
       </div>
