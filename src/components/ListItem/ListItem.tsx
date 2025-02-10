@@ -89,7 +89,9 @@ ListItem.SubInfo = ({ date, participantCount, capacity }: SubInfoProps) => {
   return (
     <div className="flex items-center gap-3 text-sm text-gray-700">
       <div>{date}</div>
-      <CapacityStatus participantCount={participantCount} capacity={capacity} />
+      <CapacityStatus>
+        {participantCount}/{capacity}
+      </CapacityStatus>
     </div>
   );
 };
