@@ -20,6 +20,7 @@ export default [
         React: "readonly",
         console: "readonly",
         process: "readonly",
+        document: "readonly",
       },
     },
     plugins: {
