@@ -1,3 +1,9 @@
+import CardList from "./card/CardList";
+
 export default function Home() {
-  return <div>hello world</div>;
+  return (
+    <div>
+      <CardList />
+    </div>
+  );
 }

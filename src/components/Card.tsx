@@ -1,27 +1,46 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import React from "react";
 import Image from "next/image";
-import ProgressBar from "@/components/ProgressBar";
-import ChipInfo from "@/components/ChipInfo";
-import Tag from "@/components/Tag";
-import testCard from "@/components/Card/testCard.png";
+import ProgressBar from "./ProgressBar";
+import ChipInfo from "./ChipInfo";
+import Tag from "./Tag";
+import testCard from "../../public/images/testCard.png";
+import { CardData } from "@/stores/useCardStore";
+import LikeButton from "./LikeButton";
 
-type CardProps = {
-  name: string;
-  dateTime: string;
-  registrationEnd: string;
-  location: string;
-  participantCount: number;
-  capacity: number;
-};
+export default function Card({
+  id,
+  name,
+  location,
+  dateTime,
+  registrationEnd,
+  participantCount,
+  capacity,
+  image,
+}: CardData) {
+  const router = useRouter();
 
-export default function Card({ name, location, dateTime, registrationEnd, participantCount, capacity }: CardProps) {
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
+  const isClosed = !!registrationEnd; //모집이 마감되었는지
+
+  const handleCardClick = () => {
+    router.push(`/card/${id}`);
+  };
+
+  const handleLikeClick = () => {
+    console.log(`좋아요 버튼 클릭됨! 카드 ID: ${id}`);
+  };
 
   return (
-    <div className="m-3 items-center rounded-3xl border-0 shadow md:flex md:h-[156px] lg:flex lg:h-[156px]">
+    <div
+      onClick={handleCardClick}
+      className="my-5 items-center rounded-3xl border-0 shadow md:flex md:h-[156px] lg:flex lg:h-[156px]"
+    >
       {/* 카드 이미지 */}
       <div className="relative">
-        <Tag text="오늘 21시 마감" />
+        <Tag text={`${registrationEnd ? "오늘 21시 마감" : "모집 종료"}`} />
         <Image
           src={testCard}
           alt={"test 이미지"}
@@ -37,7 +56,7 @@ export default function Card({ name, location, dateTime, registrationEnd, partic
         <div className="mb-2 flex items-center gap-2">
           <h2 className="text-lg font-bold">{name} |</h2>
           <p className="text-sm text-gray-500">{location}</p>
-          <p className="ml-auto">❤️</p>
+          <LikeButton onClick={handleLikeClick} isClosed={isClosed} />
         </div>
 
         {/* 날짜 정보 */}
@@ -52,7 +71,7 @@ export default function Card({ name, location, dateTime, registrationEnd, partic
           <ProgressBar progress={progress} />
           <button className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-orange-500">
             join now
-            <Image src={"/images/card_arrow.svg"} alt={"화살표  ic"} width={24} height={24} />
+            <Image src={"/images/join_now_arrow.svg"} alt={"화살표  ic"} width={24} height={24} />
           </button>
         </div>
       </div>
