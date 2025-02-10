@@ -5,32 +5,57 @@ import Input from "@/components/Input";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+type FormValues = {
+  name: string;
+  email: string;
+  company: string;
+  password: string;
+  passwordCheck: string;
+};
 
 export default function SignUp() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [company, setCompany] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordCheck, setPasswordCheck] = useState("");
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    formState: { errors, isValid },
+  } = useForm<FormValues>({ mode: "onChange" });
 
-  // helperText
-  const [nameHelper, setNameHelper] = useState("");
-  const [emailHelper, setEmailHelper] = useState("");
-  const [companyHelper, setCompanyHelper] = useState("");
-  const [passwordHelper, setPasswordHelper] = useState("");
-  const [passwordCheckHelper, setPasswordCheckHelper] = useState("");
+  const handleSignUp = (data: FormValues) => {
+    const { name, email, company, password, passwordCheck } = data;
+    if (name !== "홍길동") {
+      setError("name", { type: "manual", message: "이름을 입력해주세요" });
+    } else {
+      clearErrors("name");
+    }
+    if (email !== "rrrr@gmail.com") {
+      setError("email", { type: "manual", message: "중복된 이메일입니다." });
+    } else {
+      clearErrors("email");
+    }
+    if (company !== "코드잇") {
+      setError("company", { type: "manual", message: "회사명을 정확하게 입력해주세요" });
+    } else {
+      clearErrors("company");
+    }
+    if (password !== "0000") {
+      setError("password", { type: "manual", message: "비밀번호를 입력해주세요." });
+    } else {
+      clearErrors("password");
+    }
+    if (passwordCheck !== "0000") {
+      setError("passwordCheck", { type: "manual", message: "비밀번호가 일치하지 않습니다." });
+    } else {
+      clearErrors("passwordCheck");
+    }
+  };
 
   // 비밀번호 변경시 보이는 icon
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordCheckVisible, setPasswordCheckVisible] = useState(false);
-
-  const handleSignUp = () => {
-    setNameHelper(name !== "홍길동" ? "이름을 입력해주세요." : "");
-    setEmailHelper(email !== "rrrr@gmail.com" ? "중복된 이메일입니다." : "");
-    setCompanyHelper(company !== "코드잇" ? "회사명을 정확하게 입력해주세요" : "");
-    setPasswordHelper(password !== "0000" ? "비밀번호를 입력해주세요." : "");
-    setPasswordCheckHelper(passwordCheck !== "0000" ? "비밀번호가 일치하지 않습니다." : "");
-  };
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 px-4 pb-[72px] pt-8 xl:min-h-[calc(100vh-60px)] xl:flex-row xl:items-center xl:justify-center xl:gap-[100px]">
@@ -46,7 +71,10 @@ export default function SignUp() {
           <Image src={"/images/auth_main_img.png"} alt={""} fill className="object-cover" />
         </div>
       </div>
-      <div className="m-auto flex w-full flex-col rounded-3xl bg-white px-4 py-8 md:max-w-[608px] xl:m-0 xl:max-w-[510px] xl:px-14">
+      <form
+        onSubmit={handleSubmit(handleSignUp)}
+        className="m-auto flex w-full flex-col rounded-3xl bg-white px-4 py-8 md:max-w-[608px] xl:m-0 xl:max-w-[510px] xl:px-14"
+      >
         <p className="text-center text-xl font-semibold text-gray-800">회원가입</p>
         <div className="m-auto w-full max-w-[500px]">
           <div className="flex flex-col gap-2 pt-8">
@@ -54,9 +82,8 @@ export default function SignUp() {
             <Input
               type={"text"}
               placeholder="이름을 입력해주세요"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              helperText={nameHelper}
+              register={register("name", { required: "이름을 입력해주세요" })}
+              helperText={errors.name?.message}
             />
           </div>
           <div className="flex flex-col gap-2 pt-8">
@@ -64,9 +91,8 @@ export default function SignUp() {
             <Input
               type={"email"}
               placeholder="이메일을 입력해주세요."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              helperText={emailHelper}
+              register={register("email", { required: "중복된 이메일입니다." })}
+              helperText={errors.email?.message}
             />
           </div>
           <div className="flex flex-col gap-2 pt-8">
@@ -74,9 +100,8 @@ export default function SignUp() {
             <Input
               type={"text"}
               placeholder="회사명을 입력해주세요"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              helperText={companyHelper}
+              register={register("company", { required: "회사명을 정확하게 입력해주세요" })}
+              helperText={errors.company?.message}
             />
           </div>
           <div className="flex flex-col gap-2 pt-6">
@@ -85,9 +110,8 @@ export default function SignUp() {
               <Input
                 type={passwordVisible ? "text" : "password"}
                 placeholder="비밀번호를 입력해주세요."
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                helperText={passwordHelper}
+                register={register("password", { required: "비밀번호를 입력해주세요." })}
+                helperText={errors.password?.message}
               />
               <button
                 type="button"
@@ -109,9 +133,8 @@ export default function SignUp() {
               <Input
                 type={passwordCheckVisible ? "text" : "password"}
                 placeholder="비밀번호를 다시 한 번 입력해주세요."
-                value={passwordCheck}
-                onChange={(e) => setPasswordCheck(e.target.value)}
-                helperText={passwordCheckHelper}
+                register={register("passwordCheck", { required: "비밀번호가 일치하지 않습니다." })}
+                helperText={errors.passwordCheck?.message}
               />
               <button
                 type="button"
@@ -127,21 +150,17 @@ export default function SignUp() {
               </button>
             </div>
           </div>
-          <Button
-            children={"확인"}
-            size="lg"
-            onClick={handleSignUp}
-            disabled={!name || !email || !company || !password || !passwordCheck}
-            className="mt-10"
-          />
+          <Button size="lg" disabled={!isValid} className="mt-10">
+            확인
+          </Button>
           <div className="flex-ro mt-6 flex justify-center">
             <p className="text-[15px] font-medium text-gray-800">이미 회원이신가요?</p>
-            <Link href={"/auth/sign-in"} className="border-b border-orange-600 text-[15px] font-medium text-orange-600">
+            <Link href={"/sign-in"} className="border-b border-orange-600 text-[15px] font-medium text-orange-600">
               로그인
             </Link>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
