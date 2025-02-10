@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 export default function LocationSelect() {
@@ -12,11 +12,30 @@ export default function LocationSelect() {
     대구광역시: ["중구", "달서구", "수성구"],
   };
 
+  // 드롭다운 요소 감지를 위한 useRef
+  const cityDropdownRef = useRef<HTMLDivElement>(null);
+  const districtDropdownRef = useRef<HTMLDivElement>(null);
+
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
 
   const [isCityDropdownOpen, setCityDropdownOpen] = useState(false);
   const [isDistrictDropdownOpen, setDistrictDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (cityDropdownRef.current && !cityDropdownRef.current.contains(event.target as Node)) {
+        setCityDropdownOpen(false);
+      }
+      if (districtDropdownRef.current && !districtDropdownRef.current.contains(event.target as Node)) {
+        setDistrictDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // 시,도 상태 업데이트
   const handleCitySelect = (city: string) => {
@@ -33,7 +52,8 @@ export default function LocationSelect() {
 
   return (
     <div className="flex gap-3">
-      <div className="relative">
+      {/* 시/도 드롭다운 */}
+      <div className="relative" ref={cityDropdownRef}>
         <div
           className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isCityDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} `}
           onClick={() => setCityDropdownOpen(!isCityDropdownOpen)}
@@ -68,8 +88,8 @@ export default function LocationSelect() {
         )}
       </div>
 
-      {/* District Dropdown */}
-      <div className="relative">
+      {/* 구/군 드롭다운 */}
+      <div className="relative" ref={districtDropdownRef}>
         <div
           className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isDistrictDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} ${
             !selectedCity ? "cursor-not-allowed bg-gray-200 text-gray-500" : "bg-gray-50 text-gray-900"

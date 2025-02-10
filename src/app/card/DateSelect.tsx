@@ -1,17 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
 import Datepicker from "@/components/Datepicker";
 import { format } from "date-fns";
 
 export default function DateSelect() {
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isDateDropdownOpen, setDateDropdownOpen] = useState(false);
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDateDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative max-w-sm">
+    <div className="relative max-w-sm" ref={dropdownRef}>
       {/* 드롭다운 버튼 */}
       <div
         className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isDateDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} `}
