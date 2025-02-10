@@ -4,37 +4,21 @@ import Profile from "@/images/profile.svg";
 import CapacityStatus from "@/components/CapacityStatus";
 import { cn } from "@/utils/classnames";
 import Check from "@/images/check.svg";
+import { PropsWithChildren } from "react";
 
 type ListItemProps = {
-  children: React.ReactNode;
-};
+  CardImage?: React.ReactNode;
+} & React.HTMLAttributes<HTMLDivElement>;
 
-// ListItem의 메인 컴포넌트
-export default function ListItem({ children }: ListItemProps) {
+// ListItem의 템플릿 컴포넌트
+export default function ListItem({ children, CardImage, className }: PropsWithChildren<ListItemProps>) {
   return (
-    <div
-      className={`flex w-full max-w-[311px] flex-col items-stretch gap-4 border-gray-300 py-6 md:max-w-none md:flex-row`}
-    >
-      {children}
+    <div className={`flex w-full flex-col items-stretch gap-4 border-gray-300 py-6 md:max-w-none md:flex-row`}>
+      {CardImage}
+      <div className={`flex flex-col ${className}`}>{children}</div>
     </div>
   );
 }
-
-// ListItem의 이미지
-type ImageProps = {
-  imageSrc: string;
-};
-ListItem.Image = ({ imageSrc }: ImageProps) => {
-  return (
-    <Image
-      src={imageSrc}
-      alt="모임 이미지"
-      width={280}
-      height={156}
-      className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
-    />
-  );
-};
 
 // 모임의 예약 상태를 나타내는 chip
 type StatusChipProps = {
@@ -87,7 +71,7 @@ type TitleProps = {
 };
 ListItem.Title = ({ title, subtitle }: TitleProps) => {
   return (
-    <div className="flex w-full max-w-[311px] items-center gap-2 md:max-w-max">
+    <div className="flex w-full items-center gap-2 md:max-w-max">
       <span className="text-lg font-semibold text-gray-900">{title}</span>
       <span className="text-lg font-semibold text-gray-900">|</span>
       <span className="text-sm text-gray-700">{subtitle}</span>
