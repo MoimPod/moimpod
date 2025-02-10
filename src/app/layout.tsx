@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import type { Metadata } from "next";
+import Providers from "@/app/lib/Provider";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -23,10 +24,12 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${pretendard.variable} font-pretendard`}>
-        <div>
-          <Header />
-          <main>{children}</main>
-        </div>
+        <Providers>
+          <div>
+            <Header />
+            <main>{children}</main>
+          </div>
+        </Providers>
       </body>
     </html>
   );
