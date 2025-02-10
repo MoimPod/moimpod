@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
-import Datepicker from "@/components/Card/Datepicker";
+import Datepicker from "@/components/Datepicker";
 import { format } from "date-fns";
 
 export default function DateSelect() {
@@ -47,7 +47,10 @@ export default function DateSelect() {
               styleType="outline"
               size="sm"
               className="m-2 h-[40px] w-[118px]"
-              onClick={() => setSelectedDate(null)}
+              onClick={() => {
+                setSelectedDate(null);
+                setDateDropdownOpen(false);
+              }}
             >
               초기화
             </Button>
