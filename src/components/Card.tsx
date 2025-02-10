@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "next/image";
-import ProgressBar from "./ProgressBar";
-import ChipInfo from "./ChipInfo";
-import Tag from "./Tag";
-import testCard from "./testCard.png";
+import ProgressBar from "@/components/ProgressBar";
+import ChipInfo from "@/components/ChipInfo";
+import Tag from "@/components/Tag";
+import testCard from "@/components/Card/testCard.png";
 
 type CardProps = {
   name: string;
