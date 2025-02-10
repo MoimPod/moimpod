@@ -26,9 +26,14 @@ export default function CardList() {
 
   // 데이터를 가져오는 함수
   const fetchCards = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/${teamId}/gatherings`);
-    console.log(response.data);
-    return response.data;
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/${teamId}/gatherings`);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("요청 실패");
+      return [];
+    }
   };
 
   // React Query를 사용하여 데이터 가져오기
