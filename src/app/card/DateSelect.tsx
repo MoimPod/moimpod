@@ -60,7 +60,6 @@ export default function DateSelect() {
               className="m-2 h-[40px] w-[118px]"
               onClick={() => {
                 setDateDropdownOpen(false);
-                console.log("선택된 날짜:", selectedDate);
               }}
             >
               적용

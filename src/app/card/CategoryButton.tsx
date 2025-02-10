@@ -17,7 +17,7 @@ export default function CategoryButton() {
       {categories.map((category, i) => {
         return (
           <div
-            key={i}
+            key={category}
             onClick={() => handlecategoriesChange(category)}
             className={`h-[40px] w-auto rounded-lg border p-2 ${selectedCategory === category ? "bg-gray-900 text-white" : "bg-gray-200"}`}
           >
