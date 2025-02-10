@@ -9,6 +9,7 @@ type ListItemProps = {
   children: React.ReactNode;
 };
 
+// ListItem의 메인 컴포넌트
 export default function ListItem({ children }: ListItemProps) {
   return (
     <div
@@ -19,6 +20,23 @@ export default function ListItem({ children }: ListItemProps) {
   );
 }
 
+// ListItem의 이미지
+type ImageProps = {
+  imageSrc: string;
+};
+ListItem.Image = ({ imageSrc }: ImageProps) => {
+  return (
+    <Image
+      src={imageSrc}
+      alt="모임 이미지"
+      width={280}
+      height={156}
+      className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
+    />
+  );
+};
+
+// 모임의 예약 상태를 나타내는 chip
 type StatusChipProps = {
   styleType: "upcoming" | "completed" | "confirmed" | "waiting";
   children: React.ReactNode;
@@ -40,6 +58,7 @@ ListItem.StatusChip = ({ styleType, children }: StatusChipProps) => {
   );
 };
 
+// chip의 컨테이너
 type StatusProps = {
   isCompleted: boolean;
   participantCount: number;
@@ -61,6 +80,7 @@ ListItem.Status = ({ isCompleted, participantCount }: StatusProps) => {
   );
 };
 
+// 참가한 모임 종류 및 장소
 type TitleProps = {
   subtitle: string;
   title: string;
@@ -75,6 +95,7 @@ ListItem.Title = ({ title, subtitle }: TitleProps) => {
   );
 };
 
+// 모임 데이터의 부가 정보(시간, 인원수)
 type SubInfoProps = {
   date: string;
   participantCount: number;
@@ -89,6 +110,7 @@ ListItem.SubInfo = ({ date, participantCount, capacity }: SubInfoProps) => {
   );
 };
 
+// 리뷰 평점
 type ScoreProps = {
   score: number;
 };
@@ -102,25 +124,17 @@ ListItem.Score = ({ score }: ScoreProps) => {
   );
 };
 
+// 리뷰 내용
 ListItem.Body = ({ children }: { children: React.ReactNode }) => {
   return <p className="w-full break-words text-sm text-gray-700">{children}</p>;
 };
 
-type ImageProps = {
-  imageSrc: string;
-};
-ListItem.Image = ({ imageSrc }: ImageProps) => {
-  return (
-    <Image
-      src={imageSrc}
-      alt="모임 이미지"
-      width={280}
-      height={156}
-      className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
-    />
-  );
+// 리뷰할 모임에 대한 정보(종류, 장소)
+ListItem.ServiceInfo = ({ children }: { children: React.ReactNode }) => {
+  return <span className="mb-2 text-xs text-gray-700">{children}</span>;
 };
 
+// 리뷰 작성자의 정보
 type MetaInfoProps = {
   imageUrl?: string;
   primary?: string;
