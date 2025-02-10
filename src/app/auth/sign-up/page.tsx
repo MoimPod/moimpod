@@ -73,7 +73,7 @@ export default function SignUp() {
             <p className="text-sm font-semibold text-gray-800">회사명</p>
             <Input
               type={"text"}
-              placeholder="회사명을 입력해주세요요"
+              placeholder="회사명을 입력해주세요"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               helperText={companyHelper}
