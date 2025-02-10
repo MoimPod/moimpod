@@ -32,7 +32,7 @@ export default function LocationSelect() {
   };
 
   return (
-    <div className="my-3 flex gap-3">
+    <div className="flex gap-3">
       <div className="relative">
         <div
           className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isCityDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} `}
@@ -71,7 +71,9 @@ export default function LocationSelect() {
       {/* District Dropdown */}
       <div className="relative">
         <div
-          className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isDistrictDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} `}
+          className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isDistrictDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} ${
+            !selectedCity ? "cursor-not-allowed bg-gray-200 text-gray-500" : "bg-gray-50 text-gray-900"
+          }`}
           onClick={() => selectedCity && setDistrictDropdownOpen(!isDistrictDropdownOpen)}
         >
           {selectedDistrict || "구/군 선택"}

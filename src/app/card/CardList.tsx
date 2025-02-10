@@ -44,7 +44,7 @@ export default function CardList() {
       </div>
       <hr />
       <div>
-        <div>
+        <div className="my-3 flex gap-3">
           <LocationSelect />
           <DateSelect />
         </div>

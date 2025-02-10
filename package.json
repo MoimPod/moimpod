@@ -13,6 +13,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "flowbite": "^3.1.2",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -33,7 +34,6 @@
     "@typescript-eslint/parser": "^8.23.0",
     "axios": "^1.7.9",
     "babel-jest": "^29.7.0",
-    "date-fns": "^4.1.0",
     "eslint": "^9.19.0",
     "eslint-config-next": "15.1.6",
     "eslint-config-prettier": "^10.0.1",
@@ -46,7 +46,6 @@
     "postcss": "^8",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "react-day-picker": "^9.5.1",
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
