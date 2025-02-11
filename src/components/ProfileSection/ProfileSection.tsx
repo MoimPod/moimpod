@@ -20,7 +20,7 @@ export default function ProfileSection() {
     <section className="relative w-full rounded-3xl border-2 border-gray-200 bg-white pb-5">
       <ProfileHeader onEditClick={handleOpen} />
       <ProfileEditModal isOpen={isModal} onClose={handleClose} />
-      <ProfileInfo />
+      <ProfileInfo email={"0lYlF@example.com"} name={"이상민"} companyName={"이상민"} imageUrl={""} />
     </section>
   );
 }
