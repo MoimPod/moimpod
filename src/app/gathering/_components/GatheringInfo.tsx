@@ -23,7 +23,7 @@ export default function GatheringInfo({ name, dateTime, location, count, capacit
   };
 
   return (
-    <div className="h-auto w-full rounded-3xl border-2 border-gray-200 bg-white shadow-md">
+    <div className="h-auto w-full rounded-3xl border-2 border-gray-200 bg-white">
       <div className="flex justify-between p-6">
         <div>
           <h2 className="text-lg font-semibold">{name}</h2>
