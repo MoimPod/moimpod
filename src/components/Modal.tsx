@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import Close from "@/images/close.svg";
 import { usePreventScroll } from "@/hooks/usePreventScroll";
 import { useEscapeKey } from "@/hooks/useEscapeKey";
