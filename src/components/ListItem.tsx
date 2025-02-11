@@ -36,7 +36,7 @@ ListItem.StatusChip = ({ styleType, children }: StatusChipProps) => {
   };
   return (
     <li className={cn(baseStyles, variantStyles[styleType])}>
-      {styleType === "confirmed" && <Check />}
+      {styleType === "confirmed" && <Check className="text-orange-500" />}
       {children}
     </li>
   );
