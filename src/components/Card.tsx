@@ -72,7 +72,7 @@ export default function Card({
         </div>
 
         {/* 날짜 정보 */}
-        <ChipInfo dateTime={dateTime} registrationEnd={registrationEnd} />
+        <ChipInfo dateTime={dateTime} />
 
         {/* 인원 정보 */}
         <p className="mt-5 text-sm text-gray-500">

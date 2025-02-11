@@ -1,9 +1,8 @@
 type ChipInfoProps = {
   dateTime: string;
-  registrationEnd: string;
 };
 
-export default function ChipInfo({ dateTime, registrationEnd }: ChipInfoProps) {
+export default function ChipInfo({ dateTime }: ChipInfoProps) {
   // 날짜를 "MM-DD" 형식으로 변환하는 함수
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -12,15 +11,23 @@ export default function ChipInfo({ dateTime, registrationEnd }: ChipInfoProps) {
     return `${month}월 ${day}일`;
   };
 
+  // 시간를 "HH:MM" 형식으로 변환하는 함수
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${hours}:${minutes}`;
+  };
+
   return (
     <div className="flex gap-2">
       <div className="h-[24px] w-[58px] rounded-sm bg-gray-900">
-        {/* dateTime */}
+        {/* 날짜 */}
         <div className="mt-1 text-center text-xs font-medium text-white">{formatDate(dateTime)}</div>
       </div>
       <div className="h-[24px] w-[58px] rounded-sm bg-gray-900">
-        {/* registrationEnd */}
-        <div className="mt-1 text-center text-xs font-medium text-orange-500">{formatDate(registrationEnd)}</div>
+        {/* 시간 */}
+        <div className="mt-1 text-center text-xs font-medium text-orange-500">{formatTime(dateTime)}</div>
       </div>
     </div>
   );
