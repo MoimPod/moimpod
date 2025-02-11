@@ -9,6 +9,7 @@ import Tag from "./Tag";
 import testCard from "../../public/images/testCard.png";
 import { CardData } from "@/stores/useCardStore";
 import LikeButton from "./LikeButton";
+import JoinArrow from "@/images/join_now_arrow.svg";
 
 type CardProps = {
   id: number;
@@ -82,7 +83,7 @@ export default function Card({
           <ProgressBar progress={progress} />
           <button className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-orange-500">
             join now
-            <Image src={"/images/join_now_arrow.svg"} alt={"화살표  ic"} width={24} height={24} />
+            <JoinArrow />
           </button>
         </div>
       </div>

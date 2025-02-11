@@ -1,15 +1,14 @@
 "use client";
 
 import React from "react";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 import Card from "@/components/Card";
 import { useFetchGatherings } from "./_hooks/useFetchGatherings";
-import Image from "next/image";
-import CategoryButton from "./CategoryButton";
-import LocationSelect from "./LocationSelect";
-import ServiceTab from "./ServiceTab";
-import DateSelect from "./DateSelect";
+import CategoryButton from "./_components/CategoryButton";
+import LocationSelect from "./_components/LocationSelect";
+import ServiceTab from "./_components/ServiceTab";
+import DateSelect from "./_components/DateSelect";
+import GatheringLogo from "@/images/gathering_logo.svg";
+import Button from "@/components/Button";
 
 export type CardData = {
   id: number;
@@ -32,14 +31,22 @@ export default function CardList() {
   return (
     <div className="px-20 pt-10">
       <div className="mb-5 flex gap-6">
-        <Image src={"/images/main_card_list_logo.svg"} alt={"main logo"} width={72} height={72} />
+        <GatheringLogo />
         <div>
           <div className="mb-2 text-sm font-semibold text-gray-700">함께할 사람이 없나요?</div>
           <div className="text-2xl font-semibold text-gray-900">지금 모임에 참여해보세요</div>
         </div>
       </div>
       <div>
-        <ServiceTab />
+        <div className="flex items-center">
+          <ServiceTab />
+          <div className="ml-auto w-[114px]">
+            <Button styleType="solid" size="sm" className="h-[40px] md:h-[44px] lg:h-[44px]">
+              모임 만들기
+            </Button>
+          </div>
+        </div>
+
         <CategoryButton />
       </div>
       <hr />
