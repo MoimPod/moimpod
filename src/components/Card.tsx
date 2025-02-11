@@ -35,7 +35,7 @@ export default function Card({
   const router = useRouter();
 
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
-  const isClosed = !!registrationEnd; //모집이 마감되었는지
+  const isClosed = !registrationEnd; //모집이 마감되었는지
 
   const handleCardClick = () => {
     router.push(`/card/${id}`);
@@ -68,7 +68,7 @@ export default function Card({
         <div className="mb-2 flex items-center gap-2">
           <h2 className="text-lg font-bold">{name} |</h2>
           <p className="text-sm text-gray-500">{location}</p>
-          <LikeButton onClick={handleLikeClick} isClosed={isClosed} />
+          <LikeButton onClick={handleLikeClick} isClosed={isClosed} className="ml-auto" />
         </div>
 
         {/* 날짜 정보 */}

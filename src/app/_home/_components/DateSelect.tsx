@@ -28,13 +28,13 @@ export default function DateSelect() {
   return (
     <div className="relative max-w-sm" ref={dropdownRef}>
       {/* 드롭다운 버튼 */}
-      <div
+      <button
         className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isDateDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} `}
         onClick={() => setDateDropdownOpen(!isDateDropdownOpen)}
       >
         {selectedDate ? format(selectedDate, "yy/MM/dd") : "날짜 선택"}
         {!isDateDropdownOpen ? <ArrowDownBlackIcon /> : <ArrowDownWhiteIcon />}
-      </div>
+      </button>
 
       {/* 날짜 선택 */}
       {isDateDropdownOpen && (

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Card from "@/components/Card";
 import { useFetchGatherings } from "./_hooks/useFetchGatherings";
 import CategoryButton from "./_components/CategoryButton";
@@ -9,6 +9,7 @@ import ServiceTab from "./_components/ServiceTab";
 import DateSelect from "./_components/DateSelect";
 import GatheringLogo from "@/images/gathering_logo.svg";
 import Button from "@/components/Button";
+import SortButton from "./_components/SortButton";
 
 export type CardData = {
   id: number;
@@ -24,6 +25,13 @@ export default function CardList() {
   const teamId = 3;
 
   const { data: cards = [], isLoading, error } = useFetchGatherings(teamId);
+
+  const [sortcards, setSortCards] = useState<CardData[]>(cards);
+  useEffect(() => {
+    if (cards.length > 0) {
+      setSortCards(cards);
+    }
+  }, [cards]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>;
@@ -54,8 +62,9 @@ export default function CardList() {
         <div className="my-3 flex gap-3">
           <LocationSelect />
           <DateSelect />
+          <SortButton cards={cards} onSort={setSortCards} />
         </div>
-        {cards.map((card) => (
+        {sortcards.map((card) => (
           <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />
         ))}
       </div>
