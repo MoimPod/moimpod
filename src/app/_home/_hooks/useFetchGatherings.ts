@@ -72,8 +72,13 @@ export const useFetchGatherings = (teamId: number) => {
   return useQuery({
     queryKey: ["gatherings", teamId],
     queryFn: async () => {
-      console.log("더미 데이터 사용 중!");
-      return mockCards; // API 요청 대신 더미 데이터 반환
+      try {
+        console.log("더미 데이터 사용 중!");
+        return mockCards; // API 요청 대신 더미 데이터 반환
+      } catch (error) {
+        console.error("데이터 조회 실패:", error);
+        throw error;
+      }
     },
     staleTime: 60000,
   });

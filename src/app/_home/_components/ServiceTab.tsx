@@ -18,7 +18,7 @@ export default function ServiceTab() {
         className={`inline-block rounded-t-lg text-lg font-medium transition-colors duration-300 ${activeTab === "워케이션" ? "px-2 text-gray-900" : "text-gray-400"} `}
         onClick={() => setActiveTab("워케이션")}
       >
-        위케이션
+        워케이션
       </div>
       <TabSlider activeTab={activeTab} />
     </div>

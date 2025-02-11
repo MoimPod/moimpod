@@ -26,9 +26,14 @@ export default function SortButton({ cards, onSort }: SortButtonProps) {
 
   useEffect(() => {
     const sortedCards = [...cards].sort((a, b) => {
+      const getDateValue = (date: string | null) => {
+        if (!date) return Infinity;
+        return new Date(date + "T00:00:00+09:00").getTime();
+      };
+
       if (selectedSort === "registrationEnd") {
-        const dateA = a.registrationEnd ? new Date(a.registrationEnd + "T00:00:00").getTime() : Infinity;
-        const dateB = b.registrationEnd ? new Date(b.registrationEnd + "T00:00:00").getTime() : Infinity;
+        const dateA = getDateValue(a.registrationEnd);
+        const dateB = getDateValue(b.registrationEnd);
 
         return dateA - dateB; // 마감일 오름차순 정렬
       } else {
