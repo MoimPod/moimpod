@@ -8,7 +8,7 @@ type AvatarProps = {
   size?: number;
 };
 
-export default function Avatar({ imageUrl, size = 30 }: AvatarProps) {
+export default function Avatar({ imageUrl, size = 40 }: AvatarProps) {
   const [isError, setIsError] = useState(false);
   const DEFAULT_IMAGE = "/images/profile.svg";
 
