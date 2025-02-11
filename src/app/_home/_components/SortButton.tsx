@@ -44,7 +44,7 @@ export default function SortButton({ cards, onSort }: SortButtonProps) {
       {/* 정렬 버튼 */}
       <button
         onClick={() => setSortDropdownOpen(!isSortDropdownOpen)}
-        className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isSortDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} `}
+        className="mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium"
       >
         <SortIcon />
         {selectedSort === "registrationEnd" ? "마감 임박" : "참여 인원 순"}
