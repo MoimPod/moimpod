@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SortIcon from "@/images/sort_icon.svg";
 import { CardData } from "@/stores/useCardStore";
 
@@ -20,20 +20,24 @@ export default function SortButton({ cards, onSort }: SortButtonProps) {
 
   // 정렬 함수
   const handleSort = (sortType: "registrationEnd" | "participantCount") => {
+    setSelectedSort(sortType);
+    setSortDropdownOpen(false);
+  };
+
+  useEffect(() => {
     const sortedCards = [...cards].sort((a, b) => {
-      if (sortType === "registrationEnd") {
-        const dateA = a.registrationEnd ? new Date(a.registrationEnd).getTime() : Infinity;
-        const dateB = b.registrationEnd ? new Date(b.registrationEnd).getTime() : Infinity;
+      if (selectedSort === "registrationEnd") {
+        const dateA = a.registrationEnd ? new Date(a.registrationEnd + "T00:00:00").getTime() : Infinity;
+        const dateB = b.registrationEnd ? new Date(b.registrationEnd + "T00:00:00").getTime() : Infinity;
+
         return dateA - dateB; // 마감일 오름차순 정렬
       } else {
-        return a.participantCount - b.participantCount; // 참여 인원 오름차순 정렬
+        return b.participantCount - a.participantCount; // 내림차순 정렬
       }
     });
 
-    setSelectedSort(sortType);
-    setSortDropdownOpen(false);
     onSort(sortedCards);
-  };
+  }, [selectedSort, cards]);
 
   return (
     <div>

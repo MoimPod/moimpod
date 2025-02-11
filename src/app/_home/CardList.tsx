@@ -24,12 +24,15 @@ export type CardData = {
 export default function CardList() {
   const teamId = 3;
 
+  // 원본 데이터
   const { data: cards = [], isLoading, error } = useFetchGatherings(teamId);
 
-  const [sortcards, setSortCards] = useState<CardData[]>(cards);
+  // 정렬된 데이터
+  const [sortedCards, setSortedCards] = useState<CardData[]>([]);
+
   useEffect(() => {
     if (cards.length > 0) {
-      setSortCards(cards);
+      setSortedCards(cards);
     }
   }, [cards]);
 
@@ -62,9 +65,9 @@ export default function CardList() {
         <div className="my-3 flex gap-3">
           <LocationSelect />
           <DateSelect />
-          <SortButton cards={cards} onSort={setSortCards} />
+          <SortButton cards={cards} onSort={setSortedCards} />
         </div>
-        {sortcards.map((card) => (
+        {sortedCards.map((card) => (
           <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />
         ))}
       </div>
