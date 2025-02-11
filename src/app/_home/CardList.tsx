@@ -4,6 +4,7 @@ import React from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Card from "@/components/Card";
+import { useFetchGatherings } from "./_hooks/useFetchGatherings";
 import Image from "next/image";
 import CategoryButton from "./CategoryButton";
 import LocationSelect from "./LocationSelect";
@@ -20,32 +21,10 @@ export type CardData = {
   capacity: number;
   image: string;
 };
-
 export default function CardList() {
   const teamId = 3;
 
-  // 데이터를 가져오는 함수
-  const fetchCards = async () => {
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/${teamId}/gatherings`);
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      console.error("요청 실패");
-      return [];
-    }
-  };
-
-  // React Query를 사용하여 데이터 가져오기
-  const {
-    data: cards = [],
-    isLoading,
-    error,
-  } = useQuery<CardData[]>({
-    queryKey: ["gatherings", teamId],
-    queryFn: fetchCards,
-    staleTime: 60000, // 데이터가 60초 동안 신선하다고 간주
-  });
+  const { data: cards = [], isLoading, error } = useFetchGatherings(teamId);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>;
