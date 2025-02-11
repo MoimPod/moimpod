@@ -15,7 +15,7 @@ export type GatheringProps = {
   capacity: number;
 };
 
-export default function GatheringInfo({ name, dateTime, registrationEnd, location, count, capacity }: GatheringProps) {
+export default function GatheringInfo({ name, dateTime, location, count, capacity }: GatheringProps) {
   const MIN_COUNT = 5;
 
   const handleClickFavorite = () => {
@@ -23,7 +23,7 @@ export default function GatheringInfo({ name, dateTime, registrationEnd, locatio
   };
 
   return (
-    <div className="h-auto w-full rounded-3xl border border-gray-200 bg-white shadow-md">
+    <div className="h-auto w-full rounded-3xl border-2 border-gray-200 bg-white shadow-md">
       <div className="flex justify-between p-6">
         <div>
           <h2 className="text-lg font-semibold">{name}</h2>
@@ -32,7 +32,8 @@ export default function GatheringInfo({ name, dateTime, registrationEnd, locatio
         </div>
         <LikeButton onClick={handleClickFavorite} isClosed={false} />
       </div>
-      <div className="border border-dashed" />
+
+      <hr className="border-2 border-dashed" />
 
       <div className="p-6">
         <div className="mb-3 flex items-center justify-between">
