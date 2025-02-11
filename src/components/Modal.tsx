@@ -9,9 +9,9 @@ type ModalProps = {
   onClose: () => void;
   closeOnBackdropClick?: boolean;
   children: React.ReactNode;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
-export default function Modal({ isOpen, onClose, children, closeOnBackdropClick = false, ...rest }: ModalProps) {
+export default function Modal({ isOpen, onClose, children, closeOnBackdropClick = false, className }: ModalProps) {
   usePreventScroll(isOpen);
   useEscapeKey(isOpen, onClose);
 
@@ -32,7 +32,7 @@ export default function Modal({ isOpen, onClose, children, closeOnBackdropClick 
         }
       }}
     >
-      <div className="relative rounded-lg bg-white p-[24px] shadow-lg" {...rest}>
+      <div className={`relative rounded-lg bg-white p-[24px] shadow-lg ${className || ""}`}>
         <button className="absolute right-[24px] top-[24px] cursor-pointer" aria-label={"모달 닫기"} onClick={onClose}>
           <Close />
         </button>
