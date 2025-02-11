@@ -5,7 +5,7 @@ import { CardData } from "@/stores/useCardStore";
 // 데이터를 가져오는 함수
 // const fetchCards = async (teamId: number) => {
 //   try {
-//     const response = await axios.get<CardData[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}/${teamId}/gatherings`);
+//     const response = await axios.get<CardData[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}/gatherings`);
 //     console.log(response.data);
 //     return response.data;
 //   } catch (error) {
