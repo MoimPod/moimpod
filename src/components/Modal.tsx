@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import Close from "@/images/close.svg";
 import { usePreventScroll } from "@/hooks/usePreventScroll";
 import { useEscapeKey } from "@/hooks/useEscapeKey";
@@ -12,7 +11,7 @@ type ModalProps = {
   children: React.ReactNode;
 };
 
-export default function Modal({ isOpen, onClose, children, closeOnBackdropClick = false }: ModalProps) {
+export default function Modal({ isOpen, onClose, children, closeOnBackdropClick = false, ...rest }: ModalProps) {
   usePreventScroll(isOpen);
   useEscapeKey(isOpen, onClose);
 
@@ -33,7 +32,7 @@ export default function Modal({ isOpen, onClose, children, closeOnBackdropClick 
         }
       }}
     >
-      <div className="relative rounded-lg bg-white p-[24px] shadow-lg">
+      <div className="relative rounded-lg bg-white p-[24px] shadow-lg" {...rest}>
         <button className="absolute right-[24px] top-[24px] cursor-pointer" aria-label={"모달 닫기"} onClick={onClose}>
           <Close />
         </button>
