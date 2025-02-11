@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import type { Metadata } from "next";
-import Providers from "@/app/lib/Provider";
+import Providers from "@/lib/Provider";
 import localFont from "next/font/local";
 import "./globals.css";
 
