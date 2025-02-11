@@ -3,8 +3,8 @@ import Profile from "@/images/profile.svg";
 
 export default function ProfileSection() {
   return (
-    <section className="relative h-[178px] w-full rounded-3xl border-2 border-gray-200 bg-white">
-      <div className="flex h-[64px] w-full items-start justify-between rounded-t-3xl bg-[url('/images/profile_background.svg')] bg-cover bg-center px-6 pt-4">
+    <section className="relative w-full rounded-3xl border-2 border-gray-200 bg-white pb-5">
+      <div className="flex h-[64px] w-full items-start justify-between rounded-t-3xl bg-[url('/images/profile_background.svg')] bg-cover bg-right bg-no-repeat px-6 pt-4">
         <span className="text-lg font-semibold">내 프로필</span>
         <button>
           <Edit width="32" height="32" />
