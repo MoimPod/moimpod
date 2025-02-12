@@ -2,19 +2,20 @@
 
 import Heart from "@/images/heart.svg";
 import Bye from "@/images/bye.svg";
-import { ButtonHTMLAttributes, useState } from "react";
+import { useState } from "react";
 
 type LikeButtonProps = {
-  onClick: () => void; // 버튼 클릭 시 실행될 함수
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void; // 버튼 클릭 시 실행될 함수
   isClosed: boolean; // 이미 마감, 취소된경우
   isLiked: boolean; // 찜해놓은 경우
-} & ButtonHTMLAttributes<HTMLButtonElement>;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export default function LikeButton({ onClick, isClosed, isLiked, ...rest }: LikeButtonProps) {
   const [isClicked, setIsClicked] = useState(isLiked);
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setIsClicked(!isClicked);
-    onClick();
+    onClick(e);
   };
   return (
     <button

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Modal from "@/components/Modal";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import LocationSelect from "@/app/_home/_components/LocationSelect";
+import LocationSelect from "@/components/Filtering/LocationSelect";
 import { useForm } from "react-hook-form";
 
 type CreateGatheringsModalProps = {
