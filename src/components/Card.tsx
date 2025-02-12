@@ -9,6 +9,18 @@ import Tag from "./Tag";
 import testCard from "../../public/images/testCard.png";
 import { CardData } from "@/stores/useCardStore";
 import LikeButton from "./LikeButton";
+import JoinArrow from "@/images/join_now_arrow.svg";
+
+type CardProps = {
+  id: number;
+  name: string;
+  location: string;
+  dateTime: string;
+  registrationEnd: string;
+  participantCount: number;
+  capacity: number;
+  image: string;
+};
 
 export default function Card({
   id,
@@ -19,14 +31,14 @@ export default function Card({
   participantCount,
   capacity,
   image,
-}: CardData) {
+}: CardProps) {
   const router = useRouter();
 
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
-  const isClosed = !!registrationEnd; //모집이 마감되었는지
+  const isClosed = registrationEnd && new Date(registrationEnd) < new Date(); //모집이 마감되었는지
 
   const handleCardClick = () => {
-    router.push(`/card/${id}`);
+    router.push(`/${id}`);
   };
 
   const handleLikeClick = () => {
@@ -56,7 +68,7 @@ export default function Card({
         <div className="mb-2 flex items-center gap-2">
           <h2 className="text-lg font-bold">{name} |</h2>
           <p className="text-sm text-gray-500">{location}</p>
-          <LikeButton onClick={handleLikeClick} isClosed={isClosed} />
+          <LikeButton onClick={handleLikeClick} isClosed={!isClosed} className="ml-auto" />
         </div>
 
         {/* 날짜 정보 */}
@@ -71,7 +83,7 @@ export default function Card({
           <ProgressBar progress={progress} />
           <button className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-orange-500">
             join now
-            <Image src={"/images/join_now_arrow.svg"} alt={"화살표  ic"} width={24} height={24} />
+            <JoinArrow />
           </button>
         </div>
       </div>
