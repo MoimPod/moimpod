@@ -2,15 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import Card from "@/components/Card";
-import { useFetchGatherings } from "./_hooks/useFetchGatherings";
-import CategoryButton from "./_components/CategoryButton";
-import LocationSelect from "./_components/LocationSelect";
-import ServiceTab from "./_components/ServiceTab";
-import DateSelect from "./_components/DateSelect";
+import { useFetchGatherings } from "@/app/_home/_hooks/useFetchGatherings";
+import CategoryButton from "@/app/_home/_components/CategoryButton";
+import LocationSelect from "@/app/_home/_components/LocationSelect";
+import ServiceTab from "@/app/_home/_components/ServiceTab";
+import DateSelect from "@/app/_home/_components/DateSelect";
 import GatheringLogo from "@/images/gathering_logo.svg";
 import Button from "@/components/Button";
-import SortButton from "./_components/SortButton";
-import CreateGatheringsModal from "./_components/CreateGatheringsModal";
+import SortButton from "@/app/_home/_components/SortButton";
+import CreateGatheringsModal from "@/app/_home/_components/CreateGatheringsModal";
 
 export type CardData = {
   id: number;
