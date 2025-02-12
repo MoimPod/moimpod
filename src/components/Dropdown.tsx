@@ -49,6 +49,7 @@ export default function Dropdown({
           "mb-2 flex w-[110px] cursor-pointer items-center justify-between rounded-xl border p-2 text-sm font-medium",
           className,
           isOpen ? "bg-gray-900 text-white" : "bg-gray-50",
+          selected ? "text-gray-800" : "",
           disabled && "cursor-not-allowed bg-gray-200",
         )}
         onClick={() => !disabled && setIsOpen(!isOpen)}
