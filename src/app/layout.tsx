@@ -23,11 +23,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${pretendard.variable} font-pretendard`}>
+      <body className={`${pretendard.variable} bg-gray-100 font-pretendard`}>
         <Providers>
           <div>
             <Header />
-            <main>{children}</main>
+            <main className="flex min-h-screen flex-col pt-[56px]">{children}</main>
           </div>
         </Providers>
       </body>
