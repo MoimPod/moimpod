@@ -19,7 +19,7 @@ export default function LikeButton({ onClick, isClosed, isLiked, className, ...r
   };
   return (
     <button
-      className={`group flex ${isClosed ? "h-9 w-full max-w-[116px] sm:size-12" : "size-12"} ${className} items-center justify-center rounded-full ${isClicked || isClosed ? "border-0 bg-orange-50" : "border-2 bg-white"} border-gray-200`}
+      className={`group flex ${isClosed ? "h-9 w-full max-w-[116px] sm:size-12" : "size-12"} items-center justify-center rounded-full ${isClicked || isClosed ? "border-0 bg-orange-50" : "border-2 border-gray-200 bg-white"} ${className}`}
       onClick={handleClick}
       {...rest}
     >
