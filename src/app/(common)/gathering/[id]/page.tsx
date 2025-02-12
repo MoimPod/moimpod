@@ -22,6 +22,7 @@ export default function GatheringDetail() {
     <div className="flex flex-col items-center gap-4 pt-6 md:flex-row lg:pt-10">
       <Thumbnail imageUrl={data.image} />
       <GatheringInfo
+        gatheringId={`${data.id}`}
         name={data.name}
         dateTime={data.dateTime}
         registrationEnd={data.registrationEnd}
