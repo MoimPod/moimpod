@@ -99,7 +99,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         </FormField>
 
         <FormField label="선택 서비스">
-          <CategoryButton categories={["달램핏", "워케이션"]} className="rounded-lg">
+          <CategoryButton categories={["달램핏", "워케이션"]}>
             <CategoryButton.Checkbox category="달램핏" subText="오피스 스트레칭" />
             <CategoryButton.Checkbox category="워케이션" />
           </CategoryButton>
