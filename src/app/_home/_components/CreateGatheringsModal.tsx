@@ -5,6 +5,7 @@ import Modal from "@/components/Modal";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import LocationSelect from "@/components/Filtering/LocationSelect";
+import CategoryButton from "@/components/Filtering/CategoryButton";
 import { useForm } from "react-hook-form";
 
 type CreateGatheringsModalProps = {
@@ -98,10 +99,10 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         </FormField>
 
         <FormField label="선택 서비스">
-          <Input
-            placeholder="서비스를 선택해주세요."
-            {...register("service", { required: "서비스를 선택해주세요." })}
-          />
+          <CategoryButton categories={["달램핏", "워케이션"]} className="rounded-lg">
+            <CategoryButton.Checkbox category="달램핏" subText="오피스 스트레칭" />
+            <CategoryButton.Checkbox category="워케이션" />
+          </CategoryButton>
         </FormField>
 
         <FormField label="모임 날짜">
