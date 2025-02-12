@@ -3,7 +3,7 @@
 import LikeButton from "@/components/LikeButton";
 import ChipInfo from "@/components/ChipInfo";
 import ProgressBar from "@/components/ProgressBar";
-import GatheredProfiles from "@/app/gathering/_components/GatheredProfiles";
+import GatheredProfiles from "@/app/(common)/gathering/_components/GatheredProfiles";
 import Check from "@/images/check.svg";
 
 export type GatheringProps = {
@@ -23,8 +23,8 @@ export default function GatheringInfo({ name, dateTime, location, count, capacit
   };
 
   return (
-    <div className="h-auto w-full rounded-3xl border-2 border-gray-200 bg-white">
-      <div className="flex justify-between p-6">
+    <div className="w-full rounded-3xl border-2 border-gray-200 bg-white md:h-60 lg:h-[270px]">
+      <div className="flex justify-between p-6 lg:pb-11">
         <div>
           <h2 className="text-lg font-semibold">{name}</h2>
           <div className="mb-3">{location}</div>

@@ -1,8 +1,9 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useGetGatheringInfo } from "@/app/gathering/_hooks/useGetGatheringInfo";
-import GatheringInfo from "@/app/gathering/_components/GatheringInfo";
+import { useGetGatheringInfo } from "@/app/(common)/gathering/_hooks/useGetGatheringInfo";
+import Thumbnail from "@/app/(common)/gathering/_components/Thumbnail";
+import GatheringInfo from "@/app/(common)/gathering/_components/GatheringInfo";
 import Spinner from "@/components/Spinner";
 
 export default function GatheringDetail() {
@@ -18,8 +19,8 @@ export default function GatheringDetail() {
   if (error) return <p>죄송합니다. 에러가 발생하였습니다.</p>;
 
   return (
-    <div className="max-w flex flex-col items-center gap-4 p-4 md:flex-row">
-      {/* <Thumbnail imageUrl={data.image} /> */}
+    <div className="flex flex-col items-center gap-4 pt-6 md:flex-row lg:pt-10">
+      <Thumbnail imageUrl={data.image} />
       <GatheringInfo
         name={data.name}
         dateTime={data.dateTime}
