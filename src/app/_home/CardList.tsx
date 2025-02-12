@@ -66,7 +66,7 @@ export default function CardList() {
           </div>
         </div>
 
-        <CategoryButton />
+        <CategoryButton categories={["전체", "오피스 스트레칭", "마인드풀니스"]} />
       </div>
       <hr />
 

@@ -50,7 +50,7 @@ export default function Card({
   return (
     <div
       onClick={handleCardClick}
-      className="my-5 items-center rounded-3xl border-0 shadow md:flex md:h-[156px] lg:flex lg:h-[156px]"
+      className="my-5 items-center rounded-3xl border-0 bg-white shadow md:flex md:h-[156px] lg:flex lg:h-[156px]"
     >
       {/* 카드 이미지 */}
       <div className="relative">
