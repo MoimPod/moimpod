@@ -28,7 +28,7 @@ export default function CardList() {
   // 정렬된 데이터
   const [sortedCards, setSortedCards] = useState<CardData[]>([]);
 
-  const [isModal, setIsModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (cards.length > 0) {
@@ -37,11 +37,11 @@ export default function CardList() {
   }, [cards]);
 
   const handleOpen = () => {
-    setIsModal(true);
+    setIsModalOpen(true);
   };
 
   const handleClose = () => {
-    setIsModal(false);
+    setIsModalOpen(false);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -60,7 +60,7 @@ export default function CardList() {
         <div className="flex items-center">
           <ServiceTab />
           <div className="ml-auto w-[114px]">
-            <Button styleType="solid" size="sm" className="h-[40px] md:h-[44px] lg:h-[44px]">
+            <Button styleType="solid" size="sm" className="h-[40px] md:h-[44px] lg:h-[44px]" onClick={handleOpen}>
               모임 만들기
             </Button>
           </div>
@@ -80,6 +80,8 @@ export default function CardList() {
           <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />
         ))}
       </div>
+
+      <CreateGatheringsModal isOpen={isModalOpen} onClose={handleClose} />
     </div>
   );
 }
