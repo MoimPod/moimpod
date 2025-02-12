@@ -41,13 +41,12 @@ export const BaseDatepicker = ({
 };
 
 // 시간선택
-export const DatepickerWithTime = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+export const DatepickerWithTime = ({ selectedDate, onDateChange }: BaseDatepickerProps) => {
   return (
     <div className="p-4">
       <BaseDatepicker
         selectedDate={selectedDate}
-        onDateChange={setSelectedDate}
+        onDateChange={onDateChange}
         showTimeSelect={true} // 시간 선택 활성화
         placeholderText="날짜와 시간을 선택하세요"
       />
@@ -56,13 +55,12 @@ export const DatepickerWithTime = () => {
 };
 
 // 날짜만 선택
-export const SimpleDatepicker = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+export const SimpleDatepicker = ({ selectedDate, onDateChange }: BaseDatepickerProps) => {
   return (
     <div className="p-4">
       <BaseDatepicker
         selectedDate={selectedDate}
-        onDateChange={setSelectedDate}
+        onDateChange={onDateChange}
         showInline={true} // 캘린더를 인라인으로 표시
         placeholderText="날짜를 선택하세요"
       />
