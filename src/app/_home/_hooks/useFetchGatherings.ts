@@ -68,9 +68,9 @@ const mockCards: CardData[] = [
 //     staleTime: 60000,
 //   });
 // };
-export const useFetchGatherings = (teamId: number) => {
+export const useFetchGatherings = () => {
   return useQuery({
-    queryKey: ["gatherings", teamId],
+    queryKey: ["gatherings"],
     queryFn: async () => {
       try {
         console.log("더미 데이터 사용 중!");

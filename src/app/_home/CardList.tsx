@@ -10,6 +10,7 @@ import DateSelect from "./_components/DateSelect";
 import GatheringLogo from "@/images/gathering_logo.svg";
 import Button from "@/components/Button";
 import SortButton from "./_components/SortButton";
+import CreateGatheringsModal from "./_components/CreateGatheringsModal";
 
 export type CardData = {
   id: number;
@@ -22,19 +23,26 @@ export type CardData = {
   image: string;
 };
 export default function CardList() {
-  const teamId = 3;
-
   // 원본 데이터
-  const { data: cards = [], isLoading, error } = useFetchGatherings(teamId);
-
+  const { data: cards = [], isLoading, error } = useFetchGatherings();
   // 정렬된 데이터
   const [sortedCards, setSortedCards] = useState<CardData[]>([]);
+
+  const [isModal, setIsModal] = useState(false);
 
   useEffect(() => {
     if (cards.length > 0) {
       setSortedCards(cards);
     }
   }, [cards]);
+
+  const handleOpen = () => {
+    setIsModal(true);
+  };
+
+  const handleClose = () => {
+    setIsModal(false);
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>;
@@ -61,6 +69,7 @@ export default function CardList() {
         <CategoryButton />
       </div>
       <hr />
+
       <div>
         <div className="my-3 flex gap-3">
           <LocationSelect />

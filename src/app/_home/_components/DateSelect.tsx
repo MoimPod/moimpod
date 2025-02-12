@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Button from "@/components/Button";
-import { SimpleDatepicker, DatepickerWithTime } from "@/components/Datepicker";
+import { SimpleDatepicker } from "@/components/Datepicker";
 import { format } from "date-fns";
 import ArrowDownBlackIcon from "@/images/dropdown_down_arrow_black.svg";
 import ArrowDownWhiteIcon from "@/images/dropdown_down_arrow_white.svg";
