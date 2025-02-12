@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "@/components/Modal";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -12,11 +12,10 @@ type CreateGatheringsModalProps = {
   onClose: () => void;
 };
 
-// 입력 필드 타입 정의
 type FormValues = {
   name: string;
   location: string;
-  image: string;
+  image: File | null;
   service: string;
   date: string;
   capacity: string;
@@ -34,8 +33,27 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isValid },
-  } = useForm<FormValues>({ mode: "onChange" });
+  } = useForm<FormValues>({
+    mode: "onChange",
+  });
+
+  const [imageName, setImageName] = useState<string>("");
+
+  useEffect(() => {
+    if (!isOpen) {
+      reset();
+      setImageName("");
+    }
+  }, [isOpen, reset]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageName(file.name);
+    }
+  };
 
   return (
     <Modal
@@ -44,44 +62,64 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
       className="flex h-screen w-full flex-col sm:fixed sm:overflow-auto md:h-[802px] md:max-w-[520px]"
     >
       <h2 className="mb-3 text-lg font-semibold">모임 만들기</h2>
-      <FormField label="모임 이름">
-        <Input placeholder="모임 이름을 작성해주세요." {...register("name", { required: true })} />
-      </FormField>
+      <form onSubmit={handleSubmit(onClose)}>
+        <FormField label="모임 이름">
+          <Input
+            placeholder="모임 이름을 작성해주세요."
+            {...register("name", { required: "모임 이름을 입력해주세요." })}
+          />
+        </FormField>
 
-      <FormField label="장소">
-        <LocationSelect />
-      </FormField>
+        <FormField label="장소">
+          <LocationSelect />
+        </FormField>
 
-      <FormField label="이미지">
-        <div className="flex">
-          <Input placeholder="이미지를 첨부해주세요." {...register("image", { required: true })} />
-          <Button styleType="outline" size="sm" className="ml-3 w-[100px]">
-            파일 첨부
-          </Button>
-        </div>
-      </FormField>
+        <FormField label="이미지">
+          <div className="flex">
+            <div
+              className={`w-full rounded-xl bg-gray-50 px-4 py-2.5 text-sm ${imageName ? "text-gray-900" : "text-gray-400"}`}
+            >
+              {imageName || "이미지를 첨부해주세요."}
+            </div>
+            <input type="file" id="imageUpload" className="hidden" onChange={handleFileChange} />
+            <Button
+              styleType="outline"
+              size="sm"
+              className="ml-3 w-[100px]"
+              onClick={() => {
+                document.getElementById("imageUpload")?.click();
+              }}
+            >
+              파일 첨부
+            </Button>
+          </div>
+        </FormField>
 
-      <FormField label="선택 서비스">
-        <Input placeholder="서비스를 선택해주세요." {...register("service", { required: true })} />
-      </FormField>
+        <FormField label="선택 서비스">
+          <Input
+            placeholder="서비스를 선택해주세요."
+            {...register("service", { required: "서비스를 선택해주세요." })}
+          />
+        </FormField>
 
-      <FormField label="모임 날짜">
-        <Input placeholder="모임 날짜를 입력해주세요." {...register("date", { required: true })} />
-      </FormField>
+        <FormField label="모임 날짜">
+          <Input
+            placeholder="모임 날짜를 입력해주세요."
+            {...register("date", { required: "모임 날짜를 입력해주세요." })}
+          />
+        </FormField>
 
-      <FormField label="모임 정원">
-        <Input placeholder="최소 3인 이상 입력해주세요." {...register("capacity", { required: true })} />
-      </FormField>
+        <FormField label="모임 정원">
+          <Input
+            placeholder="최소 3인 이상 입력해주세요."
+            {...register("capacity", { required: "정원을 입력해주세요." })}
+          />
+        </FormField>
 
-      <Button
-        styleType="solid"
-        size="sm"
-        className="mt-7 h-[40px] w-[118px]"
-        disabled={!isValid}
-        onClick={handleSubmit(onClose)}
-      >
-        확인
-      </Button>
+        <Button styleType="solid" size="sm" className="mt-7 h-[40px] w-[118px]" disabled={!isValid} type="submit">
+          확인
+        </Button>
+      </form>
     </Modal>
   );
 }
