@@ -38,7 +38,7 @@ export default function Card({
   const isClosed = registrationEnd && new Date(registrationEnd) < new Date(); //모집이 마감되었는지
 
   const handleCardClick = () => {
-    router.push(`/${id}`);
+    router.push(`gathering/${id}`);
   };
 
   const handleLikeClick = () => {
