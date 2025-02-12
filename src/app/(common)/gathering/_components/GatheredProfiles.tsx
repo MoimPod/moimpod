@@ -1,11 +1,16 @@
 import Avatar from "@/components/Avatar";
 
-export default function GatheredProfiles({ count }: { count: number }) {
+type GatheredProfilesProps = {
+  count: number;
+  profileImages: (string | null)[];
+};
+
+export default function GatheredProfiles({ count, profileImages }: GatheredProfilesProps) {
   return (
     <div className="flex">
-      {[...Array(count)].slice(0, 4).map((_, index) => (
+      {profileImages.slice(0, 4).map((imageUrl, index) => (
         <div key={index} className={`relative ${index !== 0 ? "-ml-3" : ""}`}>
-          <Avatar key={index} />
+          <Avatar key={index} size={"sm"} imageUrl={imageUrl} />
         </div>
       ))}
       {count > 4 ? (

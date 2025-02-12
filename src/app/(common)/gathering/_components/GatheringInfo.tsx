@@ -15,9 +15,18 @@ export type GatheringProps = {
   location: string;
   count: number;
   capacity: number;
+  profileImages: (string | null)[];
 };
 
-export default function GatheringInfo({ gatheringId, name, dateTime, location, count, capacity }: GatheringProps) {
+export default function GatheringInfo({
+  gatheringId,
+  name,
+  dateTime,
+  location,
+  count,
+  capacity,
+  profileImages,
+}: GatheringProps) {
   const MIN_COUNT = 5;
 
   const { favorites, toggleFavorite } = useFavoritesStore();
@@ -40,7 +49,7 @@ export default function GatheringInfo({ gatheringId, name, dateTime, location, c
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="text-sm font-semibold text-gray-900">모집정원 {count}명</div>
-            <GatheredProfiles count={count} />
+            <GatheredProfiles count={count} profileImages={profileImages} />
           </div>
           {MIN_COUNT <= count && <ConfirmedStamp />}
         </div>
