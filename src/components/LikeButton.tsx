@@ -5,20 +5,20 @@ import Bye from "@/images/bye.svg";
 import { ButtonHTMLAttributes, useState } from "react";
 
 type LikeButtonProps = {
-  onClick: () => void;
-  isClosed: boolean;
+  onClick: () => void; // 버튼 클릭 시 실행될 함수
+  isClosed: boolean; // 이미 마감, 취소된경우
+  isLiked: boolean; // 찜해놓은 경우
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function LikeButton({ onClick, isClosed, ...rest }: LikeButtonProps) {
-  // 모임이 마감, 취소된 경우
-  const [clicked, setClicked] = useState(false);
+export default function LikeButton({ onClick, isClosed, isLiked, ...rest }: LikeButtonProps) {
+  const [isClicked, setIsClicked] = useState(isLiked);
   const handleClick = () => {
-    setClicked(!clicked);
+    setIsClicked(!isClicked);
     onClick();
   };
   return (
     <button
-      className={`group flex ${isClosed ? "h-9 w-full max-w-[116px] sm:size-12" : "size-12"} items-center justify-center rounded-full ${clicked || isClosed ? "border-0 bg-orange-50" : "border-2 bg-white"} border-gray-200`}
+      className={`group flex ${isClosed ? "h-9 w-full max-w-[116px] sm:size-12" : "size-12"} items-center justify-center rounded-full ${isClicked || isClosed ? "border-0 bg-orange-50" : "border-2 bg-white"} border-gray-200`}
       onClick={handleClick}
       {...rest}
     >
@@ -32,7 +32,7 @@ export default function LikeButton({ onClick, isClosed, ...rest }: LikeButtonPro
         <Heart
           fill="#fff"
           stroke="#9CA3AF"
-          className={`transition-all ${clicked ? "animate-heart-scale-up fill-red-600 stroke-none" : ""}`}
+          className={`transition-all ${isClicked ? "animate-heart-scale-up fill-red-600 stroke-none" : ""}`}
         />
       )}
     </button>
