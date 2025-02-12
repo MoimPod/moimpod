@@ -3,8 +3,8 @@
 import LikeButton from "@/components/LikeButton";
 import ChipInfo from "@/components/ChipInfo";
 import ProgressBar from "@/components/ProgressBar";
+import ConfirmedStamp from "@/components/ConfirmedStamp";
 import GatheredProfiles from "./GatheredProfiles";
-import Check from "@/images/check.svg";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 
 export type GatheringProps = {
@@ -42,14 +42,7 @@ export default function GatheringInfo({ gatheringId, name, dateTime, location, c
             <div className="text-sm font-semibold text-gray-900">모집정원 {count}명</div>
             <GatheredProfiles count={count} />
           </div>
-          {MIN_COUNT <= count && (
-            <div className="flex items-center gap-2">
-              <div className="flex h-4 w-4 items-center justify-center rounded-full bg-orange-500">
-                <Check alt={"확정 아이콘"} className="text-white" />
-              </div>
-              <div className="whitespace-nowrap text-sm font-medium text-orange-500">개설확정</div>
-            </div>
-          )}
+          {MIN_COUNT <= count && <ConfirmedStamp />}
         </div>
 
         <ProgressBar progress={(count / capacity) * 100} />
