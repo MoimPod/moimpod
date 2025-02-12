@@ -31,7 +31,7 @@ export default function GatheringInfo({ gatheringId, name, dateTime, location, c
           <div className="mb-3">{location}</div>
           <ChipInfo dateTime={dateTime} />
         </div>
-        <LikeButton onClick={() => toggleFavorite(gatheringId)} isClosed={false} />
+        <LikeButton isLiked={isLiked} onClick={() => toggleFavorite(gatheringId)} isClosed={false} />
       </div>
 
       <hr className="border-2 border-dashed" />
