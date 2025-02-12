@@ -10,15 +10,16 @@ type LikeButtonProps = {
   isLiked: boolean; // 찜해놓은 경우
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function LikeButton({ onClick, isClosed, isLiked, ...rest }: LikeButtonProps) {
+export default function LikeButton({ onClick, isClosed, isLiked, className, ...rest }: LikeButtonProps) {
   const [isClicked, setIsClicked] = useState(isLiked);
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setIsClicked(!isClicked);
-    onClick();
+    onClick(e);
   };
   return (
     <button
-      className={`group flex ${isClosed ? "h-9 w-full max-w-[116px] sm:size-12" : "size-12"} items-center justify-center rounded-full ${isClicked || isClosed ? "border-0 bg-orange-50" : "border-2 bg-white"} border-gray-200`}
+      className={`group flex ${isClosed ? "h-9 w-full max-w-[116px] sm:size-12" : "size-12"} ${className} items-center justify-center rounded-full ${isClicked || isClosed ? "border-0 bg-orange-50" : "border-2 bg-white"} border-gray-200`}
       onClick={handleClick}
       {...rest}
     >
