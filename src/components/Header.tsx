@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="h-[56px] border-b-2 border-black bg-orange-600 px-4 md:h-[60px]">
+    <header className="fixed left-0 right-0 top-0 z-50 h-[56px] border-b-2 border-black bg-orange-600 px-4 md:h-[60px]">
       <div className="m-auto flex h-full max-w-[1200px] flex-row items-center justify-between">
         <nav className="flex h-full flex-row items-center gap-3 md:gap-6">
           {/* 768px 이하에서 보이는 로고 */}
