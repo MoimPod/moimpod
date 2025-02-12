@@ -5,13 +5,13 @@ import Bye from "@/images/bye.svg";
 import { ButtonHTMLAttributes, useState } from "react";
 
 type LikeButtonProps = {
-  onClick: () => void;
-  isClosed: boolean;
+  onClick: () => void; // 버튼 클릭 시 실행될 함수
+  isClosed: boolean; // 이미 마감, 취소된경우
+  isLiked: boolean; // 찜해놓은 경우
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function LikeButton({ onClick, isClosed, ...rest }: LikeButtonProps) {
-  // 모임이 마감, 취소된 경우
-  const [clicked, setClicked] = useState(false);
+export default function LikeButton({ onClick, isClosed, isLiked, ...rest }: LikeButtonProps) {
+  const [clicked, setClicked] = useState(isLiked);
   const handleClick = () => {
     setClicked(!clicked);
     onClick();
