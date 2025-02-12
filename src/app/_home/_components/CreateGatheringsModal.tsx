@@ -71,7 +71,9 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         </FormField>
 
         <FormField label="장소">
-          <LocationSelect />
+          <div className="border-none">
+            <LocationSelect className="border-none text-gray-400" />
+          </div>
         </FormField>
 
         <FormField label="이미지">
@@ -116,7 +118,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           />
         </FormField>
 
-        <Button styleType="solid" size="sm" className="mt-7 h-[40px] w-[118px]" disabled={!isValid} type="submit">
+        <Button styleType="solid" size="lg" className="mt-7 h-[40px] w-[118px]" disabled={!isValid} type="submit">
           확인
         </Button>
       </form>

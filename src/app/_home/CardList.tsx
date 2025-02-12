@@ -9,7 +9,7 @@ import ServiceTab from "@/app/_home/_components/ServiceTab";
 import DateSelect from "@/app/_home/_components/DateSelect";
 import GatheringLogo from "@/images/gathering_logo.svg";
 import Button from "@/components/Button";
-import SortButton from "@/app/_home/_components/SortButton";
+import SortButton from "@/components/SortButton";
 import CreateGatheringsModal from "@/app/_home/_components/CreateGatheringsModal";
 
 export type CardData = {
@@ -71,9 +71,11 @@ export default function CardList() {
       <hr />
 
       <div>
-        <div className="my-3 flex gap-3">
-          <LocationSelect />
-          <DateSelect />
+        <div className="my-3 flex items-center justify-between">
+          <div className="flex gap-3">
+            <LocationSelect />
+            <DateSelect />
+          </div>
           <SortButton cards={cards} onSort={setSortedCards} />
         </div>
         {sortedCards.map((card) => (

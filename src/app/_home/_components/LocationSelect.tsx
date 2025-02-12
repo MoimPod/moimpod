@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import ArrowDownBlackIcon from "@/images/dropdown_down_arrow_black.svg";
-import ArrowDownWhiteIcon from "@/images/dropdown_down_arrow_white.svg";
+import { useState } from "react";
+import Dropdown from "@/components/Dropdown";
 
-export default function LocationSelect() {
+type LocationSelectProps = {
+  className?: string;
+};
+
+export default function LocationSelect({ className }: LocationSelectProps) {
   const cities: Record<string, string[]> = {
     지역전체: [],
     서울시: ["강남구", "서초구", "송파구"],
@@ -13,92 +16,29 @@ export default function LocationSelect() {
     대구광역시: ["중구", "달서구", "수성구"],
   };
 
-  // 드롭다운 요소 감지를 위한 useRef
-  const cityDropdownRef = useRef<HTMLDivElement>(null);
-  const districtDropdownRef = useRef<HTMLDivElement>(null);
-
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
 
-  const [isCityDropdownOpen, setCityDropdownOpen] = useState(false);
-  const [isDistrictDropdownOpen, setDistrictDropdownOpen] = useState(false);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (cityDropdownRef.current && !cityDropdownRef.current.contains(event.target as Node)) {
-        setCityDropdownOpen(false);
-      }
-      if (districtDropdownRef.current && !districtDropdownRef.current.contains(event.target as Node)) {
-        setDistrictDropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  // 시,도 상태 업데이트
-  const handleCitySelect = (city: string) => {
-    setSelectedCity(city);
-    setSelectedDistrict(""); // 시가 변경되면 구 선택 초기화
-    setCityDropdownOpen(false);
-  };
-
-  // 구, 군 상태 업데이트
-  const handleDistrictSelect = (district: string) => {
-    setSelectedDistrict(district);
-    setDistrictDropdownOpen(false);
-  };
-
   return (
     <div className="flex gap-3">
-      {/* 시/도 드롭다운 */}
-      <div className="relative" ref={cityDropdownRef}>
-        <div
-          className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isCityDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} `}
-          onClick={() => setCityDropdownOpen(!isCityDropdownOpen)}
-        >
-          {selectedCity || "시/도 선택"}
-          {!isCityDropdownOpen ? <ArrowDownBlackIcon /> : <ArrowDownWhiteIcon />}
-        </div>
-        {isCityDropdownOpen && (
-          <div className="absolute z-10 w-[110px] rounded-lg border bg-white p-2 text-sm font-medium shadow-md">
-            {Object.keys(cities).map((city) => (
-              <div key={city} onClick={() => handleCitySelect(city)} className="rounded-lg p-2 hover:bg-orange-100">
-                {city}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* 구/군 드롭다운 */}
-      <div className="relative" ref={districtDropdownRef}>
-        <div
-          className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isDistrictDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} ${
-            !selectedCity ? "cursor-not-allowed bg-gray-200 text-gray-500" : "bg-gray-50 text-gray-900"
-          }`}
-          onClick={() => selectedCity && setDistrictDropdownOpen(!isDistrictDropdownOpen)}
-        >
-          {selectedDistrict || "구/군 선택"}
-          {!isDistrictDropdownOpen ? <ArrowDownBlackIcon /> : <ArrowDownWhiteIcon />}
-        </div>
-        {isDistrictDropdownOpen && (
-          <div className="absolute z-10 w-[110px] rounded-lg border bg-white p-2 text-sm font-medium shadow-md">
-            {selectedCity &&
-              cities[selectedCity]?.map((district) => (
-                <div
-                  key={district}
-                  onClick={() => handleDistrictSelect(district)}
-                  className="rounded-lg p-2 hover:bg-orange-100"
-                >
-                  {district}
-                </div>
-              ))}
-          </div>
-        )}
-      </div>
+      <Dropdown
+        options={Object.keys(cities)}
+        selected={selectedCity}
+        onSelect={(city) => {
+          setSelectedCity(city);
+          setSelectedDistrict(""); // 시가 바뀌면 구 초기화
+        }}
+        placeholder="시/도 선택"
+        className={className}
+      />
+      <Dropdown
+        options={selectedCity ? cities[selectedCity] : []}
+        selected={selectedDistrict}
+        onSelect={setSelectedDistrict}
+        placeholder="구/군 선택"
+        disabled={!selectedCity}
+        className={className}
+      />
     </div>
   );
 }
