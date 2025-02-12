@@ -2,6 +2,7 @@
 
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import { useUserStore } from "@/stores/useUserStore";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,6 +25,7 @@ export default function SignIn() {
   } = useForm<FormValues>({ mode: "onChange" });
   const [passwordVisible, setPasswordVisible] = useState(false);
   const router = useRouter();
+  const action = useUserStore((state) => state.action);
 
   const handleLogin = async (data: FormValues) => {
     const { email, password } = data;
@@ -43,6 +45,12 @@ export default function SignIn() {
     if (LoginError) return;
     const result = await postSignIn({ email, password });
     if (result.token) {
+      // 토큰이 들어왔을때 cookies로 저장하기
+      document.cookie = `token=${result.token};`;
+      const userInfo = await getUser(result.token);
+      // user 정보 저장하기
+      action.setUser(userInfo);
+      // 로그인 성공 이후 main으로 이동
       router.push("/");
     } else {
       if (result.status === 401) {
@@ -57,6 +65,17 @@ export default function SignIn() {
   const postSignIn = async (data: FormValues) => {
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/signin`, data);
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const getUser = async (token: string) => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/user`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       return response.data;
     } catch (error) {
       return error;
