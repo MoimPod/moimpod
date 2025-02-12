@@ -11,14 +11,14 @@ type LikeButtonProps = {
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export default function LikeButton({ onClick, isClosed, isLiked, ...rest }: LikeButtonProps) {
-  const [clicked, setClicked] = useState(isLiked);
+  const [isClicked, setIsClicked] = useState(isLiked);
   const handleClick = () => {
-    setClicked(!clicked);
+    setIsClicked(!isClicked);
     onClick();
   };
   return (
     <button
-      className={`group flex ${isClosed ? "h-9 w-full max-w-[116px] sm:size-12" : "size-12"} items-center justify-center rounded-full ${clicked || isClosed ? "border-0 bg-orange-50" : "border-2 bg-white"} border-gray-200`}
+      className={`group flex ${isClosed ? "h-9 w-full max-w-[116px] sm:size-12" : "size-12"} items-center justify-center rounded-full ${isClicked || isClosed ? "border-0 bg-orange-50" : "border-2 bg-white"} border-gray-200`}
       onClick={handleClick}
       {...rest}
     >
@@ -32,7 +32,7 @@ export default function LikeButton({ onClick, isClosed, isLiked, ...rest }: Like
         <Heart
           fill="#fff"
           stroke="#9CA3AF"
-          className={`transition-all ${clicked ? "animate-heart-scale-up fill-red-600 stroke-none" : ""}`}
+          className={`transition-all ${isClicked ? "animate-heart-scale-up fill-red-600 stroke-none" : ""}`}
         />
       )}
     </button>
