@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import TabSlider from "./TabSlider";
+import TabSlider from "@/app/_home/_components/TabSlider";
 
 export default function ServiceTab() {
   const [activeTab, setActiveTab] = useState<"달램핏" | "워케이션">("달램핏");
