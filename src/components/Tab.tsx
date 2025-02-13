@@ -92,7 +92,7 @@ Tab.Item = function ({ index, children }: ItemProps) {
       ref={(el) => {
         addTabRefs(index, el);
       }}
-      // 활성화된 탭이면 text의 생을 변경
+      // 활성화된 탭이면 text의 색을 변경
       className={`${activeIndex === index && "text-gray-900"} mb-1 flex cursor-pointer items-center gap-1 transition-colors duration-300`}
     >
       {children}
