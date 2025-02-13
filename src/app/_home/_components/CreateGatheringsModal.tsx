@@ -23,12 +23,14 @@ type FormValues = {
 };
 
 // 입력 필드 컴포넌트
-const FormField = ({ label, children }: { label: string; children: React.ReactNode }) => (
-  <div className="my-3">
-    <h2 className="mb-3 text-base font-semibold">{label}</h2>
-    {children}
-  </div>
-);
+export function FormField({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="my-3">
+      <h2 className="mb-3 text-base font-semibold">{label}</h2>
+      {children}
+    </div>
+  );
+}
 
 export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheringsModalProps) {
   const {
@@ -41,8 +43,6 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   });
 
   const [imageName, setImageName] = useState<string>("");
-
-  console.log("error!!!!!!:", errors);
 
   useEffect(() => {
     if (!isOpen) {

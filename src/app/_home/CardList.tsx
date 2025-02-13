@@ -60,7 +60,7 @@ export default function CardList() {
         <div className="flex items-center">
           <ServiceTab />
           <div className="ml-auto w-[114px]">
-            <Button styleType="solid" size="sm" className="h-[40px] md:h-[44px] lg:h-[44px]" onClick={handleOpen}>
+            <Button styleType="solid" size="sm" className="h-10 md:h-11" onClick={handleOpen}>
               모임 만들기
             </Button>
           </div>
@@ -69,7 +69,7 @@ export default function CardList() {
           <CategoryButton.Title category="전체" />
           <CategoryButton.Title category="오피스 스트레칭" />
           <CategoryButton.Title category="마인드풀니스" />
-        </CategoryButton>{" "}
+        </CategoryButton>
       </div>
       <hr />
 
