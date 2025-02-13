@@ -38,14 +38,14 @@ export default function DateSelect() {
 
       {/* 날짜 선택 */}
       {isDateDropdownOpen && (
-        <div className="absolute rounded-lg border bg-white p-6 px-8 shadow-md">
+        <div className="absolute z-10 rounded-xl border bg-white p-6 px-10 shadow-md">
           <SimpleDatepicker selectedDate={selectedDate} onDateChange={(date) => setSelectedDate(date)} />
           {/* 버튼 */}
-          <div className="mt-4 flex justify-center">
+          <div className="mt-3 flex justify-center gap-2">
             <Button
               styleType="outline"
               size="sm"
-              className="m-2 h-10 w-[118px]"
+              className="h-10 w-[118px]"
               onClick={() => {
                 setSelectedDate(null);
                 setDateDropdownOpen(false);
@@ -56,7 +56,7 @@ export default function DateSelect() {
             <Button
               styleType="solid"
               size="sm"
-              className="m-2 h-10 w-[118px]"
+              className="h-10 w-[118px]"
               disabled={!selectedDate} // 날짜가 선택되지 않으면 비활성화
               onClick={() => {
                 setDateDropdownOpen(false);

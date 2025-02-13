@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "./Datepicker.module.css";
@@ -15,7 +15,7 @@ type BaseDatepickerProps = {
 
 // 공통 커스텀 캘린더
 export const BaseDatepicker = ({
-  selectedDate,
+  selectedDate = null,
   onDateChange,
   showTimeSelect = false,
   showInline = false,
@@ -30,12 +30,20 @@ export const BaseDatepicker = ({
       dateFormat={showTimeSelect ? "yyyy-MM-dd h:mm aa" : "yyyy-MM-dd"}
       placeholderText={placeholderText}
       timeFormat="h:mm aa"
+      formatWeekDay={(day) => day.substr(0, 3)}
       timeIntervals={15}
       className={styles.dateInput}
       calendarClassName={styles.calendar}
-      dayClassName={(date) =>
-        date?.toDateString() === selectedDate?.toDateString() ? styles["selected-day"] : styles["default-day"]
-      }
+      dayClassName={(date) => {
+        const today = new Date();
+        const isToday = date.toDateString() === today.toDateString();
+        const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
+        const isOutsideMonth = date.getMonth() !== today.getMonth();
+        if (isSelected) return styles["selected-day"];
+        if (isToday) return styles.today;
+        if (isOutsideMonth) return styles["outside-month"];
+        return styles["default-day"];
+      }}
     />
   );
 };
@@ -57,7 +65,7 @@ export const DatepickerWithTime = ({ selectedDate, onDateChange }: BaseDatepicke
 // 날짜만 선택
 export const SimpleDatepicker = ({ selectedDate, onDateChange }: BaseDatepickerProps) => {
   return (
-    <div className="p-4">
+    <div>
       <BaseDatepicker
         selectedDate={selectedDate}
         onDateChange={onDateChange}
