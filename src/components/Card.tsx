@@ -68,7 +68,7 @@ export default function Card({
         <div className="mb-2 flex items-center gap-2">
           <h2 className="text-lg font-bold">{name} |</h2>
           <p className="text-sm text-gray-500">{location}</p>
-          <LikeButton onClick={handleLikeClick} isClosed={!isClosed} className="ml-auto" />
+          <LikeButton onClick={handleLikeClick} isLiked={true} isClosed={!isClosed} className="ml-auto" />
         </div>
 
         {/* 날짜 정보 */}

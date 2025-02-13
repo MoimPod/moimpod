@@ -3,34 +3,44 @@
 import LikeButton from "@/components/LikeButton";
 import ChipInfo from "@/components/ChipInfo";
 import ProgressBar from "@/components/ProgressBar";
-import GatheredProfiles from "@/app/gathering/_components/GatheredProfiles";
-import Check from "@/images/check.svg";
+import ConfirmedStamp from "@/components/ConfirmedStamp";
+import GatheredProfiles from "./GatheredProfiles";
+import { useFavoritesStore } from "@/stores/useFavoritesStore";
 
 export type GatheringProps = {
+  gatheringId: string;
   name: string;
   dateTime: string;
   registrationEnd: string;
   location: string;
   count: number;
   capacity: number;
+  profileImages: (string | null)[];
 };
 
-export default function GatheringInfo({ name, dateTime, location, count, capacity }: GatheringProps) {
+export default function GatheringInfo({
+  gatheringId,
+  name,
+  dateTime,
+  location,
+  count,
+  capacity,
+  profileImages,
+}: GatheringProps) {
   const MIN_COUNT = 5;
 
-  const handleClickFavorite = () => {
-    // TODO: 찜 클릭 로컬 스토리지 로직 구현
-  };
+  const { favorites, toggleFavorite } = useFavoritesStore();
+  const isLiked = favorites.includes(gatheringId);
 
   return (
-    <div className="h-auto w-full rounded-3xl border-2 border-gray-200 bg-white">
-      <div className="flex justify-between p-6">
+    <div className="w-full rounded-3xl border-2 border-gray-200 bg-white md:h-60 lg:h-[270px]">
+      <div className="flex justify-between p-6 lg:pb-11">
         <div>
           <h2 className="text-lg font-semibold">{name}</h2>
           <div className="mb-3">{location}</div>
           <ChipInfo dateTime={dateTime} />
         </div>
-        <LikeButton onClick={handleClickFavorite} isClosed={false} />
+        <LikeButton isLiked={isLiked} onClick={() => toggleFavorite(gatheringId)} isClosed={false} />
       </div>
 
       <hr className="border-2 border-dashed" />
@@ -39,14 +49,9 @@ export default function GatheringInfo({ name, dateTime, location, count, capacit
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="text-sm font-semibold text-gray-900">모집정원 {count}명</div>
-            <GatheredProfiles count={count} />
+            <GatheredProfiles count={count} profileImages={profileImages} />
           </div>
-          <div className="flex items-center gap-2">
-            <div className="flex h-4 w-4 items-center justify-center rounded-full bg-orange-500">
-              <Check alt={"확정 아이콘"} className="text-white" />
-            </div>
-            <div className="whitespace-nowrap text-sm font-medium text-orange-500">개설확정</div>
-          </div>
+          {MIN_COUNT <= count && <ConfirmedStamp />}
         </div>
 
         <ProgressBar progress={(count / capacity) * 100} />

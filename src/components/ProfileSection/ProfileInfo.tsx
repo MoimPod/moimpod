@@ -11,7 +11,7 @@ export default function ProfileInfo({ email, name, companyName, imageUrl }: Prof
   return (
     <div className="flex w-full flex-col gap-2 pl-24 pt-3">
       <div className="absolute left-6 top-[54px]">
-        <Avatar size={56} imageUrl={imageUrl} />
+        <Avatar size={"lg"} imageUrl={imageUrl} />
       </div>
       <span className="font-semibold text-gray-800">{name}</span>
       <div className="flex flex-col gap-1">
