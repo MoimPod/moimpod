@@ -2,20 +2,27 @@
 
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import Modal from "@/components/Modal";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 type FormValues = {
   name: string;
   email: string;
-  company: string;
+  companyName: string;
   password: string;
-  passwordCheck: string;
+  passwordCheck?: string;
 };
 
 export default function SignUp() {
+  // 회원가입 성공시 modal
+  const [isModal, setIsModal] = useState(false);
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -24,32 +31,48 @@ export default function SignUp() {
     formState: { errors, isValid },
   } = useForm<FormValues>({ mode: "onChange" });
 
-  const handleSignUp = (data: FormValues) => {
-    const { name, email, company, password, passwordCheck } = data;
-    if (name !== "홍길동") {
+  const handleSignUp = async (data: FormValues) => {
+    const { name, email, companyName, password, passwordCheck } = data;
+    if (name !== "") {
       setError("name", { type: "manual", message: "이름을 입력해주세요" });
     } else {
       clearErrors("name");
     }
-    if (email !== "rrrr@gmail.com") {
+    if (email !== "") {
       setError("email", { type: "manual", message: "중복된 이메일입니다." });
     } else {
       clearErrors("email");
     }
-    if (company !== "코드잇") {
-      setError("company", { type: "manual", message: "회사명을 정확하게 입력해주세요" });
+    if (companyName !== "") {
+      setError("companyName", { type: "manual", message: "회사명을 정확하게 입력해주세요" });
     } else {
-      clearErrors("company");
+      clearErrors("companyName");
     }
-    if (password !== "0000") {
+    if (password.length < 8) {
       setError("password", { type: "manual", message: "비밀번호를 입력해주세요." });
     } else {
       clearErrors("password");
     }
-    if (passwordCheck !== "0000") {
+    if (passwordCheck !== password) {
       setError("passwordCheck", { type: "manual", message: "비밀번호가 일치하지 않습니다." });
     } else {
       clearErrors("passwordCheck");
+    }
+    const result = await postSignUp({ name, email, companyName, password });
+    if (result.message === "사용자 생성 성공") {
+      setIsModal(true);
+    } else {
+      setError(result.parameter, { type: "manual", message: result.message });
+    }
+  };
+
+  const postSignUp = async (data: FormValues) => {
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auths/signup`, data);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("회원가입에 실패 하였습니다.", error);
     }
   };
 
@@ -100,8 +123,8 @@ export default function SignUp() {
             <Input
               type={"text"}
               placeholder="회사명을 입력해주세요"
-              register={register("company", { required: "회사명을 정확하게 입력해주세요" })}
-              helperText={errors.company?.message}
+              register={register("companyName", { required: "회사명을 정확하게 입력해주세요" })}
+              helperText={errors.companyName?.message}
             />
           </div>
           <div className="flex flex-col gap-2 pt-6">
@@ -161,6 +184,34 @@ export default function SignUp() {
           </div>
         </div>
       </form>
+      {isModal ? (
+        <>
+          <Modal
+            isOpen={isModal}
+            onClose={() => {
+              setIsModal(false);
+              router.push("/sign-in");
+            }}
+          >
+            <div className="w-full min-w-[252px]">
+              <p className="py-12 text-center text-base font-medium text-gray-900">가입이 완료 되었습니다.</p>
+              <div className="m-auto flex w-[120px]">
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setIsModal(false);
+                    router.push("/sign-in");
+                  }}
+                >
+                  확인
+                </Button>
+              </div>
+            </div>
+          </Modal>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
