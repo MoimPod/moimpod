@@ -35,12 +35,14 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     register,
     handleSubmit,
     reset,
-    formState: { isValid },
+    formState: { errors, isValid },
   } = useForm<FormValues>({
     mode: "onChange",
   });
 
   const [imageName, setImageName] = useState<string>("");
+
+  console.log("error!!!!!!:", errors);
 
   useEffect(() => {
     if (!isOpen) {
@@ -67,7 +69,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <FormField label="모임 이름">
           <Input
             placeholder="모임 이름을 작성해주세요."
-            {...register("name", { required: "모임 이름을 입력해주세요." })}
+            register={register("name", { required: "모임 이름을 입력해주세요." })}
           />
         </FormField>
 
@@ -108,14 +110,14 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <FormField label="모임 날짜">
           <Input
             placeholder="모임 날짜를 입력해주세요."
-            {...register("date", { required: "모임 날짜를 입력해주세요." })}
+            register={register("date", { required: "모임 날짜를 입력해주세요." })}
           />
         </FormField>
 
         <FormField label="모임 정원">
           <Input
             placeholder="최소 3인 이상 입력해주세요."
-            {...register("capacity", { required: "정원을 입력해주세요." })}
+            register={register("capacity", { required: "정원을 입력해주세요." })}
           />
         </FormField>
 
