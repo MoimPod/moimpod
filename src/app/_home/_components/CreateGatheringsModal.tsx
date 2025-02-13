@@ -37,24 +37,51 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     register,
     handleSubmit,
     reset,
-    formState: { errors, isValid },
+    setValue,
+    setError,
+    formState: { isValid },
   } = useForm<FormValues>({
     mode: "onChange",
   });
 
   const [imageName, setImageName] = useState<string>("");
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
 
   useEffect(() => {
     if (!isOpen) {
       reset();
       setImageName("");
+      setSelectedCity("");
+      setSelectedDistrict("");
     }
   }, [isOpen, reset]);
 
+  // Location 값 저장
+  const handleCityChange = (city: string) => {
+    setSelectedCity(city);
+    setSelectedDistrict(""); // 시가 변경되면 구 초기화
+    setValue("location", `${city} ${selectedDistrict}`);
+  };
+
+  const handleDistrictChange = (district: string) => {
+    setSelectedDistrict(district);
+    setValue("location", `${selectedCity} ${district}`);
+  };
+
+  // image 파일 저장
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      const allowedExtensions = ["jpg", "jpeg", "png"];
+      const fileExtensions = file.name.split(".").pop()?.toLowerCase();
+
+      if (!fileExtensions || !allowedExtensions.includes(fileExtensions)) {
+        setError("image", { type: "manual", message: "지원하는 파일 형식은 JPG, JPEG, PNG만 가능합니다." });
+        return;
+      }
       setImageName(file.name);
+      setValue("image", file);
     }
   };
 
@@ -75,7 +102,13 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
 
         <FormField label="장소">
           <div className="border-none">
-            <LocationSelect className="border-none text-gray-400" />
+            <LocationSelect
+              selectedCity={selectedCity}
+              setSelectedCity={handleCityChange}
+              selectedDistrict={selectedDistrict}
+              setSelectedDistrict={handleDistrictChange}
+              className="border-none text-gray-400"
+            />
           </div>
         </FormField>
 
@@ -86,11 +119,17 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
             >
               {imageName || "이미지를 첨부해주세요."}
             </div>
-            <input type="file" id="imageUpload" className="hidden" onChange={handleFileChange} />
+            <input
+              type="file"
+              id="imageUpload"
+              className="hidden"
+              accept=".jpg,.jpeg,.png"
+              onChange={handleFileChange}
+            />
             <Button
               styleType="outline"
               size="sm"
-              className="ml-3 w-[100px]"
+              className="ml-3 w-24"
               onClick={() => {
                 document.getElementById("imageUpload")?.click();
               }}
@@ -101,7 +140,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         </FormField>
 
         <FormField label="선택 서비스">
-          <CategoryButton categories={["달램핏", "워케이션"]}>
+          <CategoryButton categories={["달램핏", "워케이션"]} setValue={(value) => setValue("service", value)}>
             <CategoryButton.Checkbox category="달램핏" subText="오피스 스트레칭" />
             <CategoryButton.Checkbox category="워케이션" />
           </CategoryButton>
