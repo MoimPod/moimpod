@@ -28,6 +28,9 @@ export default function CardList() {
   // 정렬된 데이터
   const [sortedCards, setSortedCards] = useState<CardData[]>([]);
 
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -76,7 +79,12 @@ export default function CardList() {
       <div>
         <div className="my-3 flex items-center justify-between">
           <div className="flex gap-3">
-            <LocationSelect />
+            <LocationSelect
+              selectedCity={selectedCity}
+              setSelectedCity={setSelectedCity}
+              selectedDistrict={selectedDistrict}
+              setSelectedDistrict={setSelectedDistrict}
+            />
             <DateSelect />
           </div>
           <SortButton cards={cards} onSort={setSortedCards} />

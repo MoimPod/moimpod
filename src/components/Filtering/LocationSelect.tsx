@@ -1,13 +1,22 @@
 "use client";
 
-import { useState } from "react";
 import Dropdown from "@/components/Dropdown";
 
 type LocationSelectProps = {
   className?: string;
+  selectedCity?: string;
+  setSelectedCity?: (city: string) => void;
+  selectedDistrict?: string;
+  setSelectedDistrict?: (district: string) => void;
 };
 
-export default function LocationSelect({ className }: LocationSelectProps) {
+export default function LocationSelect({
+  className,
+  selectedCity = "",
+  setSelectedCity,
+  selectedDistrict = "",
+  setSelectedDistrict,
+}: LocationSelectProps) {
   const cities: Record<string, string[]> = {
     지역전체: [],
     서울시: ["강남구", "서초구", "송파구"],
@@ -16,17 +25,14 @@ export default function LocationSelect({ className }: LocationSelectProps) {
     대구광역시: ["중구", "달서구", "수성구"],
   };
 
-  const [selectedCity, setSelectedCity] = useState<string>("");
-  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
-
   return (
     <div className="flex gap-3">
       <Dropdown
         options={Object.keys(cities)}
         selected={selectedCity}
         onSelect={(city) => {
-          setSelectedCity(city);
-          setSelectedDistrict(""); // 시가 바뀌면 구 초기화
+          if (setSelectedCity) setSelectedCity(city);
+          if (setSelectedDistrict) setSelectedDistrict(""); // 시가 바뀌면 구 초기화
         }}
         placeholder="시/도 선택"
         className={className}
@@ -34,7 +40,7 @@ export default function LocationSelect({ className }: LocationSelectProps) {
       <Dropdown
         options={selectedCity ? cities[selectedCity] : []}
         selected={selectedDistrict}
-        onSelect={setSelectedDistrict}
+        onSelect={(district) => setSelectedDistrict?.(district)}
         placeholder="구/군 선택"
         disabled={!selectedCity}
         className={className}
