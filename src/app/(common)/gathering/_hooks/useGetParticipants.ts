@@ -4,7 +4,6 @@ import apiClient from "@/services/appClient";
 const fetchParticipants = async (id: number | string) => {
   try {
     const { data } = await apiClient.get(`/gatherings/${id}/participants`);
-    console.log(data);
     return data;
   } catch (error) {
     throw new Error("데이터를 불러오지 못했습니다.");
