@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from "react";
 import Card from "@/components/Card";
 import { useFetchGatherings } from "@/app/_home/_hooks/useFetchGatherings";
-import CategoryButton from "@/components/Filtering/CategoryButton";
+import CategoryButton from "@/components/CategoryButton";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import ServiceTab from "@/app/_home/_components/ServiceTab";
 import DateSelect from "@/components/Filtering/DateSelect";
 import GatheringLogo from "@/images/gathering_logo.svg";
 import Button from "@/components/Button";
-import SortButton from "@/components/SortButton";
+import SortButton from "@/components/Filtering/SortButton";
 import CreateGatheringsModal from "@/app/_home/_components/CreateGatheringsModal";
 
 export type CardData = {
@@ -60,7 +60,7 @@ export default function CardList() {
         <div className="flex items-center">
           <ServiceTab />
           <div className="ml-auto w-[114px]">
-            <Button styleType="solid" size="sm" className="h-[40px] md:h-[44px] lg:h-[44px]" onClick={handleOpen}>
+            <Button styleType="solid" size="sm" className="h-10 md:h-11" onClick={handleOpen}>
               모임 만들기
             </Button>
           </div>
@@ -69,7 +69,7 @@ export default function CardList() {
           <CategoryButton.Title category="전체" />
           <CategoryButton.Title category="오피스 스트레칭" />
           <CategoryButton.Title category="마인드풀니스" />
-        </CategoryButton>{" "}
+        </CategoryButton>
       </div>
       <hr />
 

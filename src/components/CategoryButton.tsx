@@ -35,7 +35,7 @@ CategoryButton.Title = function Title({ category }: { category: string }) {
       onClick={() => {
         setSelectedCategory(category);
       }}
-      className={`h-[40px] w-auto rounded-xl border p-2.5 px-4 text-sm font-medium ${selectedCategory === category ? "bg-gray-900 text-white" : "bg-gray-200"}`}
+      className={`h-10 w-auto rounded-xl border p-2.5 px-4 text-sm font-medium ${selectedCategory === category ? "bg-gray-900 text-white" : "bg-gray-200"}`}
     >
       {category}
     </button>

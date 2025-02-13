@@ -5,7 +5,7 @@ import Modal from "@/components/Modal";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import LocationSelect from "@/components/Filtering/LocationSelect";
-import CategoryButton from "@/components/Filtering/CategoryButton";
+import CategoryButton from "@/components/CategoryButton";
 import { useForm } from "react-hook-form";
 
 type CreateGatheringsModalProps = {
@@ -23,12 +23,14 @@ type FormValues = {
 };
 
 // 입력 필드 컴포넌트
-const FormField = ({ label, children }: { label: string; children: React.ReactNode }) => (
-  <div className="my-3">
-    <h2 className="mb-3 text-base font-semibold">{label}</h2>
-    {children}
-  </div>
-);
+export function FormField({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="my-3">
+      <h2 className="mb-3 text-base font-semibold">{label}</h2>
+      {children}
+    </div>
+  );
+}
 
 export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheringsModalProps) {
   const {
@@ -41,8 +43,6 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   });
 
   const [imageName, setImageName] = useState<string>("");
-
-  console.log("error!!!!!!:", errors);
 
   useEffect(() => {
     if (!isOpen) {
@@ -121,7 +121,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           />
         </FormField>
 
-        <Button styleType="solid" size="lg" className="mt-7 h-[40px] w-[118px]" disabled={!isValid} type="submit">
+        <Button styleType="solid" size="lg" className="mt-7 h-10 w-[118px]" disabled={!isValid} type="submit">
           확인
         </Button>
       </form>
