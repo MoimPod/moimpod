@@ -22,12 +22,12 @@ function useTabContext() {
 // Tab의 props
 type TabProps = {
   children: React.ReactNode;
-  categories?: React.ReactNode; // 카태고리 버튼
+  category?: React.ReactNode; // 카태고리 버튼
   targetIndex?: number; // 클릭 시 카테고리가 나와야 할 index
   gap?: string; // 탭과 카테고리의 간격
 };
 // Tab 루트 컴포넌트
-export default function Tab({ children, categories, targetIndex, gap = "gap-4" }: TabProps) {
+export default function Tab({ children, category, targetIndex, gap = "gap-4" }: TabProps) {
   // 현재 활성화된 탭의 인덱스
   const [activeIndex, setActiveIndex] = useState(0);
   // 슬라이더의 길이 및 X축 이동거리
@@ -73,7 +73,7 @@ export default function Tab({ children, categories, targetIndex, gap = "gap-4" }
             className={`absolute bottom-0 h-[2px] bg-gray-900 transition-all duration-300`}
           />
         </div>
-        {targetIndex === activeIndex && <div>{categories}</div>}
+        {targetIndex === activeIndex && <div>{category}</div>}
       </div>
     </TabContext.Provider>
   );

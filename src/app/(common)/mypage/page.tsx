@@ -17,7 +17,7 @@ export default function Page() {
       {/* 마이페이지의 콘텐츠 */}
       <div className="border-t-2 border-gray-900 bg-white px-6 pt-6">
         <Tab
-          categories={
+          category={
             <CategoryButton categories={categories}>
               {categories.map((category) => (
                 <CategoryButton.Title key={category} category={category} />
