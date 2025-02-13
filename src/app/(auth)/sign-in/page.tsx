@@ -92,8 +92,11 @@ export default function SignIn() {
           </div>
           <div className="m-auto w-full max-w-[500px]">
             <div className="flex flex-col gap-2 pt-8">
-              <p className="text-sm font-semibold text-gray-800">아이디</p>
+              <label htmlFor="email" className="text-sm font-semibold text-gray-800">
+                아이디
+              </label>
               <Input
+                id={"email"}
                 type={"email"}
                 placeholder="이메일을 입력해주세요."
                 register={register("email", { required: "아이디를 입력해주세요." })}
@@ -101,9 +104,12 @@ export default function SignIn() {
               />
             </div>
             <div className="flex flex-col gap-2 pt-6">
-              <p className="text-sm font-semibold text-gray-800">비밀번호</p>
+              <label htmlFor="password" className="text-sm font-semibold text-gray-800">
+                비밀번호
+              </label>
               <div className="relative">
                 <Input
+                  id={"password"}
                   type={passwordVisible ? "text" : "password"}
                   placeholder="비밀번호를 입력해주세요."
                   register={register("password", { required: "비밀번호는 최소 8자 이상입니다." })}

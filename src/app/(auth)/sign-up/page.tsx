@@ -93,8 +93,11 @@ export default function SignUp() {
           </div>
           <div className="m-auto w-full max-w-[500px]">
             <div className="flex flex-col gap-2 pt-8">
-              <p className="text-sm font-semibold text-gray-800">이름</p>
+              <label htmlFor="name" className="text-sm font-semibold text-gray-800">
+                이름
+              </label>
               <Input
+                id={"name"}
                 type={"text"}
                 placeholder="이름을 입력해주세요"
                 register={register("name", { required: "이름을 입력해주세요" })}
@@ -102,8 +105,11 @@ export default function SignUp() {
               />
             </div>
             <div className="flex flex-col gap-2 pt-8">
-              <p className="text-sm font-semibold text-gray-800">아이디</p>
+              <label htmlFor="email" className="text-sm font-semibold text-gray-800">
+                아이디
+              </label>
               <Input
+                id={"email"}
                 type={"email"}
                 placeholder="이메일을 입력해주세요."
                 register={register("email", { required: "중복된 이메일입니다." })}
@@ -111,8 +117,11 @@ export default function SignUp() {
               />
             </div>
             <div className="flex flex-col gap-2 pt-8">
-              <p className="text-sm font-semibold text-gray-800">회사명</p>
+              <label htmlFor="company" className="text-sm font-semibold text-gray-800">
+                회사명
+              </label>
               <Input
+                id={"company"}
                 type={"text"}
                 placeholder="회사명을 입력해주세요"
                 register={register("companyName", { required: "회사명을 정확하게 입력해주세요" })}
@@ -120,9 +129,12 @@ export default function SignUp() {
               />
             </div>
             <div className="flex flex-col gap-2 pt-6">
-              <p className="text-sm font-semibold text-gray-800">비밀번호</p>
+              <label htmlFor="password" className="text-sm font-semibold text-gray-800">
+                비밀번호
+              </label>
               <div className="relative">
                 <Input
+                  id={"password"}
                   type={passwordVisible ? "text" : "password"}
                   placeholder="비밀번호를 입력해주세요."
                   register={register("password", { required: "비밀번호를 입력해주세요." })}
@@ -143,9 +155,12 @@ export default function SignUp() {
               </div>
             </div>
             <div className="flex flex-col gap-2 pt-6">
-              <p className="text-sm font-semibold text-gray-800">비밀번호 확인</p>
+              <label htmlFor="passwordCheck" className="text-sm font-semibold text-gray-800">
+                비밀번호 확인
+              </label>
               <div className="relative">
                 <Input
+                  id={"passwordCheck"}
                   type={passwordCheckVisible ? "text" : "password"}
                   placeholder="비밀번호를 다시 한 번 입력해주세요."
                   register={register("passwordCheck", { required: "비밀번호가 일치하지 않습니다." })}
