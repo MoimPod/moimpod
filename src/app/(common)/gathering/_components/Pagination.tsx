@@ -25,7 +25,7 @@ export default function Pagination({ currentPage, totalPages, onClick, pageLimit
   return (
     <div className="mt-6 flex items-center justify-center gap-2 text-gray-200">
       <button onClick={() => onClick(currentStartPage - pageLimit)} disabled={currentPage <= pageLimit}>
-        <Arrow className={currentPage > pageLimit && "text-black"} />
+        <Arrow className={cn(currentPage > pageLimit && "text-black")} />
       </button>
       {pages.map((page) => (
         <button
