@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Button from "@/components/Button";
-import { SimpleDatepicker } from "@/components/Datepicker";
+import { SimpleDatepicker } from "@/components/Filtering/Datepicker";
 import { format } from "date-fns";
 import ArrowDownBlackIcon from "@/images/dropdown_down_arrow_black.svg";
 import ArrowDownWhiteIcon from "@/images/dropdown_down_arrow_white.svg";
@@ -45,7 +45,7 @@ export default function DateSelect() {
             <Button
               styleType="outline"
               size="sm"
-              className="m-2 h-[40px] w-[118px]"
+              className="m-2 h-10 w-[118px]"
               onClick={() => {
                 setSelectedDate(null);
                 setDateDropdownOpen(false);
@@ -56,7 +56,7 @@ export default function DateSelect() {
             <Button
               styleType="solid"
               size="sm"
-              className="m-2 h-[40px] w-[118px]"
+              className="m-2 h-10 w-[118px]"
               disabled={!selectedDate} // 날짜가 선택되지 않으면 비활성화
               onClick={() => {
                 setDateDropdownOpen(false);

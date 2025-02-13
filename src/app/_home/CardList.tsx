@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from "react";
 import Card from "@/components/Card";
 import { useFetchGatherings } from "@/app/_home/_hooks/useFetchGatherings";
-import CategoryButton from "@/components/Filtering/CategoryButton";
+import CategoryButton from "@/components/CategoryButton";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import ServiceTab from "@/app/_home/_components/ServiceTab";
 import DateSelect from "@/components/Filtering/DateSelect";
 import GatheringLogo from "@/images/gathering_logo.svg";
 import Button from "@/components/Button";
-import SortButton from "@/components/SortButton";
+import SortButton from "@/components/Filtering/SortButton";
 import CreateGatheringsModal from "@/app/_home/_components/CreateGatheringsModal";
 
 export type CardData = {

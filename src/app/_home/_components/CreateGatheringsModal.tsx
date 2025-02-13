@@ -5,7 +5,7 @@ import Modal from "@/components/Modal";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import LocationSelect from "@/components/Filtering/LocationSelect";
-import CategoryButton from "@/components/Filtering/CategoryButton";
+import CategoryButton from "@/components/CategoryButton";
 import { useForm } from "react-hook-form";
 
 type CreateGatheringsModalProps = {
@@ -121,7 +121,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           />
         </FormField>
 
-        <Button styleType="solid" size="lg" className="mt-7 h-[40px] w-[118px]" disabled={!isValid} type="submit">
+        <Button styleType="solid" size="lg" className="mt-7 h-10 w-[118px]" disabled={!isValid} type="submit">
           확인
         </Button>
       </form>
