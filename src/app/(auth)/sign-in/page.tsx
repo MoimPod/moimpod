@@ -133,7 +133,7 @@ export default function SignIn() {
               로그인
             </Button>
             <div className="flex-ro mt-6 flex justify-center">
-              <p className="text-[15px] font-medium text-gray-800">같이 달램이 처음이신가요?</p>
+              <p className="text-[15px] font-medium text-gray-800">모임팟이 처음이신가요?</p>
               <Link
                 href={"/sign-up"}
                 className="border-b border-primary-color text-[15px] font-medium text-primary-color"
