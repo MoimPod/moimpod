@@ -9,13 +9,13 @@ const categories = ["작성 가능한 리뷰", "작성한 리뷰"];
 
 export default function Page() {
   return (
-    <div className="flex flex-col gap-[30px] pt-8">
+    <div className="flex flex-1 flex-col gap-[30px] pt-8">
       <div className="flex flex-col gap-6">
         <h2 className="text-2xl font-semibold">마이 페이지</h2>
         <ProfileSection />
       </div>
       {/* 마이페이지의 콘텐츠 */}
-      <div className="border-t-2 border-gray-900 bg-white px-6 pt-6">
+      <div className="flex flex-1 flex-col gap-6 border-t-2 border-gray-900 bg-white px-6 pt-6">
         <Tab
           category={
             <CategoryButton categories={categories}>
@@ -32,6 +32,7 @@ export default function Page() {
             </Tab.Item>
           ))}
         </Tab>
+        <div className="border">리스트 컨테이너</div>
       </div>
     </div>
   );
