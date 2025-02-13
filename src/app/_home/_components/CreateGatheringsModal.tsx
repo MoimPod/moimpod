@@ -34,17 +34,22 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { isValid },
   } = useForm<FormValues>({
     mode: "onChange",
   });
 
   const [imageName, setImageName] = useState<string>("");
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
 
   useEffect(() => {
     if (!isOpen) {
       reset();
       setImageName("");
+      setSelectedCity("");
+      setSelectedDistrict("");
     }
   }, [isOpen, reset]);
 
@@ -53,6 +58,18 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     if (file) {
       setImageName(file.name);
     }
+  };
+
+  // 🔹 Location 값이 변경될 때 react-hook-form 상태도 업데이트
+  const handleCityChange = (city: string) => {
+    setSelectedCity(city);
+    setSelectedDistrict(""); // 시가 변경되면 구 초기화
+    setValue("location", `${city} ${selectedDistrict}`); // 📌 location 필드 업데이트
+  };
+
+  const handleDistrictChange = (district: string) => {
+    setSelectedDistrict(district);
+    setValue("location", `${selectedCity} ${district}`); // 📌 location 필드 업데이트
   };
 
   return (
@@ -72,7 +89,13 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
 
         <FormField label="장소">
           <div className="border-none">
-            <LocationSelect className="border-none text-gray-400" />
+            <LocationSelect
+              selectedCity={selectedCity}
+              setSelectedCity={handleCityChange}
+              selectedDistrict={selectedDistrict}
+              setSelectedDistrict={handleDistrictChange}
+              className="border-none text-gray-400"
+            />
           </div>
         </FormField>
 

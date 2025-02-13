@@ -9,7 +9,7 @@ import ServiceTab from "@/app/_home/_components/ServiceTab";
 import DateSelect from "@/components/Filtering/DateSelect";
 import GatheringLogo from "@/images/gathering_logo.svg";
 import Button from "@/components/Button";
-import SortButton from "@/components/SortButton";
+import SortButton from "@/components/Filtering/SortButton";
 import CreateGatheringsModal from "@/app/_home/_components/CreateGatheringsModal";
 
 export type CardData = {
@@ -27,6 +27,9 @@ export default function CardList() {
   const { data: cards = [], isLoading, error } = useFetchGatherings();
   // 정렬된 데이터
   const [sortedCards, setSortedCards] = useState<CardData[]>([]);
+
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -73,7 +76,12 @@ export default function CardList() {
       <div>
         <div className="my-3 flex items-center justify-between">
           <div className="flex gap-3">
-            <LocationSelect />
+            <LocationSelect
+              selectedCity={selectedCity}
+              setSelectedCity={setSelectedCity}
+              selectedDistrict={selectedDistrict}
+              setSelectedDistrict={setSelectedDistrict}
+            />
             <DateSelect />
           </div>
           <SortButton cards={cards} onSort={setSortedCards} />

@@ -2,8 +2,11 @@
 
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import { useUserStore } from "@/stores/useUserStore";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -21,18 +24,61 @@ export default function SignIn() {
     formState: { errors, isValid },
   } = useForm<FormValues>({ mode: "onChange" });
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const router = useRouter();
+  const action = useUserStore((state) => state.action);
 
-  const handleLogin = (data: FormValues) => {
+  const handleLogin = async (data: FormValues) => {
     const { email, password } = data;
-    if (email !== "rrrr@gmail.com") {
-      setError("email", { type: "manual", message: "존재하지 않는 아이디입니다." });
+    let LoginError = false;
+    if (email === "") {
+      setError("email", { type: "manual", message: "아이디를 입력해주세요." });
+      LoginError = true;
     } else {
       clearErrors("email");
     }
-    if (password !== "0000") {
-      setError("password", { type: "manual", message: "비밀번호가 일치하지 않습니다." });
+    if (password.length < 8) {
+      setError("password", { type: "manual", message: "비밀번호는 최소 8자 이상입니다." });
+      LoginError = true;
     } else {
       clearErrors("password");
+    }
+    if (LoginError) return;
+    const result = await postSignIn({ email, password });
+    if (result.token) {
+      // 토큰이 들어왔을때 cookies로 저장하기
+      document.cookie = `token=${result.token};`;
+      const userInfo = await getUser(result.token);
+      // user 정보 저장하기
+      action.setUser(userInfo);
+      // 로그인 성공 이후 main으로 이동
+      router.push("/");
+    } else {
+      if (result.status === 401) {
+        setError("password", { type: "manual", message: "비밀번호가 아이디와 일치하지 않습니다." });
+      }
+      if (result.status === 404) {
+        setError("email", { type: "manual", message: "존재하지 않는 아이디입니다." });
+      }
+    }
+  };
+
+  const postSignIn = async (data: FormValues) => {
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/signin`, data);
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const getUser = async (token: string) => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/user`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      return error;
     }
   };
 
@@ -61,7 +107,7 @@ export default function SignIn() {
             <Input
               type={"email"}
               placeholder="이메일을 입력해주세요."
-              register={register("email", { required: "존재하지 않는 아이디입니다." })}
+              register={register("email", { required: "아이디를 입력해주세요." })}
               helperText={errors.email?.message}
             />
           </div>
@@ -71,7 +117,7 @@ export default function SignIn() {
               <Input
                 type={passwordVisible ? "text" : "password"}
                 placeholder="비밀번호를 입력해주세요."
-                register={register("password", { required: "비밀번호가 일치하지 않습니다." })}
+                register={register("password", { required: "비밀번호는 최소 8자 이상입니다." })}
                 helperText={errors.password?.message}
               />
               <button
