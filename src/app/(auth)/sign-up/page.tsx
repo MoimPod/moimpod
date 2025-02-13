@@ -143,7 +143,7 @@ export default function SignUp() {
               </div>
             </div>
             <div className="flex flex-col gap-2 pt-6">
-              <p className="text-sm font-semibold text-gray-800">비밀번호</p>
+              <p className="text-sm font-semibold text-gray-800">비밀번호 확인</p>
               <div className="relative">
                 <Input
                   type={passwordCheckVisible ? "text" : "password"}
