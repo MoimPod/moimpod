@@ -35,7 +35,8 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     handleSubmit,
     reset,
     setValue,
-    formState: { isValid },
+    setError,
+    formState: { errors, isValid },
   } = useForm<FormValues>({
     mode: "onChange",
   });
@@ -56,20 +57,28 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      const allowedExtensions = ["jpg", "jpeg", "png"];
+      const fileExtensions = file.name.split(".").pop()?.toLowerCase();
+
+      if (!fileExtensions || !allowedExtensions.includes(fileExtensions)) {
+        setError("image", { type: "manual", message: "지원하는 파일 형식은 JPG, JPEG, PNG만 가능합니다." });
+        return;
+      }
       setImageName(file.name);
+      setValue("image", file);
     }
   };
 
-  // 🔹 Location 값이 변경될 때 react-hook-form 상태도 업데이트
+  // Location 값이 변경될 때 react-hook-form 상태도 업데이트
   const handleCityChange = (city: string) => {
     setSelectedCity(city);
     setSelectedDistrict(""); // 시가 변경되면 구 초기화
-    setValue("location", `${city} ${selectedDistrict}`); // 📌 location 필드 업데이트
+    setValue("location", `${city} ${selectedDistrict}`);
   };
 
   const handleDistrictChange = (district: string) => {
     setSelectedDistrict(district);
-    setValue("location", `${selectedCity} ${district}`); // 📌 location 필드 업데이트
+    setValue("location", `${selectedCity} ${district}`);
   };
 
   return (
@@ -83,7 +92,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <FormField label="모임 이름">
           <Input
             placeholder="모임 이름을 작성해주세요."
-            {...register("name", { required: "모임 이름을 입력해주세요." })}
+            register={register("name", { required: "모임 이름을 입력해주세요." })}
           />
         </FormField>
 
@@ -106,7 +115,13 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
             >
               {imageName || "이미지를 첨부해주세요."}
             </div>
-            <input type="file" id="imageUpload" className="hidden" onChange={handleFileChange} />
+            <input
+              type="file"
+              id="imageUpload"
+              className="hidden"
+              accept=".jpg,.jpeg,.png"
+              onChange={handleFileChange}
+            />
             <Button
               styleType="outline"
               size="sm"
@@ -123,21 +138,21 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <FormField label="선택 서비스">
           <Input
             placeholder="서비스를 선택해주세요."
-            {...register("service", { required: "서비스를 선택해주세요." })}
+            register={register("service", { required: "서비스를 선택해주세요." })}
           />
         </FormField>
 
         <FormField label="모임 날짜">
           <Input
             placeholder="모임 날짜를 입력해주세요."
-            {...register("date", { required: "모임 날짜를 입력해주세요." })}
+            register={register("date", { required: "모임 날짜를 입력해주세요." })}
           />
         </FormField>
 
         <FormField label="모임 정원">
           <Input
             placeholder="최소 3인 이상 입력해주세요."
-            {...register("capacity", { required: "정원을 입력해주세요." })}
+            register={register("capacity", { required: "정원을 입력해주세요." })}
           />
         </FormField>
 
