@@ -57,6 +57,19 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     }
   }, [isOpen, reset]);
 
+  // Location 값 저장
+  const handleCityChange = (city: string) => {
+    setSelectedCity(city);
+    setSelectedDistrict(""); // 시가 변경되면 구 초기화
+    setValue("location", `${city} ${selectedDistrict}`);
+  };
+
+  const handleDistrictChange = (district: string) => {
+    setSelectedDistrict(district);
+    setValue("location", `${selectedCity} ${district}`);
+  };
+
+  // image 파일 저장
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -70,18 +83,6 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
       setImageName(file.name);
       setValue("image", file);
     }
-  };
-
-  // Location 값이 변경될 때 react-hook-form 상태도 업데이트
-  const handleCityChange = (city: string) => {
-    setSelectedCity(city);
-    setSelectedDistrict(""); // 시가 변경되면 구 초기화
-    setValue("location", `${city} ${selectedDistrict}`);
-  };
-
-  const handleDistrictChange = (district: string) => {
-    setSelectedDistrict(district);
-    setValue("location", `${selectedCity} ${district}`);
   };
 
   return (
@@ -128,7 +129,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
             <Button
               styleType="outline"
               size="sm"
-              className="ml-3 w-[100px]"
+              className="ml-3 w-24"
               onClick={() => {
                 document.getElementById("imageUpload")?.click();
               }}
@@ -139,7 +140,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         </FormField>
 
         <FormField label="선택 서비스">
-          <CategoryButton categories={["달램핏", "워케이션"]}>
+          <CategoryButton categories={["달램핏", "워케이션"]} setValue={(value) => setValue("service", value)}>
             <CategoryButton.Checkbox category="달램핏" subText="오피스 스트레칭" />
             <CategoryButton.Checkbox category="워케이션" />
           </CategoryButton>
