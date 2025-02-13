@@ -14,10 +14,17 @@ type CategoryButtonProps = {
   categories: string[];
   defaultCategory?: string;
   children: React.ReactNode;
+  className?: string;
   setValue?: (value: string) => void;
 };
 
-export default function CategoryButton({ categories, defaultCategory, children, setValue }: CategoryButtonProps) {
+export default function CategoryButton({
+  categories,
+  defaultCategory,
+  children,
+  setValue,
+  className,
+}: CategoryButtonProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>(defaultCategory ?? categories[0]);
 
   const handleCategoryChange = (category: string) => {
@@ -26,8 +33,7 @@ export default function CategoryButton({ categories, defaultCategory, children, 
   };
 
   return (
-
-    <CategoryContext.Provider value={{ selectedCategory, setSelectedCategory }}>
+    <CategoryContext.Provider value={{ selectedCategory, setSelectedCategory: handleCategoryChange }}>
       <div className={cn("flex gap-3", className)}>{children}</div>
     </CategoryContext.Provider>
   );
