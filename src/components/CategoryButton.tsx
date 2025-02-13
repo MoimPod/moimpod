@@ -3,6 +3,7 @@
 import { useState, createContext, useContext } from "react";
 import CheckedIcon from "@/images/checkbox_checked.svg";
 import UncheckedIcon from "@/images/checkbox-unchecked.svg";
+import { cn } from "@/utils/classnames";
 
 const CategoryContext = createContext<{
   selectedCategory: string;
@@ -25,8 +26,9 @@ export default function CategoryButton({ categories, defaultCategory, children, 
   };
 
   return (
-    <CategoryContext.Provider value={{ selectedCategory, setSelectedCategory: handleCategoryChange }}>
-      <div className="mb-3 mt-2 flex gap-3">{children}</div>
+
+    <CategoryContext.Provider value={{ selectedCategory, setSelectedCategory }}>
+      <div className={cn("flex gap-3", className)}>{children}</div>
     </CategoryContext.Provider>
   );
 }

@@ -68,7 +68,7 @@ export default function CardList() {
             </Button>
           </div>
         </div>
-        <CategoryButton categories={["전체", "오피스 스트레칭", "마인드풀니스"]}>
+        <CategoryButton className="mb-3 mt-2" categories={["전체", "오피스 스트레칭", "마인드풀니스"]}>
           <CategoryButton.Title category="전체" />
           <CategoryButton.Title category="오피스 스트레칭" />
           <CategoryButton.Title category="마인드풀니스" />
