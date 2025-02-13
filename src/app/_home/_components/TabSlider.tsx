@@ -9,7 +9,7 @@ type TabSliderProps = {
 export default function TabSlider({ activeTab }: TabSliderProps) {
   return (
     <div
-      className={`absolute bottom-0 h-[2px] w-1/2 bg-gray-900 transition-transform duration-300 ${
+      className={`absolute bottom-0 h-0.5 w-1/2 bg-gray-900 transition-transform duration-300 ${
         activeTab === "달램핏" ? "translate-x-0" : "translate-x-full"
       }`}
     />

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Card from "@/components/Card";
 import { useFetchGatherings } from "@/app/_home/_hooks/useFetchGatherings";
-import CategoryButton from "@/app/_home/_components/CategoryButton";
+import CategoryButton from "@/components/CategoryButton";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import ServiceTab from "@/app/_home/_components/ServiceTab";
 import DateSelect from "@/components/Filtering/DateSelect";
@@ -63,13 +63,16 @@ export default function CardList() {
         <div className="flex items-center">
           <ServiceTab />
           <div className="ml-auto w-[114px]">
-            <Button styleType="solid" size="sm" className="h-[40px] md:h-[44px] lg:h-[44px]" onClick={handleOpen}>
+            <Button styleType="solid" size="sm" className="h-10 md:h-11" onClick={handleOpen}>
               모임 만들기
             </Button>
           </div>
         </div>
-
-        <CategoryButton />
+        <CategoryButton categories={["전체", "오피스 스트레칭", "마인드풀니스"]}>
+          <CategoryButton.Title category="전체" />
+          <CategoryButton.Title category="오피스 스트레칭" />
+          <CategoryButton.Title category="마인드풀니스" />
+        </CategoryButton>
       </div>
       <hr />
 
