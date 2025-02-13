@@ -1,4 +1,4 @@
-import ConditionalHeader from "@/components/ConditionalHeader";
+import Header from "@/components/Header";
 import Providers from "@/lib/Provider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={`${pretendard.variable} bg-gray-100 font-pretendard`}>
         <Providers>
           <div>
-            <ConditionalHeader />
+            <Header />
             <main className="flex min-h-[calc(100vh-56px)] flex-col">{children}</main>
           </div>
         </Providers>
