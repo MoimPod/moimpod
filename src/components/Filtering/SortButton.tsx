@@ -54,7 +54,7 @@ export default function SortButton({ cards, onSort }: SortButtonProps) {
         <div className="mr-1">
           <SortIcon />
         </div>
-        {selectedSort === "registrationEnd" ? "마감 임박" : "참여 인원 순"}
+        <span className="hidden md:block">{selectedSort === "registrationEnd" ? "마감 임박" : "참여 인원 순"}</span>
       </button>
 
       {/* 드롭다운 메뉴 */}
