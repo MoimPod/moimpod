@@ -4,6 +4,7 @@ import LikeButton from "@/components/LikeButton";
 import ChipInfo from "@/components/ChipInfo";
 import ProgressBar from "@/components/ProgressBar";
 import ConfirmedStamp from "@/components/ConfirmedStamp";
+import DashedLine from "@/components/DashedLine";
 import GatheredProfiles from "./GatheredProfiles";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import type { GatheringType } from "../types";
@@ -33,7 +34,7 @@ export default function GatheringInfo({ gatheringId, gathering, profileImages }:
         <LikeButton isLiked={isLiked} onClick={() => toggleFavorite(gatheringId)} isClosed={false} />
       </div>
 
-      <hr className="border-2 border-dashed" />
+      <DashedLine />
 
       <div className="p-6">
         <div className="mb-3 flex items-center justify-between">

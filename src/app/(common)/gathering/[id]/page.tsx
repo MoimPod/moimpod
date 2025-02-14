@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const profileImages = participants?.map((item: GatheringParticipantType) => item.User.image) || [];
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-6">
       <Gathering gathering={gathering} profileImages={profileImages} />
       <Reviews gatheringId={gatheringId} />
     </div>
