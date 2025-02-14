@@ -13,7 +13,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <div className="flex flex-col">
       <Gathering gathering={gathering} profileImages={profileImages} />
-      <Reviews />
+      <Reviews gatheringId={gatheringId} />
     </div>
   );
 }

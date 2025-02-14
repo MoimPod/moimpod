@@ -1,18 +1,16 @@
 import ListItem from "@/components/ListItem";
+import { Review } from "@/app/(common)/gathering/types";
 
-type ReviewListProps = {
-  score: number;
-  content: string;
-  nickname: string;
-  createdAt: string;
-};
-
-export default function ReviewList({ score, content, nickname, createdAt }: ReviewListProps) {
+export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
   return (
-    <ListItem>
-      <ListItem.Score score={score} />
-      <ListItem.Body>{content}</ListItem.Body>
-      <ListItem.MetaInfo primary={nickname} secondary={createdAt} />
-    </ListItem>
+    <div>
+      {reviewList.map((item) => (
+        <ListItem key={item.id}>
+          <ListItem.Score score={item.score} />
+          <ListItem.Body>{item.comment}</ListItem.Body>
+          <ListItem.MetaInfo primary={item.user.name} secondary={item.createdAt} />
+        </ListItem>
+      ))}
+    </div>
   );
 }
