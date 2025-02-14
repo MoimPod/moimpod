@@ -79,8 +79,8 @@ export default function DateTimePicker({ selectedDateTime, onDateTimeChange }: D
 
       {/* 드롭다운 (Datepicker + Timepicker) */}
       {isOpen && (
-        <div className="fixed z-10 my-2 max-w-[540px] rounded-lg border bg-white pb-4 shadow-md">
-          <div className="flex gap-4">
+        <div className="fixed z-10 my-2 rounded-lg border bg-white pb-4 pr-4 shadow-md">
+          <div className="flex flex-col sm:flex-row">
             {/* 날짜 선택 */}
             <CustomDatepicker selectedDate={selectedDate} onDateChange={handleDateChange} />
             {/* 시간 선택 */}
