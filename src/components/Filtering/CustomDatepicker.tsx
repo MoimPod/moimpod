@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Datepicker } from "flowbite-react";
 
 type CustomDatepickerProps = {
@@ -12,7 +12,7 @@ export default function CustomDatepicker({ selectedDate, onDateChange }: CustomD
   const datepickerTheme = {
     popup: {
       root: {
-        inner: "p-4 shadow-none",
+        inner: "p-4 bg-white shadow-none",
       },
       header: {
         title: "px-2 py-3 text-center font-semibold text-gray-900 dark:text-white",
@@ -44,6 +44,7 @@ export default function CustomDatepicker({ selectedDate, onDateChange }: CustomD
     <div>
       <Datepicker
         inline
+        value={selectedDate}
         onChange={onDateChange}
         showClearButton={false}
         showTodayButton={false}
