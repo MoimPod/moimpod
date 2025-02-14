@@ -29,7 +29,7 @@ type FormValues = {
 export function FormField({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="my-3">
-      <h2 className="mb-3 text-base font-semibold">{label}</h2>
+      <label className="mb-3 text-base font-semibold">{label}</label>
       {children}
     </div>
   );
@@ -116,7 +116,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
       onClose={onClose}
       className="flex h-screen w-full flex-col sm:fixed sm:overflow-auto md:h-[802px] md:max-w-[520px]"
     >
-      <h2 className="mb-3 text-lg font-semibold">모임 만들기</h2>
+      <label className="mb-3 text-lg font-semibold">모임 만들기</label>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormField label="모임 이름">
           <Input
