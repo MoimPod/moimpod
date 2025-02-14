@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
-import type { Metadata } from "next";
 import Providers from "@/lib/Provider";
+import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -27,7 +27,7 @@ export default function RootLayout({
         <Providers>
           <div>
             <Header />
-            <main className="flex min-h-[calc(100vh-56px)] flex-col">{children}</main>
+            <main className="flex min-h-[calc(100vh-56px)] flex-col md:min-h-[calc(100vh-60px)]">{children}</main>
           </div>
         </Providers>
       </body>
