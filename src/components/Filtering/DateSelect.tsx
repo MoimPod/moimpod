@@ -10,6 +10,7 @@ export default function DateSelect() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [tempSelectedDate, setTempSelectedDate] = useState<Date | null>(null); // 임시 날짜 저장
   const [isDateDropdownOpen, setDateDropdownOpen] = useState(false);
 
   useEffect(() => {
@@ -24,6 +25,12 @@ export default function DateSelect() {
     };
   }, []);
 
+  useEffect(() => {
+    if (isDateDropdownOpen) {
+      setTempSelectedDate(selectedDate);
+    }
+  }, [isDateDropdownOpen]);
+
   return (
     <div className="relative max-w-sm" ref={dropdownRef}>
       {/* 드롭다운 버튼 */}
@@ -35,8 +42,8 @@ export default function DateSelect() {
       >
         {/* 날짜 선택 */}
         {isDateDropdownOpen && (
-          <div className="absolute z-10 rounded-xl border bg-white p-6 px-10 shadow-md">
-            <CustomDatepicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
+          <div className="absolute z-10 rounded-xl border bg-white px-10 pb-6 shadow-md">
+            <CustomDatepicker selectedDate={tempSelectedDate} onDateChange={setTempSelectedDate} />
             {/* 버튼 */}
             <div className="mt-3 flex justify-center gap-2">
               <Button
@@ -45,7 +52,6 @@ export default function DateSelect() {
                 className="h-10 w-[118px]"
                 onClick={() => {
                   setSelectedDate(null);
-                  setDateDropdownOpen(false);
                 }}
               >
                 초기화
@@ -54,8 +60,9 @@ export default function DateSelect() {
                 styleType="solid"
                 size="sm"
                 className="h-10 w-[118px]"
-                disabled={!selectedDate} // 날짜가 선택되지 않으면 비활성화
+                disabled={!tempSelectedDate} // 날짜가 선택되지 않으면 비활성화
                 onClick={() => {
+                  setSelectedDate(tempSelectedDate);
                   setDateDropdownOpen(false);
                 }}
               >
