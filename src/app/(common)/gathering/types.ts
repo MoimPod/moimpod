@@ -43,7 +43,7 @@ export type GatheringType = {
   canceledAt: string;
 };
 
-export type Review = {
+export type ReviewResponse = {
   teamId?: string;
   id: number;
   score: number;
@@ -53,9 +53,10 @@ export type Review = {
   User: User;
 };
 
-// 실제 데이터 응답값
+export type Review = Omit<ReviewResponse, "User"> & { user: User };
+
 export type ReviewsResponse = {
-  data: Review[];
+  data: ReviewResponse[];
   totalItemCount: number;
   currentPage: number;
   totalPages: number;
