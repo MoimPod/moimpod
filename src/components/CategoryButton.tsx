@@ -2,7 +2,7 @@
 
 import { useState, createContext, useContext } from "react";
 import CheckedIcon from "@/images/checkbox_checked.svg";
-import UncheckedIcon from "@/images/checkbox-unchecked.svg";
+import UncheckedIcon from "@/images/checkbox_unchecked.svg";
 import { cn } from "@/utils/classnames";
 
 const CategoryContext = createContext<{

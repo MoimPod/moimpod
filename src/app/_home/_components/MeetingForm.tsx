@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import DateTimePicker from "@/components/Filtering/DateTimePicker";
 
 type MeetingFormProps = {
@@ -20,7 +20,7 @@ export default function MeetingForm({
   //   const [deadlineDateTime, setDeadlineDateTime] = useState<Date | null>(null);
 
   return (
-    <div className="flex gap-3">
+    <div className="flex flex-col gap-3 md:flex-row">
       {/* 모임 날짜 & 시간 */}
       <div>
         <h2 className="mb-1 text-base font-semibold">모임 날짜</h2>

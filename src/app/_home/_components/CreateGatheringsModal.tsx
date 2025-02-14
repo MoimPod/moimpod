@@ -8,6 +8,7 @@ import LocationSelect from "@/components/Filtering/LocationSelect";
 import CategoryButton from "@/components/CategoryButton";
 import MeetingForm from "@/app/_home/_components/MeetingForm";
 import { useForm } from "react-hook-form";
+import { isValid as isValidDate } from "date-fns";
 
 type CreateGatheringsModalProps = {
   isOpen: boolean;
@@ -58,6 +59,8 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
       setImageName("");
       setSelectedCity("");
       setSelectedDistrict("");
+      setMeetingDateTime(null);
+      setDeadlineDateTime(null);
     }
   }, [isOpen, reset]);
 
@@ -88,6 +91,20 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
       setValue("image", file);
     }
   };
+
+  // 모임 날짜 저장
+  useEffect(() => {
+    if (meetingDateTime && isValidDate(meetingDateTime)) {
+      setValue("meetingDate", meetingDateTime.toISOString());
+    }
+  }, [meetingDateTime, setValue]);
+
+  // 모임 마감 날짜 저장
+  useEffect(() => {
+    if (deadlineDateTime && isValidDate(deadlineDateTime)) {
+      setValue("deadlineDate", deadlineDateTime.toISOString());
+    }
+  }, [deadlineDateTime, setValue]);
 
   const onSubmit = (data: FormValues) => {
     console.log("폼 데이터:", data);
@@ -157,15 +174,9 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <div className="my-3">
           <MeetingForm
             meetingDateTime={meetingDateTime}
-            setMeetingDateTime={(dateTime: Date | null) => {
-              setMeetingDateTime(dateTime);
-              setValue("meetingDate", dateTime ? dateTime.toISOString() : "");
-            }}
+            setMeetingDateTime={setMeetingDateTime}
             deadlineDateTime={deadlineDateTime}
-            setDeadlineDateTime={(dateTime: Date | null) => {
-              setDeadlineDateTime(dateTime);
-              setValue("deadlineDate", dateTime ? dateTime.toISOString() : "");
-            }}
+            setDeadlineDateTime={setDeadlineDateTime}
           />
         </div>
 
