@@ -1,17 +1,17 @@
 export type User = {
   id: number;
-  email?: string;
   name: string;
+  email?: string;
   companyName?: string;
   image: string | null;
 };
 
-export type GatheringParticipant = {
+export type GatheringParticipantType = {
+  User: User;
   teamId: string;
   userId: number;
   gatheringId: number;
   joinedAt: string;
-  User: User;
 };
 
 export type ReviewQuery = {
@@ -27,14 +27,20 @@ export type ReviewQuery = {
   offset?: number;
 };
 
-type Gathering = {
+export type GatheringType = {
   teamId: string;
   id: number;
   type: string;
   name: string;
   dateTime: string;
+  registrationEnd: string;
   location: string;
+  participantCount: number;
   image: string;
+  count: number;
+  capacity: number;
+  createdBy: number;
+  canceledAt: string;
 };
 
 export type Review = {
@@ -43,7 +49,7 @@ export type Review = {
   score: number;
   comment: string;
   createdAt: string;
-  Gathering?: Gathering;
+  Gathering?: GatheringType;
   User: User;
 };
 
