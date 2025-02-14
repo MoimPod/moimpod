@@ -78,14 +78,16 @@ export default function CardList() {
 
       <div>
         <div className="my-3 flex items-center justify-between">
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3 md:flex-nowrap">
             <LocationSelect
               selectedCity={selectedCity}
               setSelectedCity={setSelectedCity}
               selectedDistrict={selectedDistrict}
               setSelectedDistrict={setSelectedDistrict}
             />
-            <DateSelect />
+            <div className="sm:w-auto">
+              <DateSelect />
+            </div>
           </div>
           <SortButton cards={cards} onSort={setSortedCards} />
         </div>

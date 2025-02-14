@@ -12,14 +12,14 @@ export default function CustomDatepicker({ selectedDate, onDateChange }: CustomD
   const datepickerTheme = {
     popup: {
       root: {
-        inner: "p-4 bg-white shadow-none",
+        inner: "bg-white shadow-none",
       },
       header: {
         title: "px-2 py-3 text-center font-semibold text-gray-900 dark:text-white",
         selectors: {
           base: "mb-2 flex justify-between",
           button: {
-            base: "rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200  ",
+            base: "rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-100",
           },
         },
       },
@@ -31,7 +31,7 @@ export default function CustomDatepicker({ selectedDate, onDateChange }: CustomD
         },
         items: {
           item: {
-            base: "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-gray-100 ",
+            base: "block flex-1 cursor-pointer rounded-lg text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-gray-100 ",
             selected: "bg-primary-color text-white hover:bg-blue-600", // 선택된 날짜 색상 변경
             disabled: "text-red-100", // 현재 달이 아닌 날짜 연하게
           },

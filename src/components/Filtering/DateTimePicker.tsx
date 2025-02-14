@@ -66,7 +66,7 @@ export default function DateTimePicker({ selectedDateTime, onDateTimeChange }: D
     <div className="relative" ref={dropdownRef}>
       {/* 날짜 & 시간 선택 필드 */}
       <div
-        className="flex w-full cursor-pointer items-center justify-between rounded-lg bg-gray-50 p-2 text-gray-900"
+        className={`flex w-full cursor-pointer items-center justify-between rounded-lg bg-gray-50 p-2 ${selectedDateTime && isValid(selectedDateTime) ? "text-gray-900" : "text-gray-400"}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="mr-4">
@@ -79,7 +79,7 @@ export default function DateTimePicker({ selectedDateTime, onDateTimeChange }: D
 
       {/* 드롭다운 (Datepicker + Timepicker) */}
       {isOpen && (
-        <div className="fixed z-10 my-2 rounded-lg border bg-white pb-4 pr-4 shadow-md">
+        <div className="fixed z-10 my-2 rounded-lg border bg-white p-4 shadow-md">
           <div className="flex flex-col sm:flex-row">
             {/* 날짜 선택 */}
             <CustomDatepicker selectedDate={selectedDate} onDateChange={handleDateChange} />
