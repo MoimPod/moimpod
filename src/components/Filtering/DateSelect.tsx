@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Button from "@/components/Button";
-import { SimpleDatepicker } from "@/components/Filtering/Datepicker";
+import CustomDatepicker from "@/components/Filtering/CustomDatepicker";
 import { format } from "date-fns";
-import ArrowDownBlackIcon from "@/images/dropdown_down_arrow_black.svg";
-import ArrowDownWhiteIcon from "@/images/dropdown_down_arrow_white.svg";
+import Dropdown from "@/components/Dropdown";
 
 export default function DateSelect() {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -28,45 +27,44 @@ export default function DateSelect() {
   return (
     <div className="relative max-w-sm" ref={dropdownRef}>
       {/* 드롭다운 버튼 */}
-      <button
-        className={`mb-2 flex w-[110px] cursor-pointer rounded-lg border p-2 text-sm font-medium ${!isDateDropdownOpen ? "bg-gray-50 text-gray-900" : "bg-gray-900 text-white"} `}
-        onClick={() => setDateDropdownOpen(!isDateDropdownOpen)}
+      <Dropdown
+        selected={selectedDate ? format(selectedDate, "yy/MM/dd") : "날짜 선택"}
+        onSelect={() => setDateDropdownOpen(!isDateDropdownOpen)}
+        onToggle={setDateDropdownOpen}
+        placeholder="날짜 선택"
       >
-        {selectedDate ? format(selectedDate, "yy/MM/dd") : "날짜 선택"}
-        {!isDateDropdownOpen ? <ArrowDownBlackIcon /> : <ArrowDownWhiteIcon />}
-      </button>
-
-      {/* 날짜 선택 */}
-      {isDateDropdownOpen && (
-        <div className="absolute z-10 rounded-xl border bg-white p-6 px-10 shadow-md">
-          <SimpleDatepicker selectedDate={selectedDate} onDateChange={(date) => setSelectedDate(date)} />
-          {/* 버튼 */}
-          <div className="mt-3 flex justify-center gap-2">
-            <Button
-              styleType="outline"
-              size="sm"
-              className="h-10 w-[118px]"
-              onClick={() => {
-                setSelectedDate(null);
-                setDateDropdownOpen(false);
-              }}
-            >
-              초기화
-            </Button>
-            <Button
-              styleType="solid"
-              size="sm"
-              className="h-10 w-[118px]"
-              disabled={!selectedDate} // 날짜가 선택되지 않으면 비활성화
-              onClick={() => {
-                setDateDropdownOpen(false);
-              }}
-            >
-              적용
-            </Button>
+        {/* 날짜 선택 */}
+        {isDateDropdownOpen && (
+          <div className="absolute z-10 rounded-xl border bg-white p-6 px-10 shadow-md">
+            <CustomDatepicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
+            {/* 버튼 */}
+            <div className="mt-3 flex justify-center gap-2">
+              <Button
+                styleType="outline"
+                size="sm"
+                className="h-10 w-[118px]"
+                onClick={() => {
+                  setSelectedDate(null);
+                  setDateDropdownOpen(false);
+                }}
+              >
+                초기화
+              </Button>
+              <Button
+                styleType="solid"
+                size="sm"
+                className="h-10 w-[118px]"
+                disabled={!selectedDate} // 날짜가 선택되지 않으면 비활성화
+                onClick={() => {
+                  setDateDropdownOpen(false);
+                }}
+              >
+                적용
+              </Button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </Dropdown>
     </div>
   );
 }
