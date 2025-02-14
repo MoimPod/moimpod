@@ -15,7 +15,7 @@ export default function Reviews({ gatheringId }: { gatheringId: string }) {
   };
 
   return (
-    <div>
+    <div className="p-6">
       <ReviewList reviewList={data.reviews} />
       <Pagination currentPage={data.currentPage} totalPages={data.totalPages} onClick={handlePageChange} />
     </div>
