@@ -20,7 +20,7 @@ export default function GatheringInfo({ gatheringId, gathering, profileImages }:
 
   const { name, dateTime, location, participantCount, capacity } = gathering;
 
-  const { favorites, toggleFavorite } = useFavoritesStore();
+  const { favorites, toggleFavorite, isLoaded } = useFavoritesStore();
   const isLiked = favorites.includes(gatheringId);
 
   return (
@@ -31,7 +31,7 @@ export default function GatheringInfo({ gatheringId, gathering, profileImages }:
           <div className="mb-3">{location}</div>
           <ChipInfo dateTime={dateTime} />
         </div>
-        <LikeButton isLiked={isLiked} onClick={() => toggleFavorite(gatheringId)} isClosed={false} />
+        {isLoaded && <LikeButton isLiked={isLiked} onClick={() => toggleFavorite(gatheringId)} isClosed={false} />}
       </div>
 
       <DashedLine />
