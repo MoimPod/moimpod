@@ -33,7 +33,6 @@ export const useFavoritesStore = create<FavoritesStore>()(
         if (error) {
           console.error("Hydration error:", error);
         } else {
-          console.log("Hydration finished!");
           state?.setLoaded(true); // 스토어가 로드되었음을 설정
         }
       },
