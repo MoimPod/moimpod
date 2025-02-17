@@ -33,7 +33,7 @@ export default function Tag({ registrationEnd }: TagProps) {
   }
 
   return (
-    <div className="absolute right-0 top-0 flex h-8 items-center justify-center rounded-bl-lg rounded-tr-3xl bg-orange-500 py-1 pl-2 pr-4 text-sm font-medium text-white md:rounded-tr-none lg:rounded-tr-none">
+    <div className="absolute right-0 top-0 flex h-8 items-center justify-center rounded-bl-lg rounded-tr-3xl bg-primary-color py-1 pl-2 pr-4 text-sm font-medium text-white md:rounded-tr-none lg:rounded-tr-none">
       <Alarm className="mt-0.5" />
 
       <span className="ml-1">{displayText}</span>
