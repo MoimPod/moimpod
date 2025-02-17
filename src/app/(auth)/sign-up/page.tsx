@@ -33,43 +33,51 @@ export default function SignUp() {
 
   const handleSignUp = async (data: FormValues) => {
     const { name, email, companyName, password, passwordCheck } = data;
-    if (name !== "") {
+    let InvalidError = false;
+    if (name === "") {
       setError("name", { type: "manual", message: "이름을 입력해주세요" });
+      InvalidError = true;
     } else {
       clearErrors("name");
     }
-    if (email !== "") {
-      setError("email", { type: "manual", message: "중복된 이메일입니다." });
+    if (email === "") {
+      setError("email", { type: "manual", message: "이메일을 입력해주세요." });
+      InvalidError = true;
     } else {
       clearErrors("email");
     }
-    if (companyName !== "") {
+    if (companyName === "") {
       setError("companyName", { type: "manual", message: "회사명을 정확하게 입력해주세요" });
+      InvalidError = true;
     } else {
       clearErrors("companyName");
     }
     if (password.length < 8) {
       setError("password", { type: "manual", message: "비밀번호를 입력해주세요." });
+      InvalidError = true;
     } else {
       clearErrors("password");
     }
     if (passwordCheck !== password) {
       setError("passwordCheck", { type: "manual", message: "비밀번호가 일치하지 않습니다." });
+      InvalidError = true;
     } else {
       clearErrors("passwordCheck");
     }
+    if (InvalidError) return;
     const result = await postSignUp({ name, email, companyName, password });
     if (result.message === "사용자 생성 성공") {
       setIsModal(true);
     } else {
-      setError(result.parameter, { type: "manual", message: result.message });
+      if (result.message === "Database error") {
+        setError("email", { type: "manual", message: "중복된 이메일입니다." });
+      }
     }
   };
 
   const postSignUp = async (data: FormValues) => {
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auths/signup`, data);
-      console.log(response.data);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/signup`, data);
       return response.data;
     } catch (error) {
       console.error("회원가입에 실패 하였습니다.", error);
@@ -93,11 +101,11 @@ export default function SignUp() {
           </div>
           <div className="m-auto w-full max-w-[500px]">
             <div className="flex flex-col gap-2 pt-8">
-              <label htmlFor="name" className="text-sm font-semibold text-gray-800">
+              <label htmlFor="userName" className="text-sm font-semibold text-gray-800">
                 이름
               </label>
               <Input
-                id={"name"}
+                id={"userName"}
                 type={"text"}
                 placeholder="이름을 입력해주세요"
                 register={register("name", { required: "이름을 입력해주세요" })}
