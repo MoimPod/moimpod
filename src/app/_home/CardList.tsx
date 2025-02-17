@@ -10,7 +10,6 @@ import DateSelect from "@/components/Filtering/DateSelect";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import SortButton from "@/components/Filtering/SortButton";
 import GatheringLogo from "@/images/gathering_logo.svg";
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 export type CardData = {
@@ -33,17 +32,6 @@ export default function CardList() {
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
-
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    }
-  }, []);
 
   useEffect(() => {
     if (cards.length > 0) {
