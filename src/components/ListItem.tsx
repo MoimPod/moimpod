@@ -5,6 +5,7 @@ import CapacityStatus from "@/components/CapacityStatus";
 import { cn } from "@/utils/classnames";
 import Check from "@/images/check.svg";
 import { PropsWithChildren } from "react";
+import formatDateToYYYYMMDD from "@/utils/formatDateToYYYYMMDD";
 
 type ListItemProps = {
   CardImage?: React.ReactNode;
@@ -127,13 +128,6 @@ type MetaInfoProps = {
   secondary: string;
 };
 ListItem.MetaInfo = ({ imageUrl, primary, secondary }: MetaInfoProps) => {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const days = String(date.getDate()).padStart(2, "0");
-    return `${year}.${month}.${days}`;
-  };
   return (
     <div className="flex items-center text-xs text-gray-500">
       {primary && (
@@ -147,7 +141,7 @@ ListItem.MetaInfo = ({ imageUrl, primary, secondary }: MetaInfoProps) => {
           <span className="mr-3 text-xs text-gray-700">|</span>
         </div>
       )}
-      <span className="text-xs text-gray-500">{formatDate(secondary)}</span>
+      <span className="text-xs text-gray-500">{formatDateToYYYYMMDD(secondary)}</span>
     </div>
   );
 };
