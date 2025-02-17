@@ -25,7 +25,7 @@ export type CardData = {
 };
 export default function CardList() {
   // 원본 데이터
-  const { data: cards = [], isLoading, error } = [];
+  const { data: cards = [], isLoading, error } = useFetchGatherings();
   // 정렬된 데이터
   const [sortedCards, setSortedCards] = useState<CardData[]>([]);
 
@@ -104,7 +104,7 @@ export default function CardList() {
           <SortButton cards={cards} onSort={setSortedCards} />
         </div>
         {sortedCards.length === 0 ? (
-          <div className="flex h-[calc(100vh-300px)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
+          <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>아직 모임이 없어요</p>
             <p className="mt-2">지금 바로 모임을 만들어보세요</p>
           </div>
