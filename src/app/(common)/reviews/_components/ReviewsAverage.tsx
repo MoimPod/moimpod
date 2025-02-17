@@ -12,7 +12,7 @@ export default async function ReviewsAverage() {
   return (
     <div className="flex w-full max-w-[995px] justify-center border-y-2 border-gray-200 bg-white px-6 py-8">
       <div className="flex w-full max-w-[610px] justify-between">
-        <div className="flex flex-col items-center justify-center gap-2">
+        <div className="flex flex-col items-center justify-center gap-2 pr-5">
           <div className="flex items-center justify-center text-xl font-semibold md:text-2xl">
             <span>{averageScore}</span>
             <span className="text-gray-400">/5</span>
