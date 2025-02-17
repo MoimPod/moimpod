@@ -61,7 +61,7 @@ const mockCards: CardData[] = [
   {
     id: 4,
     name: "오피스 스트레칭",
-    location: "부산 남구구",
+    location: "부산 남구",
     dateTime: "2025-03-01 19:00",
     registrationEnd: "2025-02-17 19:00",
     participantCount: 13,
