@@ -58,6 +58,20 @@ const mockCards: CardData[] = [
     type: "DALLAEMFIT",
     canceledAt: null,
   },
+  {
+    id: 4,
+    name: "오피스 스트레칭",
+    location: "부산 남구구",
+    dateTime: "2025-03-01 19:00",
+    registrationEnd: "2025-02-17 19:00",
+    participantCount: 13,
+    capacity: 20,
+    image: "/images/sample_card_1.png",
+    createdBy: 1,
+    teamId: 3,
+    type: "OFFICE_STRETCHING",
+    canceledAt: null,
+  },
 ];
 
 // 커스텀 훅
