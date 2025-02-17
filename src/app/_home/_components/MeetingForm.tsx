@@ -16,9 +16,6 @@ export default function MeetingForm({
   deadlineDateTime,
   setDeadlineDateTime,
 }: MeetingFormProps) {
-  //   const [meetingDateTime, setMeetingDateTime] = useState<Date | null>(null);
-  //   const [deadlineDateTime, setDeadlineDateTime] = useState<Date | null>(null);
-
   return (
     <div className="flex flex-col gap-3 md:flex-row">
       {/* 모임 날짜 & 시간 */}

@@ -24,7 +24,6 @@ export default function CustomTimepicker({ selectedTime, onTimeChange }: Timepic
     if (period === "AM" && hour === 12) adjustedHour = 0;
 
     const newTime = `${adjustedHour.toString().padStart(2, "0")}:${minute}`;
-    console.log("✅ 선택된 시간:", newTime);
 
     setTime(`${hour.toString().padStart(2, "0")}:${minute} ${period}`);
     onTimeChange(newTime);

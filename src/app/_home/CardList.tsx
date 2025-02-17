@@ -10,7 +10,6 @@ import DateSelect from "@/components/Filtering/DateSelect";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import SortButton from "@/components/Filtering/SortButton";
 import GatheringLogo from "@/images/gathering_logo.svg";
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 export type CardData = {
@@ -33,17 +32,6 @@ export default function CardList() {
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
-
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    }
-  }, []);
 
   useEffect(() => {
     if (cards.length > 0) {
@@ -103,9 +91,14 @@ export default function CardList() {
           </div>
           <SortButton cards={cards} onSort={setSortedCards} />
         </div>
-        {sortedCards.map((card) => (
-          <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />
-        ))}
+        {sortedCards.length === 0 ? (
+          <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
+            <p>아직 모임이 없어요</p>
+            <p className="mt-2">지금 바로 모임을 만들어보세요</p>
+          </div>
+        ) : (
+          sortedCards.map((card) => <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />)
+        )}
       </div>
 
       <CreateGatheringsModal isOpen={isModalOpen} onClose={handleClose} />
