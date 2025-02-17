@@ -25,7 +25,7 @@ type FormValues = {
   capacity: string;
 };
 
-// 입력 필드 컴포넌트
+// 공통 입력 필드 컴포넌트
 export function FormField({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="my-3">
@@ -46,7 +46,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     mode: "onChange",
   });
 
-  // state 묶어서 관리
+  // 모임 관련 데이터
   const [formData, setFormData] = useState({
     selectedCity: "",
     selectedDistrict: "",
@@ -54,8 +54,11 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     meetingDateTime: null as Date | null,
     deadlineDateTime: null as Date | null,
   });
+
+  // 마감 날짜 오류 메시지
   const [errorMessage, setErrorMessage] = useState("");
 
+  // formData 업데이트 함수
   const updateFormData = (key: string, value: string | File | Date | null) => {
     setFormData((prev) => ({
       ...prev,
@@ -95,6 +98,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     }
   }, [isOpen, reset]);
 
+  // 제출 확인용
   const onSubmit = (data: FormValues) => {
     console.log("폼 데이터:", data);
   };
@@ -107,6 +111,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     >
       <label className="mb-3 text-lg font-semibold">모임 만들기</label>
       <form onSubmit={handleSubmit(onSubmit)}>
+        {/* 모임 이름 */}
         <FormField label="모임 이름">
           <Input
             placeholder="모임 이름을 작성해주세요."
@@ -114,6 +119,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           />
         </FormField>
 
+        {/* 장소 선택 */}
         <FormField label="장소">
           <div className="border-none">
             <LocationSelect
@@ -126,6 +132,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           </div>
         </FormField>
 
+        {/* 이미지 업로드 */}
         <FormField label="이미지">
           <div className="flex">
             <div
@@ -158,6 +165,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           </div>
         </FormField>
 
+        {/* 서비스 선택 */}
         <FormField label="선택 서비스">
           <CategoryButton categories={["달램핏", "워케이션"]} setValue={(value) => setValue("service", value)}>
             <CategoryButton.Checkbox category="달램핏" subText="오피스 스트레칭" />
@@ -165,6 +173,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           </CategoryButton>
         </FormField>
 
+        {/* 모임 날짜 & 마감 날짜 */}
         <div className="my-3">
           <MeetingForm
             meetingDateTime={formData.meetingDateTime}
@@ -182,6 +191,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           {errorMessage && <p className="mt-1 text-sm text-red-500">{errorMessage}</p>}
         </div>
 
+        {/* 모임 정원 */}
         <FormField label="모임 정원">
           <Input
             placeholder="최소 3인 이상 입력해주세요."
@@ -189,6 +199,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           />
         </FormField>
 
+        {/* 제출 버튼 */}
         <Button styleType="solid" size="lg" className="mt-7 h-10 w-[118px]" disabled={!isValid} type="submit">
           확인
         </Button>
