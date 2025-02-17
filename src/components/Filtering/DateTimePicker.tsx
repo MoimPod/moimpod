@@ -14,7 +14,7 @@ type DateTimePickerProps = {
 export default function DateTimePicker({ selectedDateTime, onDateTimeChange }: DateTimePickerProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  // 임시 선택 상태 저장
+  // 선택한 날짜, 시간 저장
   const [selectedDate, setSelectedDate] = useState<Date | null>(selectedDateTime);
   const [selectedTime, setSelectedTime] = useState<string>(
     selectedDateTime && isValid(selectedDateTime) ? format(selectedDateTime, "HH:mm") : "12:00",
@@ -79,7 +79,7 @@ export default function DateTimePicker({ selectedDateTime, onDateTimeChange }: D
 
       {/* 드롭다운 (Datepicker + Timepicker) */}
       {isOpen && (
-        <div className="absolute bottom-full z-10 my-2 rounded-lg border bg-white p-4 shadow-md">
+        <div className="fixed z-10 my-2 rounded-lg border bg-white pb-4 shadow-md max-md:top-10">
           <div className="flex flex-col sm:flex-row">
             {/* 날짜 선택 */}
             <CustomDatepicker selectedDate={selectedDate} onDateChange={handleDateChange} />
