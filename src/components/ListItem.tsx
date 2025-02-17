@@ -127,6 +127,13 @@ type MetaInfoProps = {
   secondary: string;
 };
 ListItem.MetaInfo = ({ imageUrl, primary, secondary }: MetaInfoProps) => {
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth()).padStart(2, "0");
+    const days = String(date.getDay()).padStart(2, "0");
+    return `${year}.${month}.${days}`;
+  };
   return (
     <div className="flex items-center text-xs text-gray-500">
       {primary && (
@@ -140,7 +147,7 @@ ListItem.MetaInfo = ({ imageUrl, primary, secondary }: MetaInfoProps) => {
           <span className="mr-3 text-xs text-gray-700">|</span>
         </div>
       )}
-      <span className="text-xs text-gray-500">{secondary}</span>
+      <span className="text-xs text-gray-500">{formatDate(secondary)}</span>
     </div>
   );
 };
