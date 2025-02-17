@@ -54,7 +54,7 @@ export default function Card({
     >
       {/* 카드 이미지 */}
       <div className="relative">
-        <Tag text={`${registrationEnd ? "오늘 21시 마감" : "모집 종료"}`} />
+        <Tag registrationEnd={registrationEnd} />
         <Image
           src={testCard}
           alt={"test 이미지"}
