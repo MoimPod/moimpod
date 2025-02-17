@@ -197,9 +197,21 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <div className="my-3">
           <MeetingForm
             meetingDateTime={formData.meetingDateTime}
-            setMeetingDateTime={(date) => updateFormData("meetingDateTime", date)}
+            setMeetingDateTime={(date) => {
+              const now = new Date();
+              if (date && date < now) {
+                setErrorMessage("과거 날짜는 선택할 수 없습니다.");
+                return;
+              }
+              updateFormData("meetingDateTime", date);
+            }}
             deadlineDateTime={formData.deadlineDateTime}
             setDeadlineDateTime={(date) => {
+              const now = new Date();
+              if (date && date < now) {
+                setErrorMessage("과거 날짜는 선택할 수 없습니다.");
+                return;
+              }
               if (formData.meetingDateTime && date && date > formData.meetingDateTime) {
                 setErrorMessage("모임 마감 날짜는 모임 날짜보다 늦을 수 없습니다.");
                 return;
