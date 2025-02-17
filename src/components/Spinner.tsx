@@ -8,6 +8,8 @@ export default function Spinner({ color = "gray" }: SpinnerProps) {
     gray: "border-gray-400",
   };
   return (
-    <span className={`size-5 animate-spin rounded-full border-2 border-t-transparent ${spinnerColors[color]}`}></span>
+    <div className="flex w-full justify-center">
+      <span className={`size-5 animate-spin rounded-full border-2 border-t-transparent ${spinnerColors[color]}`} />
+    </div>
   );
 }
