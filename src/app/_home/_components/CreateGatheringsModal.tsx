@@ -41,7 +41,6 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     handleSubmit,
     reset,
     setValue,
-    setError,
     formState: { isValid },
   } = useForm<FormValues>({
     mode: "onChange",
@@ -55,6 +54,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     deadlineDateTime: null as Date | null,
   });
 
+  // state 묶어서 관리
   const updateFormData = (key: string, value: string | File | Date | null) => {
     setFormData((prev) => ({
       ...prev,
@@ -63,6 +63,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     }));
   };
 
+  // 날짜 선택 시 setValue로 react-hook-form에 반영
   useEffect(() => {
     if (formData.meetingDateTime && isValidDate(formData.meetingDateTime)) {
       setValue("meetingDateTime", formData.meetingDateTime.toISOString());
@@ -75,6 +76,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     }
   }, [formData.deadlineDateTime, setValue]);
 
+  // 초기화 함수
   const resetFormData = () => {
     setFormData({
       selectedCity: "",
@@ -165,7 +167,11 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <div className="my-3">
           <MeetingForm
             meetingDateTime={formData.meetingDateTime}
-            setMeetingDateTime={(date) => updateFormData("meetingDateTime", date)}
+            setMeetingDateTime={(date) => {
+              if (formData.meetingDateTime && date && date > formData.meetingDateTime) {
+              }
+              updateFormData("meetingDateTime", date);
+            }}
             deadlineDateTime={formData.deadlineDateTime}
             setDeadlineDateTime={(date) => updateFormData("deadlineDateTime", date)}
           />
