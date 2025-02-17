@@ -6,7 +6,9 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import CategoryButton from "@/components/CategoryButton";
+import MeetingForm from "@/app/_home/_components/MeetingForm";
 import { useForm } from "react-hook-form";
+import { isValid as isValidDate } from "date-fns";
 
 type CreateGatheringsModalProps = {
   isOpen: boolean;
@@ -18,7 +20,8 @@ type FormValues = {
   location: string;
   image: File | null;
   service: string;
-  date: string;
+  meetingDate: string;
+  deadlineDate: string;
   capacity: string;
 };
 
@@ -26,7 +29,7 @@ type FormValues = {
 export function FormField({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="my-3">
-      <h2 className="mb-3 text-base font-semibold">{label}</h2>
+      <label className="mb-3 text-base font-semibold">{label}</label>
       {children}
     </div>
   );
@@ -47,6 +50,8 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   const [imageName, setImageName] = useState<string>("");
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+  const [meetingDateTime, setMeetingDateTime] = useState<Date | null>(null);
+  const [deadlineDateTime, setDeadlineDateTime] = useState<Date | null>(null);
 
   useEffect(() => {
     if (!isOpen) {
@@ -54,6 +59,8 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
       setImageName("");
       setSelectedCity("");
       setSelectedDistrict("");
+      setMeetingDateTime(null);
+      setDeadlineDateTime(null);
     }
   }, [isOpen, reset]);
 
@@ -85,14 +92,32 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     }
   };
 
+  // 모임 날짜 저장
+  useEffect(() => {
+    if (meetingDateTime && isValidDate(meetingDateTime)) {
+      setValue("meetingDate", meetingDateTime.toISOString());
+    }
+  }, [meetingDateTime, setValue]);
+
+  // 모임 마감 날짜 저장
+  useEffect(() => {
+    if (deadlineDateTime && isValidDate(deadlineDateTime)) {
+      setValue("deadlineDate", deadlineDateTime.toISOString());
+    }
+  }, [deadlineDateTime, setValue]);
+
+  const onSubmit = (data: FormValues) => {
+    console.log("폼 데이터:", data);
+  };
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
       className="flex h-screen w-full flex-col sm:fixed sm:overflow-auto md:h-[802px] md:max-w-[520px]"
     >
-      <h2 className="mb-3 text-lg font-semibold">모임 만들기</h2>
-      <form onSubmit={handleSubmit(onClose)}>
+      <label className="mb-3 text-lg font-semibold">모임 만들기</label>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <FormField label="모임 이름">
           <Input
             placeholder="모임 이름을 작성해주세요."
@@ -146,12 +171,14 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           </CategoryButton>
         </FormField>
 
-        <FormField label="모임 날짜">
-          <Input
-            placeholder="모임 날짜를 입력해주세요."
-            register={register("date", { required: "모임 날짜를 입력해주세요." })}
+        <div className="my-3">
+          <MeetingForm
+            meetingDateTime={meetingDateTime}
+            setMeetingDateTime={setMeetingDateTime}
+            deadlineDateTime={deadlineDateTime}
+            setDeadlineDateTime={setDeadlineDateTime}
           />
-        </FormField>
+        </div>
 
         <FormField label="모임 정원">
           <Input

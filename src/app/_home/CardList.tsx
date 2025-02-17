@@ -51,15 +51,15 @@ export default function CardList() {
   if (error) return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>;
 
   return (
-    <div className="px-20 pt-10">
-      <div className="mb-5 flex gap-6">
+    <div>
+      <div className="mb-5 flex gap-6 pt-8">
         <GatheringLogo />
         <div>
           <div className="mb-2 text-sm font-semibold text-gray-700">함께할 사람이 없나요?</div>
           <div className="text-2xl font-semibold text-gray-900">지금 모임에 참여해보세요</div>
         </div>
       </div>
-      <div>
+      <div className="px-6 pt-6">
         <div className="flex items-center">
           <ServiceTab />
           <div className="ml-auto w-[114px]">
@@ -76,16 +76,18 @@ export default function CardList() {
       </div>
       <hr />
 
-      <div>
+      <div className="px-6">
         <div className="my-3 flex items-center justify-between">
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3 md:flex-nowrap">
             <LocationSelect
               selectedCity={selectedCity}
               setSelectedCity={setSelectedCity}
               selectedDistrict={selectedDistrict}
               setSelectedDistrict={setSelectedDistrict}
             />
-            <DateSelect />
+            <div className="sm:w-auto">
+              <DateSelect />
+            </div>
           </div>
           <SortButton cards={cards} onSort={setSortedCards} />
         </div>
