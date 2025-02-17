@@ -1,22 +1,22 @@
 export type User = {
   id: number;
-  email?: string;
   name: string;
+  email?: string;
   companyName?: string;
   image: string | null;
 };
 
-export type GatheringParticipant = {
+export type GatheringParticipantType = {
+  User: User;
   teamId: string;
   userId: number;
   gatheringId: number;
   joinedAt: string;
-  User: User;
 };
 
 export type ReviewQuery = {
   gatheringId?: string;
-  useId?: number;
+  userId?: number;
   type?: string;
   location?: string;
   date?: string;
@@ -27,37 +27,35 @@ export type ReviewQuery = {
   offset?: number;
 };
 
-type Gathering = {
+export type GatheringType = {
   teamId: string;
   id: number;
   type: string;
   name: string;
   dateTime: string;
+  registrationEnd: string;
   location: string;
+  participantCount: number;
   image: string;
+  capacity: number;
+  createdBy: number;
+  canceledAt: string;
 };
 
-export type Review = {
+export type ReviewResponse = {
   teamId?: string;
   id: number;
   score: number;
   comment: string;
   createdAt: string;
-  Gathering?: Gathering;
+  Gathering?: GatheringType;
   User: User;
 };
 
-// 실제 데이터 응답값
-export type ReviewsResponse = {
-  data: Review[];
-  totalItemCount: number;
-  currentPage: number;
-  totalPages: number;
-};
+export type Review = Omit<ReviewResponse, "User"> & { user: User };
 
-// 리뷰 정제 데이터
-export type ReviewData = {
-  reviews: Review[];
+export type ReviewsResponse = {
+  data: ReviewResponse[];
   totalItemCount: number;
   currentPage: number;
   totalPages: number;

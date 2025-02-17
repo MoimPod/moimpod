@@ -1,18 +1,25 @@
 import ListItem from "@/components/ListItem";
+import { Review } from "@/app/(common)/gathering/types";
+import DashedLine from "@/components/DashedLine";
 
-type ReviewListProps = {
-  score: number;
-  content: string;
-  nickname: string;
-  createdAt: string;
-};
-
-export default function ReviewList({ score, content, nickname, createdAt }: ReviewListProps) {
+export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
   return (
-    <ListItem>
-      <ListItem.Score score={score} />
-      <ListItem.Body>{content}</ListItem.Body>
-      <ListItem.MetaInfo primary={nickname} secondary={createdAt} />
-    </ListItem>
+    <div className="flex flex-col">
+      <h1 className="text-lg font-semibold">이용자들은 이 프로그램을 이렇게 느꼈어요!</h1>
+      <div className="flex flex-col gap-4">
+        {reviewList.map((item) => (
+          <div key={item.id}>
+            <ListItem>
+              <div className="mb-2 flex flex-col gap-3">
+                <ListItem.Score score={item.score} />
+                <ListItem.Body>{item.comment}</ListItem.Body>
+              </div>
+              <ListItem.MetaInfo primary={item.user.name} secondary={item.createdAt} />
+            </ListItem>
+            <DashedLine />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

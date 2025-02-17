@@ -5,6 +5,7 @@ import CapacityStatus from "@/components/CapacityStatus";
 import { cn } from "@/utils/classnames";
 import Check from "@/images/check.svg";
 import { PropsWithChildren } from "react";
+import formatDateToYYYYMMDD from "@/utils/formatDateToYYYYMMDD";
 
 type ListItemProps = {
   CardImage?: React.ReactNode;
@@ -104,7 +105,7 @@ ListItem.Score = ({ score }: ScoreProps) => {
   return (
     <div className="flex gap-0.5">
       {Array.from({ length: score }, (_, index) => (
-        <Heart key={index} className="fill-red-600 stroke-none" />
+        <Heart key={index} className={`${index < score ? "fill-red-600" : "fill-gray-200"} stroke-none`} />
       ))}
     </div>
   );
@@ -140,7 +141,7 @@ ListItem.MetaInfo = ({ imageUrl, primary, secondary }: MetaInfoProps) => {
           <span className="mr-3 text-xs text-gray-700">|</span>
         </div>
       )}
-      <span className="text-xs text-gray-500">{secondary}</span>
+      <span className="text-xs text-gray-500">{formatDateToYYYYMMDD(secondary)}</span>
     </div>
   );
 };
