@@ -7,7 +7,7 @@ type ScoreProps = {
 export default function Score({ score }: ScoreProps) {
   return (
     <div className="flex gap-0.5">
-      {Array.from({ length: score }, (_, index) => (
+      {Array.from({ length: 5 }, (_, index) => (
         <Heart key={index} className={`${index < score ? "fill-red-600" : "fill-gray-200"} stroke-none`} />
       ))}
     </div>
