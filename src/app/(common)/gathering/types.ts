@@ -61,11 +61,3 @@ export type ReviewsResponse = {
   currentPage: number;
   totalPages: number;
 };
-
-// 리뷰 정제 데이터
-export type ReviewData = {
-  reviews: Review[];
-  totalItemCount: number;
-  currentPage: number;
-  totalPages: number;
-};
