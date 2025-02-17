@@ -22,7 +22,7 @@ export default async function ReviewsAverage() {
 
         <div className="flex max-w-[302px] flex-1 flex-col gap-1">
           {stars.map((count, index) => (
-            <ScoreProgressBar score={5 - index} stars={count} total={total} />
+            <ScoreProgressBar key={index} score={5 - index} stars={count} total={total} />
           ))}
         </div>
       </div>
