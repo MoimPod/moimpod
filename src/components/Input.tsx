@@ -22,7 +22,7 @@ export default function Input<T extends FieldValues>({
         placeholder={placeholder}
         {...register}
         {...rest}
-        className={`w-full rounded-xl bg-gray-50 px-4 py-2.5 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-inset focus:ring-orange-600`}
+        className={`w-full rounded-xl border-0 bg-gray-50 px-4 py-2.5 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-inset focus:ring-orange-600`}
       />
       {helperText && <p className="mt-1 text-sm font-semibold text-red-600">{helperText}</p>}
     </div>

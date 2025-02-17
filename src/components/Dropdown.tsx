@@ -6,21 +6,25 @@ import ArrowDownWhiteIcon from "@/images/dropdown_down_arrow_white.svg";
 import { cn } from "@/utils/classnames";
 
 type DropdownProps = {
-  options: string[];
+  options?: string[];
   selected: string;
   onSelect: (option: string) => void;
+  onToggle?: (open: boolean) => void;
   placeholder: string;
   disabled?: boolean;
   className?: string;
+  children?: React.ReactNode;
 };
 
 export default function Dropdown({
   options,
   selected,
   onSelect,
+  onToggle,
   placeholder,
   disabled = false,
   className,
+  children,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -52,20 +56,28 @@ export default function Dropdown({
           selected ? "text-gray-800" : "",
           disabled && "cursor-not-allowed bg-gray-200",
         )}
-        onClick={() => !disabled && setIsOpen(!isOpen)}
+        onClick={() => {
+          if (!disabled) {
+            const newState = !isOpen;
+            setIsOpen(newState);
+            onToggle?.(newState); // 부모 상태 업데이트
+          }
+        }}
       >
         <span>{selected || placeholder}</span>
         {isOpen ? <ArrowDownWhiteIcon /> : <ArrowDownBlackIcon />}
       </div>
-      {isOpen && (
-        <div className="absolute z-10 w-[110px] rounded-lg border bg-white p-2 text-sm font-medium shadow-md">
-          {options.map((option) => (
-            <div key={option} onClick={() => handleSelect(option)} className="rounded-xl p-2 hover:bg-orange-100">
-              {option}
+      {isOpen &&
+        (children ??
+          (options?.length ? (
+            <div className="absolute z-10 rounded-xl border bg-white p-2 text-sm font-medium shadow-md">
+              {options.map((option) => (
+                <div key={option} onClick={() => handleSelect(option)} className="rounded-xl p-2 hover:bg-orange-100">
+                  {option}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      )}
+          ) : null))}
     </div>
   );
 }
