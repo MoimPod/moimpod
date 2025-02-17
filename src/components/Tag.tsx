@@ -24,12 +24,12 @@ export default function Tag({ registrationEnd }: TagProps) {
       displayText = "모집 마감";
     }
   } else if (isBefore(endDate, now)) {
-    // 날짜가 지났다면
-    displayText = "모집 마감";
+    // 날짜가 지났다면 태그 표시 X
+    return null;
   } else {
     // 날짜가 남았다면
     const daysLeft = differenceInDays(endDate, now);
-    displayText = `${daysLeft}일 남음`;
+    displayText = `${daysLeft}일 후 마감`;
   }
 
   return (
