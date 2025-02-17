@@ -69,7 +69,16 @@ export default function CardList() {
       </div>
       <div className="px-6 pt-6">
         <div className="flex items-center">
-          <Tab>
+          <Tab
+            category={
+              <CategoryButton categories={["전체", "오피스 스트레칭", "마인드풀니스"]}>
+                <CategoryButton.Title category="전체" />
+                <CategoryButton.Title category="오피스 스트레칭" />
+                <CategoryButton.Title category="마인드풀니스" />
+              </CategoryButton>
+            }
+            targetIndex={0}
+          >
             {serviceTab.map((tabItem, idx) => (
               <Tab.Item key={tabItem.name} index={idx}>
                 {tabItem.name}
@@ -83,16 +92,11 @@ export default function CardList() {
             </Button>
           </div>
         </div>
-        <CategoryButton className="mb-3 mt-2" categories={["전체", "오피스 스트레칭", "마인드풀니스"]}>
-          <CategoryButton.Title category="전체" />
-          <CategoryButton.Title category="오피스 스트레칭" />
-          <CategoryButton.Title category="마인드풀니스" />
-        </CategoryButton>
       </div>
-      <hr />
+      <hr className="my-3" />
 
       <div className="px-6">
-        <div className="my-3 flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <div className="flex flex-wrap gap-3 md:flex-nowrap">
             <LocationSelect
               selectedCity={selectedCity}
