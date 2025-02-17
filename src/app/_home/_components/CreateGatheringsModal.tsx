@@ -240,13 +240,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         {errors.root && <p className="mt-1 text-sm text-red-500">{errors.root.message}</p>}
 
         {/* 제출 버튼 */}
-        <Button
-          styleType="solid"
-          size="lg"
-          className="mt-7 h-10 w-[118px]"
-          disabled={!isValid || isPending}
-          type="submit"
-        >
+        <Button styleType="solid" size="lg" className="mt-7" disabled={!isValid || isPending} type="submit">
           {isPending ? "저장 중..." : "확인"}
         </Button>
       </form>
