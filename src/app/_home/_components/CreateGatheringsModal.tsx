@@ -46,6 +46,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     mode: "onChange",
   });
 
+  // state 묶어서 관리
   const [formData, setFormData] = useState({
     selectedCity: "",
     selectedDistrict: "",
@@ -53,8 +54,8 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     meetingDateTime: null as Date | null,
     deadlineDateTime: null as Date | null,
   });
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // state 묶어서 관리
   const updateFormData = (key: string, value: string | File | Date | null) => {
     setFormData((prev) => ({
       ...prev,
@@ -167,14 +168,18 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <div className="my-3">
           <MeetingForm
             meetingDateTime={formData.meetingDateTime}
-            setMeetingDateTime={(date) => {
-              if (formData.meetingDateTime && date && date > formData.meetingDateTime) {
-              }
-              updateFormData("meetingDateTime", date);
-            }}
+            setMeetingDateTime={(date) => updateFormData("meetingDateTime", date)}
             deadlineDateTime={formData.deadlineDateTime}
-            setDeadlineDateTime={(date) => updateFormData("deadlineDateTime", date)}
+            setDeadlineDateTime={(date) => {
+              if (formData.meetingDateTime && date && date > formData.meetingDateTime) {
+                setErrorMessage("모임 마감 날짜는 모임 날짜보다 늦을 수 없습니다.");
+                return;
+              }
+              setErrorMessage("");
+              updateFormData("deadlineDateTime", date);
+            }}
           />
+          {errorMessage && <p className="mt-1 text-sm text-red-500">{errorMessage}</p>}
         </div>
 
         <FormField label="모임 정원">
