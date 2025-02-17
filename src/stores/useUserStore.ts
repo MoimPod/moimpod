@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 type User = {
   teamId: number;
@@ -13,16 +14,27 @@ type User = {
 
 type UserStore = {
   user: User | null;
-  action: {
-    setUser: (user: User) => void;
-    clearUser: () => void;
-  };
+  setUser: (user: User) => void;
+  clearUser: () => void;
 };
 
-export const useUserStore = create<UserStore>((set) => ({
-  user: null,
-  action: {
-    setUser: (user) => set({ user }),
-    clearUser: () => set({ user: null }),
-  },
-}));
+const getStorage = () => {
+  if (typeof window !== "undefined") {
+    return createJSONStorage(() => localStorage);
+  }
+  return createJSONStorage(() => sessionStorage);
+};
+
+export const useUserStore = create<UserStore>()(
+  persist(
+    (set) => ({
+      user: null,
+      setUser: (user) => set({ user }),
+      clearUser: () => set({ user: null }),
+    }),
+    {
+      name: "user-storage",
+      storage: getStorage(),
+    },
+  ),
+);

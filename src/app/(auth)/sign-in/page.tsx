@@ -25,7 +25,7 @@ export default function SignIn() {
   } = useForm<FormValues>({ mode: "onChange" });
   const [passwordVisible, setPasswordVisible] = useState(false);
   const router = useRouter();
-  const action = useUserStore((state) => state.action);
+  const setUser = useUserStore((state) => state.setUser);
 
   const handleLogin = async (data: FormValues) => {
     const { email, password } = data;
@@ -49,7 +49,7 @@ export default function SignIn() {
       document.cookie = `token=${result.token};`;
       const userInfo = await getUser(result.token);
       // user 정보 저장하기
-      action.setUser(userInfo);
+      setUser(userInfo); // setUser 호출
       // 로그인 성공 이후 main으로 이동
       router.push("/");
     } else {
