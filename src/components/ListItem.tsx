@@ -97,20 +97,6 @@ ListItem.SubInfo = ({ date, participantCount, capacity }: SubInfoProps) => {
   );
 };
 
-// 리뷰 평점
-type ScoreProps = {
-  score: number;
-};
-ListItem.Score = ({ score }: ScoreProps) => {
-  return (
-    <div className="flex gap-0.5">
-      {Array.from({ length: score }, (_, index) => (
-        <Heart key={index} className={`${index < score ? "fill-red-600" : "fill-gray-200"} stroke-none`} />
-      ))}
-    </div>
-  );
-};
-
 // 리뷰 내용
 ListItem.Body = ({ children }: { children: React.ReactNode }) => {
   return <p className="w-full break-words text-sm text-gray-700">{children}</p>;
