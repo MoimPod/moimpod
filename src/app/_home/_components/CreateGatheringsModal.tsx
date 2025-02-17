@@ -20,8 +20,8 @@ type FormValues = {
   location: string;
   image: File | null;
   service: string;
-  meetingDate: string;
-  deadlineDate: string;
+  meetingDateTime: string;
+  deadlineDateTime: string;
   capacity: string;
 };
 
@@ -47,64 +47,50 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     mode: "onChange",
   });
 
-  const [imageName, setImageName] = useState<string>("");
-  const [selectedCity, setSelectedCity] = useState<string>("");
-  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
-  const [meetingDateTime, setMeetingDateTime] = useState<Date | null>(null);
-  const [deadlineDateTime, setDeadlineDateTime] = useState<Date | null>(null);
+  const [formData, setFormData] = useState({
+    selectedCity: "",
+    selectedDistrict: "",
+    image: null as File | null,
+    meetingDateTime: null as Date | null,
+    deadlineDateTime: null as Date | null,
+  });
+
+  const updateFormData = (key: string, value: string | File | Date | null) => {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: value,
+      ...(key === "selectedCity" && { selectedDistrict: "" }),
+    }));
+  };
+
+  useEffect(() => {
+    if (formData.meetingDateTime && isValidDate(formData.meetingDateTime)) {
+      setValue("meetingDateTime", formData.meetingDateTime.toISOString());
+    }
+  }, [formData.meetingDateTime, setValue]);
+
+  useEffect(() => {
+    if (formData.deadlineDateTime && isValidDate(formData.deadlineDateTime)) {
+      setValue("deadlineDateTime", formData.deadlineDateTime.toISOString());
+    }
+  }, [formData.deadlineDateTime, setValue]);
+
+  const resetFormData = () => {
+    setFormData({
+      selectedCity: "",
+      selectedDistrict: "",
+      image: null,
+      meetingDateTime: null,
+      deadlineDateTime: null,
+    });
+  };
 
   useEffect(() => {
     if (!isOpen) {
       reset();
-      setImageName("");
-      setSelectedCity("");
-      setSelectedDistrict("");
-      setMeetingDateTime(null);
-      setDeadlineDateTime(null);
+      resetFormData();
     }
   }, [isOpen, reset]);
-
-  // Location 값 저장
-  const handleCityChange = (city: string) => {
-    setSelectedCity(city);
-    setSelectedDistrict(""); // 시가 변경되면 구 초기화
-    setValue("location", `${city} ${selectedDistrict}`);
-  };
-
-  const handleDistrictChange = (district: string) => {
-    setSelectedDistrict(district);
-    setValue("location", `${selectedCity} ${district}`);
-  };
-
-  // image 파일 저장
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const allowedExtensions = ["jpg", "jpeg", "png"];
-      const fileExtensions = file.name.split(".").pop()?.toLowerCase();
-
-      if (!fileExtensions || !allowedExtensions.includes(fileExtensions)) {
-        setError("image", { type: "manual", message: "지원하는 파일 형식은 JPG, JPEG, PNG만 가능합니다." });
-        return;
-      }
-      setImageName(file.name);
-      setValue("image", file);
-    }
-  };
-
-  // 모임 날짜 저장
-  useEffect(() => {
-    if (meetingDateTime && isValidDate(meetingDateTime)) {
-      setValue("meetingDate", meetingDateTime.toISOString());
-    }
-  }, [meetingDateTime, setValue]);
-
-  // 모임 마감 날짜 저장
-  useEffect(() => {
-    if (deadlineDateTime && isValidDate(deadlineDateTime)) {
-      setValue("deadlineDate", deadlineDateTime.toISOString());
-    }
-  }, [deadlineDateTime, setValue]);
 
   const onSubmit = (data: FormValues) => {
     console.log("폼 데이터:", data);
@@ -128,10 +114,10 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <FormField label="장소">
           <div className="border-none">
             <LocationSelect
-              selectedCity={selectedCity}
-              setSelectedCity={handleCityChange}
-              selectedDistrict={selectedDistrict}
-              setSelectedDistrict={handleDistrictChange}
+              selectedCity={formData.selectedCity}
+              setSelectedCity={(city) => updateFormData("selectedCity", city)}
+              selectedDistrict={formData.selectedDistrict}
+              setSelectedDistrict={(district) => updateFormData("selectedDistrict", district)}
               className="border-none text-gray-400"
             />
           </div>
@@ -140,16 +126,21 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <FormField label="이미지">
           <div className="flex">
             <div
-              className={`w-full rounded-xl bg-gray-50 px-4 py-2.5 text-sm ${imageName ? "text-gray-900" : "text-gray-400"}`}
+              className={`w-full rounded-xl bg-gray-50 px-4 py-2.5 text-sm ${formData.image?.name ? "text-gray-900" : "text-gray-400"}`}
             >
-              {imageName || "이미지를 첨부해주세요."}
+              {formData.image?.name || "이미지를 첨부해주세요."}
             </div>
             <input
               type="file"
               id="imageUpload"
               className="hidden"
               accept=".jpg,.jpeg,.png"
-              onChange={handleFileChange}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  updateFormData("image", file);
+                }
+              }}
             />
             <Button
               styleType="outline"
@@ -173,10 +164,10 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
 
         <div className="my-3">
           <MeetingForm
-            meetingDateTime={meetingDateTime}
-            setMeetingDateTime={setMeetingDateTime}
-            deadlineDateTime={deadlineDateTime}
-            setDeadlineDateTime={setDeadlineDateTime}
+            meetingDateTime={formData.meetingDateTime}
+            setMeetingDateTime={(date) => updateFormData("meetingDateTime", date)}
+            deadlineDateTime={formData.deadlineDateTime}
+            setDeadlineDateTime={(date) => updateFormData("deadlineDateTime", date)}
           />
         </div>
 
