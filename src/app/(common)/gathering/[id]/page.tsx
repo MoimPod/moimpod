@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import apiClient from "@/services/appClient";
+import axiosInstance from "@/lib/axiosInstance";
 import Gathering from "../_components/Gathering";
 import Reviews from "../_components/Reviews";
 import Spinner from "@/components/Spinner";
@@ -8,8 +8,8 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id: gatheringId } = await params;
-  const { data: gathering } = await apiClient.get<GatheringType>(`/gatherings/${gatheringId}`);
-  const { data: participants } = await apiClient.get(`/gatherings/${gatheringId}/participants`);
+  const { data: gathering } = await axiosInstance.get<GatheringType>(`/gatherings/${gatheringId}`);
+  const { data: participants } = await axiosInstance.get(`/gatherings/${gatheringId}/participants`);
 
   const profileImages = participants?.map((item: GatheringParticipantType) => item.User.image) || [];
 

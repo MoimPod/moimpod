@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import apiClient from "@/services/appClient";
+import axiosInstance from "@/lib/axiosInstance";
 
 type FormData = {
   name: string;
@@ -16,7 +16,7 @@ export const useCreateGathering = () => {
 
   return useMutation({
     mutationFn: async (formData: FormData) => {
-      const response = await apiClient.post("/gatherings", formData);
+      const response = await axiosInstance.post("/gatherings", formData);
       return response.data;
     },
     onSuccess: () => {
