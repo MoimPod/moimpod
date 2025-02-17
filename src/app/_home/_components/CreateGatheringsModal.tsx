@@ -9,6 +9,7 @@ import CategoryButton from "@/components/CategoryButton";
 import MeetingForm from "@/app/_home/_components/MeetingForm";
 import { useForm } from "react-hook-form";
 import { isValid as isValidDate } from "date-fns";
+import { useCreateGathering } from "../_hooks/useCreateGathering";
 
 type CreateGatheringsModalProps = {
   isOpen: boolean;
@@ -40,8 +41,9 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     register,
     handleSubmit,
     reset,
+    setError,
     setValue,
-    formState: { isValid },
+    formState: { errors, isValid },
   } = useForm<FormValues>({
     mode: "onChange",
   });
@@ -98,9 +100,23 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     }
   }, [isOpen, reset]);
 
+  const { mutate: createGathering, isPending } = useCreateGathering();
+
   // 제출 확인용
   const onSubmit = (data: FormValues) => {
     console.log("폼 데이터:", data);
+    createGathering(data, {
+      onSuccess: () => {
+        onClose();
+      },
+      onError: (err) => {
+        console.error("API 요청 실패:", err);
+        setError("root", {
+          type: "server",
+          message: "서버에서 오류가 발생했습니다. 다시 시도해주세요.",
+        });
+      },
+    });
   };
 
   return (
@@ -115,8 +131,12 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <FormField label="모임 이름">
           <Input
             placeholder="모임 이름을 작성해주세요."
-            register={register("name", { required: "모임 이름을 입력해주세요." })}
+            register={register("name", {
+              required: "모임 이름을 입력해주세요.",
+              maxLength: { value: 20, message: "모임 이름은 최대 20자까지 입력 가능합니다." },
+            })}
           />
+          {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
         </FormField>
 
         {/* 장소 선택 */}
@@ -195,13 +215,27 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <FormField label="모임 정원">
           <Input
             placeholder="최소 3인 이상 입력해주세요."
-            register={register("capacity", { required: "정원을 입력해주세요." })}
+            register={register("capacity", {
+              required: "정원을 입력해주세요.",
+              min: { value: 3, message: "모임 정원은 최소 3명 이상이어야 합니다." },
+              max: { value: 20, message: "모임 정원은 최대 20명까지만 가능합니다." },
+              pattern: { value: /^[0-9]+$/, message: "숫자만 입력해주세요." },
+            })}
           />
+          {errors.capacity && <p className="mt-1 text-sm text-red-500">{errors.capacity.message}</p>}
         </FormField>
 
+        {errors.root && <p className="mt-1 text-sm text-red-500">{errors.root.message}</p>}
+
         {/* 제출 버튼 */}
-        <Button styleType="solid" size="lg" className="mt-7 h-10 w-[118px]" disabled={!isValid} type="submit">
-          확인
+        <Button
+          styleType="solid"
+          size="lg"
+          className="mt-7 h-10 w-[118px]"
+          disabled={!isValid || isPending}
+          type="submit"
+        >
+          {isPending ? "저장 중..." : "확인"}
         </Button>
       </form>
     </Modal>
