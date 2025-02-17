@@ -23,7 +23,7 @@ const mockCards: CardData[] = [
     dateTime: "2025-06-01 19:00",
     registrationEnd: "2025-05-30",
     participantCount: 8,
-    capacity: 20,
+    capacity: 8,
     image: "/images/sample_card_1.png",
     createdBy: 1,
     teamId: 3,
