@@ -37,7 +37,6 @@ export type GatheringType = {
   location: string;
   participantCount: number;
   image: string;
-  count: number;
   capacity: number;
   createdBy: number;
   canceledAt: string;
