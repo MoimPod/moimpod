@@ -1,5 +1,6 @@
 "use client";
 
+import MyGatherings from "@/app/(common)/mypage/_components/MyGatherings";
 import CategoryButton from "@/components/CategoryButton";
 import Tab from "@/components/Tab";
 import { useState } from "react";
@@ -34,7 +35,10 @@ export default function MypageContent() {
           </Tab.Item>
         ))}
       </Tab>
-      <div className="flex-1 border">리스트 컨테이너</div>
+      <div className="flex flex-1 border">
+        {/* <div className="flex-1 border border-black">여기</div> */}
+        {selectedTab === "나의 모임" && <MyGatherings />}
+      </div>
     </div>
   );
 }
