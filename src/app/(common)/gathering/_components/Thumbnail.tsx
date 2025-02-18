@@ -18,7 +18,7 @@ export default function Thumbnail({ imageUrl, registrationEnd }: ThumbnailProps)
         height={270}
         className="w-full rounded-3xl"
       />
-      <Tag text={registrationEnd} />
+      <Tag registrationEnd={registrationEnd} />
     </div>
   );
 }

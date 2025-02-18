@@ -54,7 +54,7 @@ export default function Card({
     >
       {/* 카드 이미지 */}
       <div className="relative">
-        <Tag text={`${registrationEnd ? "오늘 21시 마감" : "모집 종료"}`} />
+        <Tag registrationEnd={registrationEnd} />
         <Image
           src={testCard}
           alt={"test 이미지"}
@@ -83,10 +83,14 @@ export default function Card({
 
         <div className="mb-3 flex items-center gap-x-5">
           <ProgressBar progress={progress} />
-          <button className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-orange-500">
-            join now
-            <JoinArrow />
-          </button>
+          {participantCount === capacity ? (
+            <button className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-sky-400">Closed</button>
+          ) : (
+            <button className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-primary-color">
+              join now
+              <JoinArrow className="mt-0.5" />
+            </button>
+          )}
         </div>
       </div>
     </div>

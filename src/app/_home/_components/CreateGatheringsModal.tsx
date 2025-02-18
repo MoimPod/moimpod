@@ -82,6 +82,19 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     }
   }, [formData.deadlineDateTime, setValue]);
 
+  // 이미지 파일 string 전환
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        updateFormData("image", base64String); // Base64 문자열 저장
+      };
+    }
+  };
+
   // 초기화 함수
   const resetFormData = () => {
     setFormData({
@@ -165,12 +178,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
               id="imageUpload"
               className="hidden"
               accept=".jpg,.jpeg,.png"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  updateFormData("image", file);
-                }
-              }}
+              onChange={handleImageChange}
             />
             <Button
               styleType="outline"
@@ -240,13 +248,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         {errors.root && <p className="mt-1 text-sm text-red-500">{errors.root.message}</p>}
 
         {/* 제출 버튼 */}
-        <Button
-          styleType="solid"
-          size="lg"
-          className="mt-7 h-10 w-[118px]"
-          disabled={!isValid || isPending}
-          type="submit"
-        >
+        <Button styleType="solid" size="lg" className="mt-7" disabled={!isValid || isPending} type="submit">
           {isPending ? "저장 중..." : "확인"}
         </Button>
       </form>
