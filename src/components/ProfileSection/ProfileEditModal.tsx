@@ -13,6 +13,7 @@ type ProfileEditModalProps = {
   isOpen: boolean;
   onClose: () => void;
   imageUrl: string | null;
+  companyName: string;
 };
 
 // 회원 정보 폼 타입
@@ -22,14 +23,14 @@ type FormValues = {
 };
 
 // 프로필을 수정하는 폼
-export default function ProfileEditModal({ isOpen, onClose, imageUrl }: ProfileEditModalProps) {
+export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyName }: ProfileEditModalProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(imageUrl);
   const {
     register,
     handleSubmit,
     watch,
-    formState: { isValid },
-  } = useForm<FormValues>({ mode: "onChange" });
+    formState: { isValid, isDirty },
+  } = useForm<FormValues>({ mode: "onChange", defaultValues: { companyName } });
   const mutation = useUpdateUserInfo();
 
   const watchedProfileImg = watch("profileImg");
@@ -73,14 +74,17 @@ export default function ProfileEditModal({ isOpen, onClose, imageUrl }: ProfileE
           </label>
           <Input
             placeholder="회사, 단체명"
-            register={register("companyName", { required: "회사명을 입력해주세요." })}
+            register={register("companyName", {
+              required: "회사명을 입력해주세요.",
+              validate: (value) => value !== companyName,
+            })}
           />
         </div>
         <div className="flex gap-4">
           <Button onClick={onClose} styleType="outline">
             취소
           </Button>
-          <Button type="submit" disabled={!isValid}>
+          <Button type="submit" disabled={isDirty || !isValid}>
             수정하기
           </Button>
         </div>
