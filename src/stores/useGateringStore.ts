@@ -7,7 +7,7 @@ export type CardData = {
   name: string;
   location: string;
   dateTime: string;
-  registrationEnd: string | null;
+  registrationEnd: string;
   participantCount: number;
   capacity: number;
   createdBy: number;

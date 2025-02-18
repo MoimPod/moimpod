@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SortIcon from "@/images/sort_icon.svg";
 
 type SortButtonProps = {

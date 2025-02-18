@@ -1,25 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreateGatheringsModal from "@/app/_home/_components/CreateGatheringsModal";
-import ServiceTab from "./_components/SeviceTab";
-import GatheringFilters from "./_components/GatheringFilters";
+import ServiceTab from "@/app/_home/_components/SeviceTab";
+import GatheringFilters from "@/app/_home/_components/GatheringFilters";
 import Card from "@/components/Card";
 import Button from "@/components/Button";
 import GatheringLogo from "@/images/gathering_logo.svg";
-import { CardData } from "@/stores/useGateringStore";
+import { useFetchGatherings } from "@/app/_home/_hooks/useFetchGatherings";
 
 export default function CardList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cards, setCards] = useState<CardData[]>([]);
+  const [filters, setFilters] = useState<{ city?: string; district?: string; dateTime?: string; sortBy?: string }>({});
 
-  const handleOpen = () => {
-    setIsModalOpen(true);
-  };
+  const { data: cards = [], isLoading, error } = useFetchGatherings(filters);
 
-  const handleClose = () => {
-    setIsModalOpen(false);
-  };
+  const handleOpen = () => setIsModalOpen(true);
+  const handleClose = () => setIsModalOpen(false);
 
   return (
     <div>
@@ -42,8 +39,13 @@ export default function CardList() {
       </div>
       <hr className="my-3" />
       <div className="px-6">
-        <GatheringFilters onFetch={(fetchedCards) => setCards(fetchedCards)} />
-        {cards.length === 0 ? (
+        <GatheringFilters onChange={setFilters} />
+
+        {isLoading ? (
+          <div className="flex h-[50vh] items-center justify-center text-sm text-gray-500">데이터 불러오는 중...</div>
+        ) : error ? (
+          <div className="flex h-[50vh] items-center justify-center text-sm text-red-500">데이터 불러오기 실패</div>
+        ) : cards.length === 0 ? (
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>아직 모임이 없어요</p>
             <p className="mt-2">지금 바로 모임을 만들어보세요</p>

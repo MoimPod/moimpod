@@ -6,21 +6,9 @@ import Image from "next/image";
 import ProgressBar from "./ProgressBar";
 import ChipInfo from "./ChipInfo";
 import Tag from "./Tag";
-import testCard from "../../public/images/testCard.png";
 import { CardData } from "@/stores/useGateringStore";
 import LikeButton from "./LikeButton";
 import JoinArrow from "@/images/join_now_arrow.svg";
-
-type CardProps = {
-  id: number;
-  name: string;
-  location: string;
-  dateTime: string;
-  registrationEnd: string;
-  participantCount: number;
-  capacity: number;
-  image: string;
-};
 
 export default function Card({
   id,
@@ -31,7 +19,7 @@ export default function Card({
   participantCount,
   capacity,
   image,
-}: CardProps) {
+}: CardData) {
   const router = useRouter();
 
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
@@ -53,11 +41,11 @@ export default function Card({
       <div className="relative">
         <Tag registrationEnd={registrationEnd} />
         <Image
-          src={testCard}
-          alt={"test 이미지"}
+          src={image}
+          alt={"모임 이미지"}
           width={280}
           height={156}
-          className="h-[156px] w-full rounded-t-3xl border-2 md:w-[280px] md:rounded-l-3xl lg:w-[280px] lg:rounded-l-3xl"
+          className="h-[156px] w-full rounded-t-3xl border-2 md:w-[280px] md:rounded-l-3xl md:rounded-tr-none"
         />
       </div>
 

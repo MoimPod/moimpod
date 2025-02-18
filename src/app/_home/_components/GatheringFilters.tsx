@@ -1,48 +1,59 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { CardData, useGatheringStore } from "@/stores/useGateringStore";
-import { useFetchGatherings } from "@/app/_home/_hooks/useFetchGatherings";
+import { useState } from "react";
 import DateSelect from "@/components/Filtering/DateSelect";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import SortButton from "@/components/Filtering/SortButton";
 
 type GatheringFiltersProps = {
-  onFetch: (cards: CardData[]) => void;
+  onChange: (filters: { city?: string; district?: string; dateTime?: string; sortBy?: string }) => void;
 };
 
-export default function GatheringFilters({ onFetch }: GatheringFiltersProps) {
-  const { data: fetchedCards = [] } = useFetchGatherings();
-
-  const { setFilters, fetchGatherings } = useGatheringStore();
+export default function GatheringFilters({ onChange }: GatheringFiltersProps) {
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [sortType, setSortType] = useState<string>("registrationEnd"); // 기본값: 마감 임박
 
-  useEffect(() => {
-    // 선택된 값이 변경될 때마다 API 요청
-    setFilters({ city: selectedCity, district: selectedDistrict, sortBy: sortType });
-    fetchGatherings();
-  }, [selectedCity, selectedDistrict, sortType, setFilters, fetchGatherings]);
-
-  useEffect(() => {
-    onFetch(fetchedCards);
-  }, [fetchedCards]);
+  const handleFilterChange = () => {
+    onChange({
+      city: selectedCity || undefined,
+      district: selectedDistrict || undefined,
+      dateTime: selectedDate ? selectedDate.toISOString() : undefined,
+      sortBy: sortType,
+    });
+  };
 
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-wrap gap-3 md:flex-nowrap">
         <LocationSelect
           selectedCity={selectedCity}
-          setSelectedCity={setSelectedCity}
+          setSelectedCity={(city) => {
+            setSelectedCity(city);
+            handleFilterChange();
+          }}
           selectedDistrict={selectedDistrict}
-          setSelectedDistrict={setSelectedDistrict}
+          setSelectedDistrict={(district) => {
+            setSelectedDistrict(district);
+            handleFilterChange();
+          }}
         />
         <div className="sm:w-auto">
-          <DateSelect />
+          <DateSelect
+            onDateChange={(date) => {
+              setSelectedDate(date);
+              handleFilterChange();
+            }}
+          />
         </div>
       </div>
-      <SortButton setSortType={setSortType} />
+      <SortButton
+        setSortType={(sort) => {
+          setSortType(sort);
+          handleFilterChange();
+        }}
+      />
     </div>
   );
 }
