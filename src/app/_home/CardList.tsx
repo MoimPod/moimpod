@@ -49,7 +49,7 @@ export default function CardList() {
             <p className="mt-2">지금 바로 모임을 만들어보세요</p>
           </div>
         ) : (
-          <div className="grid gap-4">
+          <div>
             {cards.map((card) => (
               <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />
             ))}
