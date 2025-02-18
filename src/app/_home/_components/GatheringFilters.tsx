@@ -23,7 +23,7 @@ export default function GatheringFilters({ onFetch }: GatheringFiltersProps) {
     // 선택된 값이 변경될 때마다 API 요청
     setFilters({ city: selectedCity, district: selectedDistrict, sortBy: sortType });
     fetchGatherings();
-  }, [selectedCity, selectedDistrict, setFilters, fetchGatherings]);
+  }, [selectedCity, selectedDistrict, sortType, setFilters, fetchGatherings]);
 
   useEffect(() => {
     onFetch(fetchedCards);
