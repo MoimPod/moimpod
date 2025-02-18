@@ -17,6 +17,7 @@ type ProfileEditModalProps = {
 type FormValues = {
   // email: string; // 프로필 사진
   companyName: string;
+  profileImg: FileList;
 };
 
 // 프로필을 수정하는 폼
@@ -31,9 +32,14 @@ export default function ProfileEditModal({ isOpen, onClose }: ProfileEditModalPr
   const onSubmit = (data: FormValues) => {
     const formData = new FormData();
     formData.append("companyName", data.companyName);
+
+    if (data.profileImg && data.profileImg.length > 0) {
+      formData.append("image", data.profileImg[0]);
+    }
     mutation.mutate(formData);
     onClose();
   };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="mx-4 flex w-full max-w-[520px] flex-col gap-6 md:mx-0">
       <div className="text-lg font-semibold">프로필 수정하기</div>
@@ -42,7 +48,7 @@ export default function ProfileEditModal({ isOpen, onClose }: ProfileEditModalPr
           <Profile width="56" height="56" />
           <Edit width="18" height="18" className="absolute bottom-1 right-1 text-white" />
         </label>
-        <input id="profile_img" type="file" hidden accept="image/*" />
+        <input id="profile_img" type="file" hidden accept=".jpg,.jpeg,.png" {...register("profileImg")} />
         <div className="flex flex-col gap-3">
           <label htmlFor="company" className="font-semibold text-gray-800">
             회사
