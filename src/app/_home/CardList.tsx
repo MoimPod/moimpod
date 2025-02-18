@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import CreateGatheringsModal from "@/app/_home/_components/CreateGatheringsModal";
 import ServiceTab from "@/app/_home/_components/SeviceTab";
 import GatheringFilters from "@/app/_home/_components/GatheringFilters";
@@ -13,10 +13,33 @@ export default function CardList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filters, setFilters] = useState<{ city?: string; district?: string; dateTime?: string; sortBy?: string }>({});
 
-  const { data: cards = [], isLoading, error } = useFetchGatherings(filters);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings(filters);
 
   const handleOpen = () => setIsModalOpen(true);
   const handleClose = () => setIsModalOpen(false);
+
+  // 무한 스크롤을 감지할 ref
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const target = entries[0];
+      if (target.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage(); // 다음 데이터 요청
+      }
+    },
+    [fetchNextPage, hasNextPage, isFetchingNextPage],
+  );
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, { threshold: 1.0 });
+
+    if (observerRef.current) observer.observe(observerRef.current);
+
+    return () => {
+      if (observerRef.current) observer.unobserve(observerRef.current);
+    };
+  }, [handleObserver]);
 
   return (
     <div>
@@ -41,22 +64,20 @@ export default function CardList() {
       <div className="px-6">
         <GatheringFilters onChange={setFilters} />
 
-        {isLoading ? (
-          <div className="flex h-[50vh] items-center justify-center text-sm text-gray-500">데이터 불러오는 중...</div>
-        ) : error ? (
-          <div className="flex h-[50vh] items-center justify-center text-sm text-red-500">데이터 불러오기 실패</div>
-        ) : cards.length === 0 ? (
+        {data?.pages[0].data.length === 0 ? (
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>아직 모임이 없어요</p>
             <p className="mt-2">지금 바로 모임을 만들어보세요</p>
           </div>
         ) : (
           <div>
-            {cards.map((card) => (
-              <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />
-            ))}
+            {data?.pages.map((page) =>
+              page.data.map((card) => <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />),
+            )}
+            <div ref={observerRef} className="h-10"></div>
           </div>
         )}
+        {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
       </div>
 
       <CreateGatheringsModal isOpen={isModalOpen} onClose={handleClose} />

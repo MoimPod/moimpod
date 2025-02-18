@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { CardData } from "@/stores/useGateringStore";
 import axiosInstance from "@/lib/axiosInstance";
 
@@ -11,21 +11,24 @@ type FetchParams = {
 
 // 데이터를 가져오는 함수
 export const useFetchGatherings = (filters: FetchParams) => {
-  return useQuery({
-    queryKey: ["gatherings"],
-    queryFn: async () => {
+  return useInfiniteQuery({
+    queryKey: ["gatherings", filters],
+    queryFn: async ({ pageParam = 5 }: { pageParam: number | null }) => {
       try {
-        const response = await axiosInstance.get<CardData[]>(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings?limit=10`,
-
-          { params: filters },
-        );
-        return response.data; // API 요청 대신 더미 데이터 반환
+        const response = await axiosInstance.get<CardData[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
+          params: { ...filters, limit: 20, cursor: pageParam },
+        });
+        return {
+          data: response.data,
+          nextCursor: response.data.length === 10 ? response.data[response.data.length - 1].id : null, // 다음 데이터가 있다면 마지막 id 저장
+        };
       } catch (error) {
         console.error("데이터 조회 실패:", error);
         throw error;
       }
     },
+    initialPageParam: null, // 첫 요청 시 cursor 없음
+    getNextPageParam: (lastPage) => lastPage.nextCursor, // 다음 요청 시 lastPage의 마지막 cursor 사용
     staleTime: 60000,
   });
 };
