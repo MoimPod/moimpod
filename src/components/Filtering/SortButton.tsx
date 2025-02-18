@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from "react";
 import SortIcon from "@/images/sort_icon.svg";
-import { CardData } from "@/stores/useCardStore";
 
 type SortButtonProps = {
-  cards: CardData[];
-  onSort: (sortedCards: CardData[]) => void;
+  setSortType: (sortType: string) => void;
 };
 
 const sortOption = [
@@ -14,35 +12,16 @@ const sortOption = [
   { label: "참여 인원 순", value: "participantCount" },
 ] as const;
 
-export default function SortButton({ cards, onSort }: SortButtonProps) {
+export default function SortButton({ setSortType }: SortButtonProps) {
   const [isSortDropdownOpen, setSortDropdownOpen] = useState(false);
   const [selectedSort, setSelectedSort] = useState<"registrationEnd" | "participantCount">("registrationEnd");
 
-  // 정렬 함수
+  // 정렬 옵션 선택
   const handleSort = (sortType: "registrationEnd" | "participantCount") => {
     setSelectedSort(sortType);
     setSortDropdownOpen(false);
+    setSortType(sortType); // 선택한 정렬 기준을 상위 컴포넌트에 전달
   };
-
-  useEffect(() => {
-    const sortedCards = [...cards].sort((a, b) => {
-      const getDateValue = (date: string | null) => {
-        if (!date) return Infinity;
-        return new Date(date + "T00:00:00+09:00").getTime();
-      };
-
-      if (selectedSort === "registrationEnd") {
-        const dateA = getDateValue(a.registrationEnd);
-        const dateB = getDateValue(b.registrationEnd);
-
-        return dateA - dateB; // 마감일 오름차순 정렬
-      } else {
-        return b.participantCount - a.participantCount; // 내림차순 정렬
-      }
-    });
-
-    onSort(sortedCards);
-  }, [selectedSort, cards]);
 
   return (
     <div>

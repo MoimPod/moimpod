@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { CardData } from "@/stores/useCardStore";
+import { CardData } from "@/stores/useGateringStore";
 
 // 데이터를 가져오는 함수
 // const fetchCards = async (teamId: number) => {
@@ -18,6 +18,7 @@ import { CardData } from "@/stores/useCardStore";
 const mockCards: CardData[] = [
   {
     id: 1,
+    type: "WORKATION",
     name: "오피스 스트레칭",
     location: "서울 강남구",
     dateTime: "2025-06-01 19:00",
@@ -26,9 +27,7 @@ const mockCards: CardData[] = [
     capacity: 8,
     image: "/images/sample_card_1.png",
     createdBy: 1,
-    teamId: 3,
-    type: "OFFICE_STRETCHING",
-    canceledAt: null,
+    canceledAt: "",
   },
   {
     id: 2,
@@ -40,9 +39,8 @@ const mockCards: CardData[] = [
     capacity: 20,
     image: "/images/sample_card_2.png",
     createdBy: 2,
-    teamId: 3,
     type: "DALLAEMFIT",
-    canceledAt: null,
+    canceledAt: "",
   },
   {
     id: 3,
@@ -54,9 +52,8 @@ const mockCards: CardData[] = [
     capacity: 20,
     image: "/images/sample_card_2.png",
     createdBy: 2,
-    teamId: 3,
     type: "DALLAEMFIT",
-    canceledAt: null,
+    canceledAt: "",
   },
   {
     id: 4,
@@ -68,9 +65,8 @@ const mockCards: CardData[] = [
     capacity: 20,
     image: "/images/sample_card_1.png",
     createdBy: 1,
-    teamId: 3,
-    type: "OFFICE_STRETCHING",
-    canceledAt: null,
+    type: "WORKATION",
+    canceledAt: "",
   },
 ];
 
