@@ -1,5 +1,8 @@
 import axiosInstance from "@/lib/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
+import ListItem from "@/components/ListItem";
+import Image from "next/image";
+import Button from "@/components/Button";
 
 const fetchMyGatherings = async () => {
   try {
@@ -44,11 +47,38 @@ export default function MyGatherings() {
   return (
     <>
       {data?.length ? (
-        data?.map((meeting) => (
-          <div key={meeting.id} className="flex-1">
-            <li>{meeting.name}</li>
-          </div>
-        ))
+        <div className="flex-1 divide-y-2 divide-dashed">
+          {data?.map((gathering) => (
+            <ListItem
+              key={gathering.id}
+              CardImage={
+                <Image
+                  src={gathering.image}
+                  alt="모임 이미지"
+                  width={280}
+                  height={156}
+                  className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
+                />
+              }
+              className="justify-between"
+            >
+              <div className="flex flex-col gap-2.5">
+                <ListItem.Status isCompleted={!!gathering.canceledAt} participantCount={gathering.participantCount} />
+                <div className="flex flex-col gap-1">
+                  <ListItem.Title title={gathering.name} subtitle={gathering.location} />
+                  <ListItem.SubInfo
+                    date={gathering.dateTime}
+                    participantCount={gathering.participantCount}
+                    capacity={gathering.capacity}
+                  />
+                </div>
+              </div>
+              <Button className="mt-[18px] w-full max-w-[120px]" size="sm" styleType="outline">
+                예약 취소하기
+              </Button>
+            </ListItem>
+          ))}
+        </div>
       ) : (
         <div className="flex flex-1 items-center justify-center">
           <p>신청한 모임이 아직 없어요</p>
