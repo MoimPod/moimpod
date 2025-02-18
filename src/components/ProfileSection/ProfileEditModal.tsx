@@ -34,10 +34,14 @@ export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyNam
   } = useForm<FormValues>({ mode: "onChange", defaultValues: { companyName } });
   const mutation = useUpdateUserInfo();
 
+  // 이미지 상태를 추적
   const watchedProfileImg = watch("profileImg");
+
+  // 이미지 미리보기 설정
   useEffect(() => {
     if (watchedProfileImg && watchedProfileImg.length > 0) {
       const file = watchedProfileImg[0];
+      // 이미지 파일를 URL로 변환
       const objectUrl = URL.createObjectURL(file);
       setPreviewUrl(objectUrl);
 
@@ -48,12 +52,16 @@ export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyNam
       setPreviewUrl(imageUrl);
     }
   }, [watchedProfileImg, imageUrl]);
+
+  // 모달을 여닫을 때 상태를 초기화
   useEffect(() => {
     if (isOpen) {
       reset({ companyName, profileImg: undefined });
       setPreviewUrl(imageUrl);
     }
   }, [isOpen, companyName, imageUrl, reset]);
+
+  // 폼 제출 로직
   const onSubmit = (data: FormValues) => {
     const formData = new FormData();
     formData.append("companyName", data.companyName);
@@ -64,6 +72,7 @@ export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyNam
     mutation.mutate(formData);
     onClose();
   };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="mx-4 flex w-full max-w-[520px] flex-col gap-6 md:mx-0">
       <div className="text-lg font-semibold">프로필 수정하기</div>
@@ -81,7 +90,6 @@ export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyNam
             placeholder="회사, 단체명"
             register={register("companyName", {
               required: "회사명을 입력해주세요.",
-              validate: (value) => value !== companyName,
             })}
           />
         </div>
@@ -89,7 +97,7 @@ export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyNam
           <Button onClick={onClose} styleType="outline">
             취소
           </Button>
-          <Button type="submit" disabled={isDirty || !isValid}>
+          <Button type="submit" disabled={!isDirty || !isValid}>
             수정하기
           </Button>
         </div>
