@@ -3,6 +3,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import Gathering from "../_components/Gathering";
 import Reviews from "../_components/Reviews";
 import Spinner from "@/components/Spinner";
+import FloatingBar from "../_components/FloatingBar";
 import type { GatheringParticipantType, GatheringType } from "../types";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
@@ -22,6 +23,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <Reviews gatheringId={gatheringId} />
         </Suspense>
       </ErrorBoundary>
+
+      <FloatingBar />
     </div>
   );
 }
