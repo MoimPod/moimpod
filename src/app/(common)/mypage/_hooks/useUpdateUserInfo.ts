@@ -3,7 +3,11 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 const updateUserInfo = async (formData: FormData) => {
   try {
-    const { data } = await axiosInstance.put(`/auths/user`, formData);
+    const { data } = await axiosInstance.put(`/auths/user`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return data;
   } catch (error) {
     throw new Error("데이터를 불러오지 못했습니다.");
