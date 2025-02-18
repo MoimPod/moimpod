@@ -1,12 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useGatheringStore } from "@/stores/useGateringStore";
+import { CardData, useGatheringStore } from "@/stores/useGateringStore";
+import { useFetchGatherings } from "@/app/_home/_hooks/useFetchGatherings";
 import DateSelect from "@/components/Filtering/DateSelect";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import SortButton from "@/components/Filtering/SortButton";
 
-export default function GatheringFilters() {
+type GatheringFiltersProps = {
+  onFetch: (cards: CardData[]) => void;
+};
+
+export default function GatheringFilters({ onFetch }: GatheringFiltersProps) {
+  const { data: fetchedCards = [] } = useFetchGatherings();
+
   const { setFilters, fetchGatherings } = useGatheringStore();
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
@@ -17,6 +24,10 @@ export default function GatheringFilters() {
     setFilters({ city: selectedCity, district: selectedDistrict, sortBy: sortType });
     fetchGatherings();
   }, [selectedCity, selectedDistrict, setFilters, fetchGatherings]);
+
+  useEffect(() => {
+    onFetch(fetchedCards);
+  }, [fetchedCards]);
 
   return (
     <div className="flex items-center justify-between">

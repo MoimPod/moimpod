@@ -1,29 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useFetchGatherings } from "@/app/_home/_hooks/useFetchGatherings";
 import CreateGatheringsModal from "@/app/_home/_components/CreateGatheringsModal";
 import ServiceTab from "./_components/SeviceTab";
 import GatheringFilters from "./_components/GatheringFilters";
+import Card from "@/components/Card";
 import Button from "@/components/Button";
 import GatheringLogo from "@/images/gathering_logo.svg";
-
-export type CardData = {
-  id: number;
-  type: string;
-  name: string;
-  dateTime: string;
-  registrationEnd: string | null;
-  location: string;
-  participantCount: number;
-  capacity: number;
-  image: string;
-  createdBy: number;
-  canceledAt: string;
-};
+import { CardData } from "@/stores/useGateringStore";
 
 export default function CardList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cards, setCards] = useState<CardData[]>([]);
 
   const handleOpen = () => {
     setIsModalOpen(true);
@@ -54,11 +42,19 @@ export default function CardList() {
       </div>
       <hr className="my-3" />
       <div className="px-6">
-        <GatheringFilters />
-        <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
-          <p>아직 모임이 없어요</p>
-          <p className="mt-2">지금 바로 모임을 만들어보세요</p>
-        </div>
+        <GatheringFilters onFetch={(fetchedCards) => setCards(fetchedCards)} />
+        {cards.length === 0 ? (
+          <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
+            <p>아직 모임이 없어요</p>
+            <p className="mt-2">지금 바로 모임을 만들어보세요</p>
+          </div>
+        ) : (
+          <div className="grid gap-4">
+            {cards.map((card) => (
+              <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />
+            ))}
+          </div>
+        )}
       </div>
 
       <CreateGatheringsModal isOpen={isModalOpen} onClose={handleClose} />

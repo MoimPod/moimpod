@@ -48,10 +48,7 @@ export default function Card({
   };
 
   return (
-    <div
-      onClick={handleCardClick}
-      className="my-5 items-center rounded-3xl border-0 bg-white shadow md:flex md:h-[156px] lg:flex lg:h-[156px]"
-    >
+    <div className="my-5 items-center rounded-3xl border-0 bg-white shadow md:flex md:h-[156px] lg:flex lg:h-[156px]">
       {/* 카드 이미지 */}
       <div className="relative">
         <Tag registrationEnd={registrationEnd} />
@@ -66,27 +63,35 @@ export default function Card({
 
       {/* 카드 내용 */}
       <div className="flex-1 pb-3 pl-6 pr-6 pt-4">
-        {/* 모임 제목 */}
-        <div className="mb-2 flex items-center gap-2">
-          <h2 className="text-lg font-bold">{name} |</h2>
-          <p className="text-sm text-gray-500">{location}</p>
-          <LikeButton onClick={handleLikeClick} isLiked={isLiked} isClosed={isClosed} className="ml-auto" />
+        <div className="flex">
+          <div className="mb-2 flex-col space-y-2">
+            {/* 모임 제목 */}
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-bold">{name} |</h2>
+              <p className="text-sm text-gray-500">{location}</p>
+            </div>
+            {/* 날짜 정보 */}
+            <ChipInfo dateTime={dateTime} />
+          </div>
+          <LikeButton onClick={handleLikeClick} isLiked={isLiked} isClosed={isClosed} className="ml-auto md:mt-3" />
         </div>
 
-        {/* 날짜 정보 */}
-        <ChipInfo dateTime={dateTime} />
-
         {/* 인원 정보 */}
-        <p className="mt-5 text-sm text-gray-500">
+        <p className="mt-3 text-sm text-gray-500">
           {participantCount}/{capacity}
         </p>
 
-        <div className="mb-3 flex items-center gap-x-5">
+        <div className="flex items-center gap-x-5">
           <ProgressBar progress={progress} />
           {participantCount === capacity ? (
-            <button className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-sky-400">Closed</button>
+            <button onClick={handleCardClick} className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-sky-400">
+              Closed
+            </button>
           ) : (
-            <button className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-primary-color">
+            <button
+              onClick={handleCardClick}
+              className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-primary-color"
+            >
               join now
               <JoinArrow className="mt-0.5" />
             </button>
