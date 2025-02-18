@@ -5,7 +5,7 @@ type ProfileInfoProps = {
   email: string;
   name: string;
   companyName: string;
-  imageUrl: string;
+  imageUrl: string | null;
 };
 export default function ProfileInfo({ email, name, companyName, imageUrl }: ProfileInfoProps) {
   return (
