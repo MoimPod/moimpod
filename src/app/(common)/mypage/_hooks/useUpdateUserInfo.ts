@@ -1,4 +1,4 @@
-import axiosInstance from "@/utils/axiosInstance";
+import axiosInstance from "@/lib/axiosInstance";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 const updateUserInfo = async (formData: FormData) => {
