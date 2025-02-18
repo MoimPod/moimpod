@@ -1,7 +1,7 @@
 "use client";
 
 import CreateGatheringsModal from "@/app/_home/_components/CreateGatheringsModal";
-import ServiceTab from "@/app/_home/_components/ServiceTab";
+import Tab from "@/components/Tab";
 import { useFetchGatherings } from "@/app/_home/_hooks/useFetchGatherings";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
@@ -11,6 +11,8 @@ import LocationSelect from "@/components/Filtering/LocationSelect";
 import SortButton from "@/components/Filtering/SortButton";
 import GatheringLogo from "@/images/gathering_logo.svg";
 import { useEffect, useState } from "react";
+import Dalaemfit from "@/images/dalaemfit.svg";
+import Workation from "@/images/workation.svg";
 
 export type CardData = {
   id: number;
@@ -22,6 +24,12 @@ export type CardData = {
   capacity: number;
   image: string;
 };
+
+const serviceTab = [
+  { name: "달램핏", icon: Dalaemfit },
+  { name: "워케이션", icon: Workation },
+];
+
 export default function CardList() {
   // 원본 데이터
   const { data: cards = [], isLoading, error } = useFetchGatherings();
@@ -61,23 +69,34 @@ export default function CardList() {
       </div>
       <div className="px-6 pt-6">
         <div className="flex items-center">
-          <ServiceTab />
+          <Tab
+            category={
+              <CategoryButton categories={["전체", "오피스 스트레칭", "마인드풀니스"]}>
+                <CategoryButton.Title category="전체" />
+                <CategoryButton.Title category="오피스 스트레칭" />
+                <CategoryButton.Title category="마인드풀니스" />
+              </CategoryButton>
+            }
+            targetIndex={0}
+          >
+            {serviceTab.map((tabItem, idx) => (
+              <Tab.Item key={tabItem.name} index={idx}>
+                {tabItem.name}
+                <tabItem.icon />
+              </Tab.Item>
+            ))}
+          </Tab>
           <div className="ml-auto w-[114px]">
             <Button styleType="solid" size="sm" className="h-10 md:h-11" onClick={handleOpen}>
               모임 만들기
             </Button>
           </div>
         </div>
-        <CategoryButton className="mb-3 mt-2" categories={["전체", "오피스 스트레칭", "마인드풀니스"]}>
-          <CategoryButton.Title category="전체" />
-          <CategoryButton.Title category="오피스 스트레칭" />
-          <CategoryButton.Title category="마인드풀니스" />
-        </CategoryButton>
       </div>
-      <hr />
+      <hr className="my-3" />
 
       <div className="px-6">
-        <div className="my-3 flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <div className="flex flex-wrap gap-3 md:flex-nowrap">
             <LocationSelect
               selectedCity={selectedCity}
