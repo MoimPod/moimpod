@@ -35,7 +35,7 @@ export default function MypageContent() {
           </Tab.Item>
         ))}
       </Tab>
-      <div className="flex flex-1 border">
+      <div className="flex flex-1">
         {/* <div className="flex-1 border border-black">여기</div> */}
         {selectedTab === "나의 모임" && <MyGatherings />}
       </div>
