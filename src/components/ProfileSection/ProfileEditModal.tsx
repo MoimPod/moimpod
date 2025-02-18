@@ -29,12 +29,12 @@ export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyNam
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { isValid, isDirty },
   } = useForm<FormValues>({ mode: "onChange", defaultValues: { companyName } });
   const mutation = useUpdateUserInfo();
 
   const watchedProfileImg = watch("profileImg");
-
   useEffect(() => {
     if (watchedProfileImg && watchedProfileImg.length > 0) {
       const file = watchedProfileImg[0];
@@ -48,7 +48,12 @@ export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyNam
       setPreviewUrl(imageUrl);
     }
   }, [watchedProfileImg, imageUrl]);
-
+  useEffect(() => {
+    if (isOpen) {
+      reset({ companyName, profileImg: undefined });
+      setPreviewUrl(imageUrl);
+    }
+  }, [isOpen, companyName, imageUrl, reset]);
   const onSubmit = (data: FormValues) => {
     const formData = new FormData();
     formData.append("companyName", data.companyName);
