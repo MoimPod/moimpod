@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { CardData } from "@/stores/useGatheringStore";
 import Image from "next/image";
 import ProgressBar from "./ProgressBar";
 import ChipInfo from "./ChipInfo";
@@ -36,7 +37,7 @@ export default function Card({
   };
 
   return (
-    <div className="my-5 items-center rounded-3xl bg-white shadow md:flex md:h-[156px] lg:flex lg:h-[156px]">
+    <div className="my-5 items-center rounded-3xl bg-white hover:shadow-md md:flex md:h-[156px] lg:flex lg:h-[156px]">
       {/* 카드 이미지 */}
       <div className="relative">
         <Tag registrationEnd={registrationEnd} />
