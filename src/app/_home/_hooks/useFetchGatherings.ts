@@ -16,7 +16,7 @@ export const useFetchGatherings = (filters: FetchParams) => {
     queryFn: async ({ pageParam = 5 }: { pageParam: number | null }) => {
       try {
         const response = await axiosInstance.get<CardData[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
-          params: { ...filters, limit: 20, cursor: pageParam },
+          params: { ...filters, limit: 20, offset: pageParam },
         });
         return {
           data: response.data,
@@ -27,7 +27,7 @@ export const useFetchGatherings = (filters: FetchParams) => {
         throw error;
       }
     },
-    initialPageParam: null, // 첫 요청 시 cursor 없음
+    initialPageParam: null, // 첫 요청 시 offset 없음
     getNextPageParam: (lastPage) => lastPage.nextCursor, // 다음 요청 시 lastPage의 마지막 cursor 사용
     staleTime: 60000,
   });
