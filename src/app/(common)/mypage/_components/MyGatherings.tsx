@@ -3,6 +3,8 @@ import Image from "next/image";
 import Button from "@/components/Button";
 import useDeleteJoinedGathering from "@/app/(common)/mypage/_hooks/useDeleteJoinedGathering";
 import { useGetJoinedGatherings } from "@/app/(common)/mypage/_hooks/useGetJoinedGatherings";
+import { useState } from "react";
+import ReviewModal from "@/app/(common)/mypage/_components/ReviewModal";
 
 // 이용 예정 => 모임 참여 신청했고 isCompleted가 false인 경우
 // 이용 완료 => 모임 참여 신청했고 isCompleted가 true인 경우
@@ -23,6 +25,17 @@ import { useGetJoinedGatherings } from "@/app/(common)/mypage/_hooks/useGetJoine
 // isCompleted가 true, isReviewed가 true => 리뷰 작성 x
 export default function MyGatherings() {
   const { data, isLoading, error } = useGetJoinedGatherings();
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedGathering, setSelectedGathering] = useState<number | null>(null);
+  const handleOpen = (gatheringId: number) => {
+    setSelectedGathering(gatheringId);
+    setModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+  };
+
   const mutation = useDeleteJoinedGathering();
   if (isLoading) return <p>Loading 나의 모임...</p>;
   if (error) return <p>Error loading 나의 모임.</p>;
@@ -58,10 +71,10 @@ export default function MyGatherings() {
                   </div>
                 </div>
                 <Button
-                  onClick={() => mutation.mutate(gathering.id)}
+                  onClick={gathering.isCompleted ? () => handleOpen(gathering.id) : () => mutation.mutate(gathering.id)}
                   className="mt-[18px] w-full max-w-[120px]"
                   size="sm"
-                  styleType="outline"
+                  styleType={gathering.isCompleted ? "solid" : "outline"}
                 >
                   {/*모임이 끝났으면 리뷰 작성 / 아니면 예약 취소 */}
                   {gathering.isCompleted ? "리뷰 작성하기" : "예약 취소하기"}
@@ -75,6 +88,7 @@ export default function MyGatherings() {
           <p>신청한 모임이 아직 없어요</p>
         </div>
       )}
+      <ReviewModal isOpen={isModalOpen} onClose={handleClose} gatheringId={selectedGathering as number} />
     </>
   );
 }
