@@ -7,7 +7,6 @@ import ProgressBar from "./ProgressBar";
 import ChipInfo from "./ChipInfo";
 import Tag from "./Tag";
 import AnimatedParticipantCount from "./AnimateParticipantCount";
-import { CardData } from "@/stores/useGateringStore";
 import LikeButton from "./LikeButton";
 import JoinArrow from "@/images/join_now_arrow.svg";
 
