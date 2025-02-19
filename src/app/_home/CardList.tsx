@@ -72,7 +72,9 @@ export default function CardList() {
         ) : (
           <div>
             {data?.pages.map((page) =>
-              page.data.map((card) => <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />),
+              page.data
+                .filter((card) => !card.registrationEnd || new Date(card.registrationEnd) >= new Date())
+                .map((card) => <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />),
             )}
             <div ref={observerRef} className="h-10"></div>
           </div>
