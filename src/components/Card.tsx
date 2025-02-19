@@ -6,7 +6,7 @@ import Image from "next/image";
 import ProgressBar from "./ProgressBar";
 import ChipInfo from "./ChipInfo";
 import Tag from "./Tag";
-import { CardData } from "@/stores/useGatheringStore";
+import AnimatedParticipantCount from "./AnimateParticipantCount";
 import LikeButton from "./LikeButton";
 import JoinArrow from "@/images/join_now_arrow.svg";
 
@@ -65,8 +65,8 @@ export default function Card({
         </div>
 
         {/* 인원 정보 */}
-        <p className="mt-3 text-sm text-gray-500">
-          {participantCount}/{capacity}
+        <p className="mt-5 text-sm text-gray-500">
+          <AnimatedParticipantCount participantCount={participantCount} capacity={capacity} />
         </p>
 
         <div className="flex items-center gap-x-5">
