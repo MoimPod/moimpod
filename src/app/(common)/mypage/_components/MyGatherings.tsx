@@ -49,8 +49,7 @@ export default function MyGatherings() {
       {data?.length ? (
         <div className="flex-1 divide-y-2 divide-dashed">
           {data?.map((gathering) => (
-            <div className="relative" key={gathering.id}>
-              {gathering.canceledAt && <InactiveLayer onClick={() => {}} message="모집 취소된 모임이에요" />}
+            <div className="relative py-6" key={gathering.id}>
               <ListItem
                 CardImage={
                   <Image
@@ -61,6 +60,8 @@ export default function MyGatherings() {
                     className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
                   />
                 }
+                canceledAt={gathering.canceledAt}
+                handleCancel={() => {}}
                 className="justify-between"
               >
                 <div className="flex flex-col gap-2.5">
