@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import CreateGatheringsModal from "@/app/_home/_components/CreateGatheringsModal";
-import ServiceTab from "@/app/_home/_components/SeviceTab";
-import GatheringFilters from "@/app/_home/_components/GatheringFilters";
+import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
+import ServiceTab from "@/app/(common)/_home/_components/SeviceTab";
+import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
 import Card from "@/components/Card";
 import Button from "@/components/Button";
 import GatheringLogo from "@/images/gathering_logo.svg";
-import { useFetchGatherings } from "@/app/_home/_hooks/useFetchGatherings";
+import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
 
 export default function CardList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
