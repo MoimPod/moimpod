@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import ListItem from "@/components/ListItem";
 import Image from "next/image";
 import Button from "@/components/Button";
-import InactiveLayer from "@/components/InactiveLayout";
+import useDeleteJoinedGathering from "@/app/(common)/mypage/_hooks/useDeleteJoinedGathering";
 
 const fetchMyGatherings = async () => {
   try {
@@ -41,7 +41,7 @@ export const useGetUserInfo = () => {
 
 export default function MyGatherings() {
   const { data, isLoading, error } = useGetUserInfo();
-
+  const mutation = useDeleteJoinedGathering();
   if (isLoading) return <p>Loading 나의 모임...</p>;
   if (error) return <p>Error loading 나의 모임.</p>;
   return (
@@ -75,8 +75,14 @@ export default function MyGatherings() {
                     />
                   </div>
                 </div>
-                <Button className="mt-[18px] w-full max-w-[120px]" size="sm" styleType="outline">
-                  예약 취소하기
+                <Button
+                  onClick={() => mutation.mutate(gathering.id)}
+                  className="mt-[18px] w-full max-w-[120px]"
+                  size="sm"
+                  styleType="outline"
+                >
+                  {/*모임이 끝났으면 리뷰 작성 / 아니면 예약 취소 */}
+                  {gathering.isCompleted ? "리뷰 작성하기" : "예약 취소하기"}
                 </Button>
               </ListItem>
             </div>
