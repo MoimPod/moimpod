@@ -1,62 +1,45 @@
 "use client";
 
+import { useState, useRef, useEffect, useCallback } from "react";
 import CreateGatheringsModal from "@/app/_home/_components/CreateGatheringsModal";
-import Tab from "@/components/Tab";
-import { useFetchGatherings } from "@/app/_home/_hooks/useFetchGatherings";
-import Button from "@/components/Button";
+import ServiceTab from "@/app/_home/_components/SeviceTab";
+import GatheringFilters from "@/app/_home/_components/GatheringFilters";
 import Card from "@/components/Card";
-import CategoryButton from "@/components/CategoryButton";
-import DateSelect from "@/components/Filtering/DateSelect";
-import LocationSelect from "@/components/Filtering/LocationSelect";
-import SortButton from "@/components/Filtering/SortButton";
+import Button from "@/components/Button";
 import GatheringLogo from "@/images/gathering_logo.svg";
-import { useEffect, useState } from "react";
-import Dalaemfit from "@/images/dalaemfit.svg";
-import Workation from "@/images/workation.svg";
-
-export type CardData = {
-  id: number;
-  name: string;
-  location: string;
-  dateTime: string;
-  registrationEnd: string | null;
-  participantCount: number;
-  capacity: number;
-  image: string;
-};
-
-const serviceTab = [
-  { name: "달램핏", icon: Dalaemfit },
-  { name: "워케이션", icon: Workation },
-];
+import { useFetchGatherings } from "@/app/_home/_hooks/useFetchGatherings";
 
 export default function CardList() {
-  // 원본 데이터
-  const { data: cards = [], isLoading, error } = useFetchGatherings();
-  // 정렬된 데이터
-  const [sortedCards, setSortedCards] = useState<CardData[]>([]);
-
-  const [selectedCity, setSelectedCity] = useState<string>("");
-  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
-
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filters, setFilters] = useState<{ city?: string; district?: string; dateTime?: string; sortBy?: string }>({});
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings(filters);
+
+  const handleOpen = () => setIsModalOpen(true);
+  const handleClose = () => setIsModalOpen(false);
+
+  // 무한 스크롤을 감지할 ref
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const target = entries[0];
+      if (target.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage(); // 다음 데이터 요청
+      }
+    },
+    [fetchNextPage, hasNextPage, isFetchingNextPage],
+  );
 
   useEffect(() => {
-    if (cards.length > 0) {
-      setSortedCards(cards);
-    }
-  }, [cards]);
+    const observer = new IntersectionObserver(handleObserver, { threshold: 1.0 });
 
-  const handleOpen = () => {
-    setIsModalOpen(true);
-  };
+    if (observerRef.current) observer.observe(observerRef.current);
 
-  const handleClose = () => {
-    setIsModalOpen(false);
-  };
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>;
+    return () => {
+      if (observerRef.current) observer.unobserve(observerRef.current);
+    };
+  }, [handleObserver]);
 
   return (
     <div>
@@ -69,23 +52,7 @@ export default function CardList() {
       </div>
       <div className="px-6 pt-6">
         <div className="flex items-center">
-          <Tab
-            category={
-              <CategoryButton categories={["전체", "오피스 스트레칭", "마인드풀니스"]}>
-                <CategoryButton.Title category="전체" />
-                <CategoryButton.Title category="오피스 스트레칭" />
-                <CategoryButton.Title category="마인드풀니스" />
-              </CategoryButton>
-            }
-            targetIndex={0}
-          >
-            {serviceTab.map((tabItem, idx) => (
-              <Tab.Item key={tabItem.name} index={idx}>
-                {tabItem.name}
-                <tabItem.icon />
-              </Tab.Item>
-            ))}
-          </Tab>
+          <ServiceTab />
           <div className="ml-auto w-[114px]">
             <Button styleType="solid" size="sm" className="h-10 md:h-11" onClick={handleOpen}>
               모임 만들기
@@ -94,32 +61,23 @@ export default function CardList() {
         </div>
       </div>
       <hr className="my-3" />
-
       <div className="px-6">
-        <div className="flex items-center justify-between">
-          <div className="flex flex-wrap gap-3 md:flex-nowrap">
-            <LocationSelect
-              selectedCity={selectedCity}
-              setSelectedCity={setSelectedCity}
-              selectedDistrict={selectedDistrict}
-              setSelectedDistrict={setSelectedDistrict}
-            />
-            <div className="sm:w-auto">
-              <DateSelect />
-            </div>
+        <GatheringFilters onChange={setFilters} />
+
+        {data?.pages[0].data.length === 0 ? (
+          <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
+            <p>아직 모임이 없어요</p>
+            <p className="mt-2">지금 바로 모임을 만들어보세요</p>
           </div>
-          <SortButton cards={cards} onSort={setSortedCards} />
-        </div>
-        <div className="animate-fadein">
-          {sortedCards.length === 0 ? (
-            <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
-              <p>아직 모임이 없어요</p>
-              <p className="mt-2">지금 바로 모임을 만들어보세요</p>
-            </div>
-          ) : (
-            sortedCards.map((card) => <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />)
-          )}
-        </div>
+        ) : (
+          <div>
+            {data?.pages.map((page) =>
+              page.data.map((card) => <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />),
+            )}
+            <div ref={observerRef} className="h-10"></div>
+          </div>
+        )}
+        {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
       </div>
 
       <CreateGatheringsModal isOpen={isModalOpen} onClose={handleClose} />
