@@ -9,7 +9,7 @@ import InactiveLayer from "@/components/InactiveLayout";
 
 type ListItemProps = {
   CardImage?: React.ReactNode;
-  canceledAt?: string;
+  canceledAt?: string | null;
   handleCancel?: () => void;
 } & React.HTMLAttributes<HTMLDivElement>;
 
