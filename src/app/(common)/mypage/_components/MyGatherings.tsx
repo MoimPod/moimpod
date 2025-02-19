@@ -1,46 +1,11 @@
-import axiosInstance from "@/lib/axiosInstance";
-import { useQuery } from "@tanstack/react-query";
 import ListItem from "@/components/ListItem";
 import Image from "next/image";
 import Button from "@/components/Button";
 import useDeleteJoinedGathering from "@/app/(common)/mypage/_hooks/useDeleteJoinedGathering";
-
-const fetchMyGatherings = async () => {
-  try {
-    const { data } = await axiosInstance.get("gatherings/joined");
-    return data;
-  } catch (error) {
-    throw new Error("데이터를 불러오지 못했습니다.");
-  }
-};
-
-type MyGathering = {
-  teamId: number;
-  id: number;
-  type: "DALLAEMFIT" | "OFFICE_STRETCHING" | "MINDFULNESS" | "WORKATION";
-  name: string;
-  dateTime: string;
-  registrationEnd: string;
-  location: string;
-  participantCount: number;
-  capacity: number;
-  image: string;
-  createdBy: number;
-  canceledAt: string;
-  joinedAt: string;
-  isCompleted: boolean;
-  isReviewed: boolean;
-};
-
-export const useGetUserInfo = () => {
-  return useQuery<MyGathering[]>({
-    queryKey: ["my-gatherings"],
-    queryFn: () => fetchMyGatherings(),
-  });
-};
+import { useGetJoinedGatherings } from "@/app/(common)/mypage/_hooks/useGetJoinedGatherings";
 
 export default function MyGatherings() {
-  const { data, isLoading, error } = useGetUserInfo();
+  const { data, isLoading, error } = useGetJoinedGatherings();
   const mutation = useDeleteJoinedGathering();
   if (isLoading) return <p>Loading 나의 모임...</p>;
   if (error) return <p>Error loading 나의 모임.</p>;
