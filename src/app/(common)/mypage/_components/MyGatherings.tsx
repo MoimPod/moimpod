@@ -65,7 +65,7 @@ export default function MyGatherings() {
                 className="justify-between"
               >
                 <div className="flex flex-col gap-2.5">
-                  <ListItem.Status isCompleted={!!gathering.canceledAt} participantCount={gathering.participantCount} />
+                  <ListItem.Status isCompleted={gathering.isCompleted} participantCount={gathering.participantCount} />
                   <div className="flex flex-col gap-1">
                     <ListItem.Title title={gathering.name} subtitle={gathering.location} />
                     <ListItem.SubInfo
