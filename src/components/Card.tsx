@@ -6,7 +6,7 @@ import Image from "next/image";
 import ProgressBar from "./ProgressBar";
 import ChipInfo from "./ChipInfo";
 import Tag from "./Tag";
-import { CardData } from "@/stores/useGateringStore";
+import { CardData } from "@/stores/useGatheringStore";
 import LikeButton from "./LikeButton";
 import JoinArrow from "@/images/join_now_arrow.svg";
 
