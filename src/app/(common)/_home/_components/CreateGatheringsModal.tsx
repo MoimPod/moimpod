@@ -6,7 +6,7 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import CategoryButton from "@/components/CategoryButton";
-import MeetingForm from "@/app/_home/_components/MeetingForm";
+import MeetingForm from "@/app/(common)/_home/_components/MeetingForm";
 import { useForm } from "react-hook-form";
 import { isValid as isValidDate } from "date-fns";
 import { useCreateGathering } from "../_hooks/useCreateGathering";
