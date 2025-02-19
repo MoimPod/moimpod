@@ -42,7 +42,7 @@ export default function Card({
         <Tag registrationEnd={registrationEnd} />
         <Image
           src={image}
-          alt={"모임 이미지"}
+          alt={`${name} 모임 이미지 - ${location}`}
           width={280}
           height={156}
           className="h-[156px] w-full rounded-t-3xl md:w-[280px] md:rounded-l-3xl md:rounded-tr-none"
