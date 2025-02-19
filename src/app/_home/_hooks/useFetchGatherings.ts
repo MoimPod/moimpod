@@ -16,7 +16,7 @@ export const useFetchGatherings = (filters: FetchParams) => {
     queryFn: async ({ pageParam = 5 }: { pageParam: number | null }) => {
       try {
         const response = await axiosInstance.get<CardData[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
-          params: { ...filters, limit: 20, offset: pageParam },
+          params: { ...filters, limit: 10, offset: pageParam },
         });
         return {
           data: response.data,
