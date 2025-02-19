@@ -71,15 +71,12 @@ export default function Card({
 
         <div className="flex items-center gap-x-5">
           <ProgressBar progress={progress} />
-          {participantCount === capacity ? (
-            <button onClick={handleCardClick} className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-sky-400">
+          {participantCount === capacity || isClosed ? (
+            <button onClick={handleCardClick} className="flex gap-1 whitespace-nowrap font-semibold text-sky-400">
               Closed
             </button>
           ) : (
-            <button
-              onClick={handleCardClick}
-              className="mr-4 flex gap-1 whitespace-nowrap font-semibold text-primary-color"
-            >
+            <button onClick={handleCardClick} className="flex gap-1 whitespace-nowrap font-semibold text-primary-color">
               join now
               <JoinArrow className="mt-0.5" />
             </button>
