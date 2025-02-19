@@ -1,3 +1,5 @@
+"use client";
+
 import CategoryButton from "@/components/CategoryButton";
 import Tab from "@/components/Tab";
 import Dalaemfit from "@/images/dalaemfit.svg";
@@ -8,14 +10,16 @@ const serviceTab = [
   { name: "워케이션", icon: Workation },
 ];
 
+const CATEGORIES = ["전체", "오피스 스트레칭", "마인드풀니스"];
+
 export default function ServiceTab() {
   return (
     <Tab
       category={
-        <CategoryButton categories={["전체", "오피스 스트레칭", "마인드풀니스"]}>
-          <CategoryButton.Title category="전체" />
-          <CategoryButton.Title category="오피스 스트레칭" />
-          <CategoryButton.Title category="마인드풀니스" />
+        <CategoryButton categories={CATEGORIES}>
+          {CATEGORIES.map((category) => (
+            <CategoryButton.Title key={category} category={category} />
+          ))}
         </CategoryButton>
       }
       targetIndex={0}

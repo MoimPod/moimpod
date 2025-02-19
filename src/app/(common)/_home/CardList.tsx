@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
-import ServiceTab from "@/app/(common)/_home/_components/SeviceTab";
+import ServiceTab from "@/app/(common)/_home/_components/ServiceTab";
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
 import Card from "@/components/Card";
 import Button from "@/components/Button";
