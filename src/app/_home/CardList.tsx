@@ -110,14 +110,16 @@ export default function CardList() {
           </div>
           <SortButton cards={cards} onSort={setSortedCards} />
         </div>
-        {sortedCards.length === 0 ? (
-          <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
-            <p>아직 모임이 없어요</p>
-            <p className="mt-2">지금 바로 모임을 만들어보세요</p>
-          </div>
-        ) : (
-          sortedCards.map((card) => <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />)
-        )}
+        <div className="animate-fadein">
+          {sortedCards.length === 0 ? (
+            <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
+              <p>아직 모임이 없어요</p>
+              <p className="mt-2">지금 바로 모임을 만들어보세요</p>
+            </div>
+          ) : (
+            sortedCards.map((card) => <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />)
+          )}
+        </div>
       </div>
 
       <CreateGatheringsModal isOpen={isModalOpen} onClose={handleClose} />
