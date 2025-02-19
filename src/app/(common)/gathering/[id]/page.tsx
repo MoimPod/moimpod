@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </Suspense>
       </ErrorBoundary>
 
-      <FloatingBar />
+      <FloatingBar gatheringId={gatheringId} hostUserId={gathering.createdBy} />
     </div>
   );
 }
