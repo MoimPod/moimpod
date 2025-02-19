@@ -50,7 +50,7 @@ export default function Header() {
           <div className="relative">
             <button
               onClick={() => {
-                setProfileBtn(true);
+                setProfileBtn((prev) => !prev);
               }}
               className="flex items-center justify-center"
             >
