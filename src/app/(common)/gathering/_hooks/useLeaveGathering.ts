@@ -17,7 +17,7 @@ export const useLeaveGathering = (gatheringId: string) => {
         queryKey: [gatheringId, "participants"],
       }),
     onError: (error) => {
-      console.error("모임 취소 중 오류 발생:", error);
+      console.error("모임 참여 취소 중 오류 발생:", error);
     },
   });
 };
