@@ -41,6 +41,11 @@ export default function CardList() {
     };
   }, [handleObserver]);
 
+  // 마감되지 않은 모임만 필터링
+  const filteredCards = data?.pages.flatMap((page) =>
+    page.data.filter((card) => !card.registrationEnd || new Date(card.registrationEnd) >= new Date()),
+  );
+
   return (
     <div>
       <div className="mb-5 flex gap-6 pt-8">
@@ -64,20 +69,19 @@ export default function CardList() {
       <div className="px-6">
         <GatheringFilters onChange={setFilters} />
 
-        {data?.pages[0].data.length === 0 ? (
+        {data?.pages[0].data.length === 0 || filteredCards?.length === 0 ? (
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>아직 모임이 없어요</p>
             <p className="mt-2">지금 바로 모임을 만들어보세요</p>
           </div>
         ) : (
-          <div>
-            {data?.pages.map((page) =>
-              page.data
-                .filter((card) => !card.registrationEnd || new Date(card.registrationEnd) >= new Date())
-                .map((card) => <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />),
-            )}
+          <>
+            {filteredCards?.map((card) => (
+              <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />
+            ))}{" "}
+            {/* 무한 스크롤 감지용 div */}
             <div ref={observerRef} className="h-10"></div>
-          </div>
+          </>
         )}
         {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
       </div>
