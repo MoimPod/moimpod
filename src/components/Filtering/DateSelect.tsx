@@ -6,7 +6,11 @@ import CustomDatepicker from "@/components/Filtering/CustomDatepicker";
 import { format } from "date-fns";
 import Dropdown from "@/components/Dropdown";
 
-export default function DateSelect() {
+type DateSelectProps = {
+  onDateChange: (date: Date | null) => void; // 부모 컴포넌트로 전달할 함수 추가
+};
+
+export default function DateSelect({ onDateChange }: DateSelectProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
