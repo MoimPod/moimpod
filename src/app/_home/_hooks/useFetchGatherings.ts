@@ -13,22 +13,22 @@ type FetchParams = {
 export const useFetchGatherings = (filters: FetchParams) => {
   return useInfiniteQuery({
     queryKey: ["gatherings", filters],
-    queryFn: async ({ pageParam = 5 }: { pageParam: number | null }) => {
+    queryFn: async ({ pageParam = 0 }: { pageParam: number }) => {
       try {
         const response = await axiosInstance.get<CardData[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
           params: { ...filters, limit: 10, offset: pageParam },
         });
         return {
           data: response.data,
-          nextCursor: response.data.length === 10 ? response.data[response.data.length - 1].id : null, // 다음 데이터가 있다면 마지막 id 저장
+          nextOffset: response.data.length === 10 ? pageParam + 10 : null, // 다음 데이터가 있다면 마지막 id 저장
         };
       } catch (error) {
         console.error("데이터 조회 실패:", error);
         throw error;
       }
     },
-    initialPageParam: null, // 첫 요청 시 offset 없음
-    getNextPageParam: (lastPage) => lastPage.nextCursor, // 다음 요청 시 lastPage의 마지막 cursor 사용
+    initialPageParam: 0, // 첫 요청 시 0
+    getNextPageParam: (lastPage) => lastPage.nextOffset, // 다음 요청 시 lastPage의 마지막 cursor 사용
     staleTime: 60000,
   });
 };
