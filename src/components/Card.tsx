@@ -9,6 +9,7 @@ import Tag from "./Tag";
 import AnimatedParticipantCount from "./AnimateParticipantCount";
 import LikeButton from "./LikeButton";
 import JoinArrow from "@/images/join_now_arrow.svg";
+import { CardData } from "@/stores/useGatheringStore";
 
 export default function Card({
   id,
