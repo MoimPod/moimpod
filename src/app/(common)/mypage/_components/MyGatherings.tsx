@@ -61,7 +61,7 @@ export default function MyGatherings() {
                   />
                 }
                 canceledAt={gathering.canceledAt}
-                handleCancel={() => {}}
+                handleCancel={() => mutation.mutate(gathering.id)}
                 className="justify-between"
               >
                 <div className="flex flex-col gap-2.5">
