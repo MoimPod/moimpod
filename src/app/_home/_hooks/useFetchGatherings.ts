@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { CardData } from "@/stores/useGateringStore";
+import { CardData } from "@/stores/useGatheringStore";
 import axiosInstance from "@/lib/axiosInstance";
 
 type FetchParams = {
