@@ -66,9 +66,9 @@ export default function Card({
         </div>
 
         {/* 인원 정보 */}
-        <p className="mt-5 text-sm text-gray-500">
+        <div className="mt-5 text-sm text-gray-500">
           <AnimatedParticipantCount participantCount={participantCount} capacity={capacity} />
-        </p>
+        </div>
 
         <div className="flex items-center gap-x-5">
           <ProgressBar progress={progress} />
