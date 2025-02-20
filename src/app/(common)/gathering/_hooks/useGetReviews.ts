@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { fetchReviews } from "../_utils/api";
+import { fetchReviews } from "../_utils/apis";
 
 export const useGetReviews = (gatheringId: string) => {
   return useSuspenseQuery({

@@ -10,14 +10,17 @@ type SortButtonProps = {
 const sortOption = [
   { label: "마감 임박", value: "registrationEnd" },
   { label: "참여 인원 순", value: "participantCount" },
+  { label: "모임 날짜 순", value: "dateTime" },
 ] as const;
 
 export default function SortButton({ setSortType }: SortButtonProps) {
   const [isSortDropdownOpen, setSortDropdownOpen] = useState(false);
-  const [selectedSort, setSelectedSort] = useState<"registrationEnd" | "participantCount">("registrationEnd");
+  const [selectedSort, setSelectedSort] = useState<"registrationEnd" | "participantCount" | "dateTime">(
+    "registrationEnd",
+  );
 
   // 정렬 옵션 선택
-  const handleSort = (sortType: "registrationEnd" | "participantCount") => {
+  const handleSort = (sortType: "registrationEnd" | "participantCount" | "dateTime") => {
     setSelectedSort(sortType);
     setSortDropdownOpen(false);
     setSortType(sortType); // 선택한 정렬 기준을 상위 컴포넌트에 전달
@@ -33,14 +36,20 @@ export default function SortButton({ setSortType }: SortButtonProps) {
         <div className="mr-1">
           <SortIcon />
         </div>
-        <span className="hidden md:block">{selectedSort === "registrationEnd" ? "마감 임박" : "참여 인원 순"}</span>
+        <span className="hidden md:block">
+          {selectedSort === "registrationEnd"
+            ? "마감 임박"
+            : selectedSort === "participantCount"
+              ? "참여 인원 순"
+              : "모임 날짜 순"}
+        </span>
       </button>
 
       {/* 드롭다운 메뉴 */}
       {isSortDropdownOpen && (
         <div className="absolute z-10 w-[110px] rounded-lg border bg-white p-2 text-sm font-medium shadow-md">
           {sortOption.map(({ label, value }) => (
-            <div key={value} onClick={() => handleSort(value)} className="rounded-lg p-2 hover:bg-orange-100">
+            <div key={value} onClick={() => handleSort(value)} className="rounded-lg p-2 hover:bg-sky-100">
               {label}
             </div>
           ))}
