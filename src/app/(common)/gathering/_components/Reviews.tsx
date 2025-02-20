@@ -7,10 +7,10 @@ import { useGetReviews } from "../_hooks/useGetReviews";
 import { useQueryParams } from "@/hooks/useQueryParams";
 
 export default function Reviews({ gatheringId }: { gatheringId: string }) {
-  const paramsObj = useQueryParams();
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const paramsObj = useQueryParams();
   const sortOrder = searchParams.get("sortOrder") || "latest";
 
   const { data } = useGetReviews(gatheringId, paramsObj);
@@ -22,7 +22,7 @@ export default function Reviews({ gatheringId }: { gatheringId: string }) {
     const offset = (page - 1) * limit;
 
     newSearchParams.set("offset", offset.toString());
-    newSearchParams.set("limit", limit.toString()); // limit도 유지
+    newSearchParams.set("limit", limit.toString());
 
     router.push(`${pathname}?${newSearchParams.toString()}`);
   };
