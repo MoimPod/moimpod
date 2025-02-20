@@ -9,13 +9,27 @@ import Button from "@/components/Button";
 import GatheringLogo from "@/images/gathering_logo.svg";
 import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
 import { useCheckAuth } from "@/app/(common)/_home/_hooks/useCheckAuth";
+import { LoginPopup } from "@/components/Popup";
+import { useUserStore } from "@/stores/useUserStore";
 
 export default function CardList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filters, setFilters] = useState<{ city?: string; district?: string; dateTime?: string; sortBy?: string }>({});
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings(filters);
-  const { checkAuth } = useCheckAuth(); // 로그인 체크 훅
+
+  // 로그인 체크 훅
+  const { checkAuth, isAuthModalOpen, setAuthModalOpen } = useCheckAuth();
+
+  const shouldOpenCreateModal = useUserStore((state) => state.shouldOpenCreateModal);
+  const setShouldOpenCreateModal = useUserStore((state) => state.setShouldOpenCreateModal);
+
+  useEffect(() => {
+    if (shouldOpenCreateModal) {
+      setIsModalOpen(true);
+      setShouldOpenCreateModal(false); // 상태 초기화
+    }
+  }, [shouldOpenCreateModal]);
 
   const handleOpen = () => {
     checkAuth("/create-gathering", () => setIsModalOpen(true)); // 로그인 여부 확인 후 실행
@@ -66,6 +80,12 @@ export default function CardList() {
             <Button styleType="solid" size="sm" className="h-10 md:h-11" onClick={handleOpen}>
               모임 만들기
             </Button>
+            <LoginPopup
+              isOpen={isAuthModalOpen}
+              onClose={() => {
+                setAuthModalOpen(false);
+              }}
+            />
           </div>
         </div>
       </div>

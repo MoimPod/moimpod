@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { restoreAuthModalState, clearAuthModalState } from "@/app/(common)/_home/_hooks/useCheckAuth";
 
 type FormValues = {
   email: string;
@@ -48,10 +49,18 @@ export default function SignIn() {
       // 토큰이 들어왔을때 cookies로 저장하기
       document.cookie = `token=${result.token};`;
       const userInfo = await getUser(result.token);
+
+      const shouldOpenModal = restoreAuthModalState();
+      clearAuthModalState();
+
       // user 정보 저장하기
       setUser(userInfo); // setUser 호출
       // 로그인 성공 이후 main으로 이동
       router.push("/");
+
+      if (shouldOpenModal) {
+        useUserStore.getState().setShouldOpenCreateModal(true);
+      }
     } else {
       if (result.status === 401) {
         setError("password", { type: "manual", message: "비밀번호가 아이디와 일치하지 않습니다." });
