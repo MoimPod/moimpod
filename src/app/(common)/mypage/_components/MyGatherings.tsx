@@ -2,10 +2,11 @@ import ListItem from "@/components/ListItem";
 import Image from "next/image";
 import Button from "@/components/Button";
 import { useGetJoinedGatherings } from "@/app/(common)/mypage/_hooks/useGetJoinedGatherings";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import ReviewModal from "@/app/(common)/mypage/_components/ReviewModal";
 import Spinner from "@/components/Spinner";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 // 이용 예정 => 모임 참여 신청했고 isCompleted가 false인 경우
 // 이용 완료 => 모임 참여 신청했고 isCompleted가 true인 경우
@@ -40,27 +41,11 @@ export default function MyGatherings() {
   const mutation = useLeaveGathering(["my-gatherings"]);
 
   // 무한 스크롤을 감지할 ref
-  const observerRef = useRef<HTMLDivElement | null>(null);
-
-  const handleObserver = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      const target = entries[0];
-      if (target.isIntersecting && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage(); // 다음 데이터 요청
-      }
-    },
-    [fetchNextPage, hasNextPage, isFetchingNextPage],
-  );
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, { threshold: 1.0 });
-
-    if (observerRef.current) observer.observe(observerRef.current);
-
-    return () => {
-      if (observerRef.current) observer.unobserve(observerRef.current);
-    };
-  }, [handleObserver]);
+  const { observerRef } = useInfiniteScroll({
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  });
 
   const allGatherings = data?.pages.flatMap((page) => page.data) || [];
 
