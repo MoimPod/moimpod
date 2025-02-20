@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useEffect, useState } from "react";
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
 import ServiceTab from "@/app/(common)/_home/_components/ServiceTab";
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
@@ -11,6 +11,7 @@ import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherin
 import { useCheckAuth } from "@/app/(common)/_home/_hooks/useCheckAuth";
 import { LoginPopup } from "@/components/Popup";
 import { useUserStore } from "@/stores/useUserStore";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 export default function CardList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,28 +37,8 @@ export default function CardList() {
   };
   const handleClose = () => setIsModalOpen(false);
 
-  // 무한 스크롤을 감지할 ref
-  const observerRef = useRef<HTMLDivElement | null>(null);
-
-  const handleObserver = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      const target = entries[0];
-      if (target.isIntersecting && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage(); // 다음 데이터 요청
-      }
-    },
-    [fetchNextPage, hasNextPage, isFetchingNextPage],
-  );
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, { threshold: 1.0 });
-
-    if (observerRef.current) observer.observe(observerRef.current);
-
-    return () => {
-      if (observerRef.current) observer.unobserve(observerRef.current);
-    };
-  }, [handleObserver]);
+  // 무한 스크롤 훅 사용
+  const { observerRef } = useInfiniteScroll({ fetchNextPage, hasNextPage, isFetchingNextPage });
 
   // 마감되지 않은 모임만 필터링
   const filteredCards = data?.pages.flatMap((page) =>
