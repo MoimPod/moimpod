@@ -15,25 +15,21 @@ const fetchMyGatherings = async ({
   pageParam: number;
   filters: FetchMyGatheringsParams;
 }) => {
-  try {
-    const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
-      params: {
-        limit: 5,
-        offset: pageParam,
-        sortBy: "dateTime",
-        sortOrder: "desc",
-        completed: filters.completed,
-        reviewed: filters.reviewed,
-      },
-    });
+  const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
+    params: {
+      limit: 5,
+      offset: pageParam,
+      sortBy: "dateTime",
+      sortOrder: "desc",
+      completed: filters.completed,
+      reviewed: filters.reviewed,
+    },
+  });
 
-    return {
-      data: response.data,
-      nextOffset: response.data.length === 5 ? pageParam + 5 : null,
-    };
-  } catch (error) {
-    throw error;
-  }
+  return {
+    data: response.data,
+    nextOffset: response.data.length === 5 ? pageParam + 5 : null,
+  };
 };
 
 export const useGetMyGatherings = (queryKey: string[], filters: FetchMyGatheringsParams = {}) => {
