@@ -1,11 +1,11 @@
 import ListItem from "@/components/ListItem";
 import Image from "next/image";
 import Button from "@/components/Button";
-import useDeleteJoinedGathering from "@/app/(common)/mypage/_hooks/useDeleteJoinedGathering";
 import { useGetJoinedGatherings } from "@/app/(common)/mypage/_hooks/useGetJoinedGatherings";
 import { useCallback, useEffect, useRef, useState } from "react";
 import ReviewModal from "@/app/(common)/mypage/_components/ReviewModal";
 import Spinner from "@/components/Spinner";
+import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 
 // 이용 예정 => 모임 참여 신청했고 isCompleted가 false인 경우
 // 이용 완료 => 모임 참여 신청했고 isCompleted가 true인 경우
@@ -37,7 +37,7 @@ export default function MyGatherings() {
     setModalOpen(false);
   };
 
-  const mutation = useDeleteJoinedGathering();
+  const mutation = useLeaveGathering(["my-gatherings"]);
 
   // 무한 스크롤을 감지할 ref
   const observerRef = useRef<HTMLDivElement | null>(null);
