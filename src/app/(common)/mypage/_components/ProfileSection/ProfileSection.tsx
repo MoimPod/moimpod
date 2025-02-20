@@ -1,8 +1,8 @@
 "use client";
 
-import ProfileEditModal from "@/components/ProfileSection/ProfileEditModal";
-import ProfileHeader from "@/components/ProfileSection/ProfileHeader";
-import ProfileInfo from "@/components/ProfileSection/ProfileInfo";
+import ProfileEditModal from "@/app/(common)/mypage/_components/ProfileSection/ProfileEditModal";
+import ProfileHeader from "@/app/(common)/mypage/_components/ProfileSection/ProfileHeader";
+import ProfileInfo from "@/app/(common)/mypage/_components/ProfileSection/ProfileInfo";
 import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import { useUserStore } from "@/stores/useUserStore";
 import { useState } from "react";
