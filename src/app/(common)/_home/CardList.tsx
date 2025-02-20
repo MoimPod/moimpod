@@ -8,14 +8,18 @@ import Card from "@/components/Card";
 import Button from "@/components/Button";
 import GatheringLogo from "@/images/gathering_logo.svg";
 import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
+import { useCheckAuth } from "@/app/(common)/_home/_hooks/useCheckAuth";
 
 export default function CardList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filters, setFilters] = useState<{ city?: string; district?: string; dateTime?: string; sortBy?: string }>({});
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings(filters);
+  const { checkAuth } = useCheckAuth(); // 로그인 체크 훅
 
-  const handleOpen = () => setIsModalOpen(true);
+  const handleOpen = () => {
+    checkAuth("/create-gathering", () => setIsModalOpen(true)); // 로그인 여부 확인 후 실행
+  };
   const handleClose = () => setIsModalOpen(false);
 
   // 무한 스크롤을 감지할 ref
