@@ -1,12 +1,12 @@
 import ListItem from "@/components/ListItem";
 import Image from "next/image";
 import Button from "@/components/Button";
-import { useGetJoinedGatherings } from "@/app/(common)/mypage/_hooks/useGetJoinedGatherings";
 import { useState } from "react";
 import ReviewModal from "@/app/(common)/mypage/_components/ReviewModal";
 import Spinner from "@/components/Spinner";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { useGetMyGatherings } from "@/app/(common)/mypage/_hooks/useGetMyGatherings";
 
 // 이용 예정 => 모임 참여 신청했고 isCompleted가 false인 경우
 // 이용 완료 => 모임 참여 신청했고 isCompleted가 true인 경우
@@ -26,7 +26,9 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 // isCompleted가 true, isReviewed가 false => 리뷰 작성하기
 // isCompleted가 true, isReviewed가 true => 리뷰 작성 x
 export default function MyGatherings() {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetJoinedGatherings();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyGatherings([
+    "my-gatherings",
+  ]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedGathering, setSelectedGathering] = useState<number | null>(null);
   const handleOpen = (gatheringId: number) => {

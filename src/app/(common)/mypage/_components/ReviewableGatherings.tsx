@@ -1,6 +1,5 @@
 "use client";
 
-import { useGetReviewableGatherings } from "@/app/(common)/mypage/_hooks/useGetReviewableGatherings";
 import Spinner from "@/components/Spinner";
 import Image from "next/image";
 import ListItem from "@/components/ListItem";
@@ -9,9 +8,13 @@ import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import { useState } from "react";
 import Button from "@/components/Button";
 import ReviewModal from "@/app/(common)/mypage/_components/ReviewModal";
+import { useGetMyGatherings } from "@/app/(common)/mypage/_hooks/useGetMyGatherings";
 
 export default function ReviewableGatherings() {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetReviewableGatherings();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyGatherings(
+    ["reviewable-gatherings"],
+    { completed: true, reviewed: !false },
+  );
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedGathering, setSelectedGathering] = useState<number | null>(null);
   const handleOpen = (gatheringId: number) => {
