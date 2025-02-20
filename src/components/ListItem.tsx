@@ -117,7 +117,7 @@ ListItem.Body = ({ children }: { children: React.ReactNode }) => {
 
 // 리뷰할 모임에 대한 정보(종류, 장소)
 ListItem.ServiceInfo = ({ children }: { children: React.ReactNode }) => {
-  return <span className="mb-2 text-xs text-gray-700">{children}</span>;
+  return <span className="text-xs text-gray-700">{children}</span>;
 };
 
 // 리뷰 작성자의 정보
