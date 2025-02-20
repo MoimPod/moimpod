@@ -33,7 +33,7 @@ export default function CardList() {
   }, [shouldOpenCreateModal]);
 
   const handleOpen = () => {
-    checkAuth("/create-gathering", () => setIsModalOpen(true)); // 로그인 여부 확인 후 실행
+    checkAuth(() => setIsModalOpen(true)); // 로그인 여부 확인 후 실행
   };
   const handleClose = () => setIsModalOpen(false);
 
