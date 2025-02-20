@@ -74,7 +74,6 @@ export default function Header() {
           </div>
         ) : (
           <Link href={"/sign-in"} className="header-link flex items-center gap-2">
-            <Avatar size={"md"} imageUrl={user.user?.image} />
             <span>로그인</span>
           </Link>
         )}
