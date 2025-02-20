@@ -1,14 +1,12 @@
-import Modal from "@/components/Modal";
-import Button from "@/components/Button";
 import { useRouter } from "next/navigation";
 import Popup from "@/components/Popup/Popup";
 
-type LoginModalProps = {
+type LoginPopupProps = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
+export default function LoginPopup({ isOpen, onClose }: LoginPopupProps) {
   const router = useRouter();
   return (
     <Popup isOpen={isOpen} onClose={onClose} type="alert" onClick={() => router.push("/sign-in")}>
