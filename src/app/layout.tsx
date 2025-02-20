@@ -1,3 +1,4 @@
+import TokenExpireHandler from "@/components/TokenExpireHandler";
 import Providers from "@/lib/Provider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -24,6 +25,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${pretendard.variable} bg-gray-100 font-pretendard`}>
         <Providers>
+          <TokenExpireHandler />
           <div>
             <main className="flex flex-col">{children}</main>
           </div>
