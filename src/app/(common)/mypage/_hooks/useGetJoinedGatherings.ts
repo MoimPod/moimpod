@@ -1,19 +1,5 @@
 import axiosInstance from "@/lib/axiosInstance";
-import { useQuery } from "@tanstack/react-query";
-
-const fetchMyGatherings = async () => {
-  try {
-    const { data } = await axiosInstance.get("gatherings/joined", {
-      params: {
-        sortBy: "dateTime",
-        sortOrder: "desc",
-      },
-    });
-    return data;
-  } catch (error) {
-    throw new Error("데이터를 불러오지 못했습니다.");
-  }
-};
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 type MyGathering = {
   teamId: number; // 팀 id
@@ -34,8 +20,23 @@ type MyGathering = {
 };
 
 export const useGetJoinedGatherings = () => {
-  return useQuery<MyGathering[]>({
+  return useInfiniteQuery({
     queryKey: ["my-gatherings"],
-    queryFn: () => fetchMyGatherings(),
+    queryFn: async ({ pageParam = 0 }: { pageParam: number }) => {
+      try {
+        const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
+          params: { limit: 5, offset: pageParam, sortBy: "dateTime", sortOrder: "desc" },
+        });
+        return {
+          data: response.data,
+          nextOffset: response.data.length === 5 ? pageParam + 5 : null, // 다음 데이터가 있다면 마지막 id 저장
+        };
+      } catch (error) {
+        throw error;
+      }
+    },
+    initialPageParam: 0, // 첫 요청 시 0
+    getNextPageParam: (lastPage) => lastPage.nextOffset, // 다음 요청 시 lastPage의 마지막 cursor 사용
+    staleTime: 60000,
   });
 };
