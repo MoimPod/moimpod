@@ -4,7 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 type Gathering = {
   teamId: number;
   id: number;
-  type: string;
+  type: "OFFICE_STRETCHING" | "MINDFULNESS" | "WORKATION";
   name: string;
   dateTime: string;
   location: string;
