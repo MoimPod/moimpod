@@ -10,7 +10,7 @@ type FetchParams = {
 };
 
 // 데이터를 가져오는 함수
-export const useFetchGatherings = (filters: FetchParams) => {
+export const useFetchGatherings = (filters?: FetchParams) => {
   return useInfiniteQuery({
     queryKey: ["gatherings", filters],
     queryFn: async ({ pageParam = 0 }: { pageParam: number }) => {
