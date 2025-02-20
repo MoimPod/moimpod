@@ -49,12 +49,12 @@ export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModa
             rules={{ validate: (value) => value > 0 || "평점은 0점 이상이어야 합니다." }}
             render={({ field }) => (
               <div className="flex">
-                {[1, 2, 3, 4, 5].map((star) => (
+                {[1, 2, 3, 4, 5].map((score) => (
                   <button
-                    key={star}
+                    key={score}
                     type="button"
-                    onClick={() => field.onChange(star)}
-                    className={`text-2xl ${field.value >= star ? "fill-red-600" : "fill-gray-200"}`}
+                    onClick={() => field.onChange(score)}
+                    className={`text-2xl ${field.value >= score ? "fill-red-600" : "fill-gray-200"}`}
                   >
                     <Heart />
                   </button>
