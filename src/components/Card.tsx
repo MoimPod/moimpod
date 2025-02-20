@@ -1,7 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
+import { CardData } from "@/stores/useGatheringStore";
+import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import Image from "next/image";
 import ProgressBar from "./ProgressBar";
 import ChipInfo from "./ChipInfo";
@@ -9,7 +11,6 @@ import Tag from "./Tag";
 import AnimatedParticipantCount from "./AnimateParticipantCount";
 import LikeButton from "./LikeButton";
 import JoinArrow from "@/images/join_now_arrow.svg";
-import { CardData } from "@/stores/useGatheringStore";
 
 export default function Card({
   id,
@@ -22,10 +23,13 @@ export default function Card({
   image,
 }: CardData) {
   const router = useRouter();
+  const { toggleFavorite, favorites } = useFavoritesStore();
 
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
   const isClosed = Boolean(registrationEnd && new Date(registrationEnd) < new Date()); //모집이 마감되었는지
-  const [isLiked, setIsLiked] = useState(false);
+  //const [isLiked, setIsLiked] = useState(false);
+
+  const isLiked = favorites.includes(id.toString());
 
   const handleCardClick = () => {
     router.push(`gathering/${id}`);
@@ -33,11 +37,11 @@ export default function Card({
 
   const handleLikeClick = (event: React.MouseEvent) => {
     event.stopPropagation();
-    setIsLiked((prev) => !prev);
+    toggleFavorite(id.toString()); // 찜한 모임 토글
   };
 
   return (
-    <div className="my-5 items-center rounded-3xl bg-white shadow md:flex md:h-[156px] lg:flex lg:h-[156px]">
+    <div className="my-5 items-center rounded-3xl bg-white hover:shadow-md md:flex md:h-[156px] lg:flex lg:h-[156px]">
       {/* 카드 이미지 */}
       <div className="relative">
         <Tag registrationEnd={registrationEnd} />
