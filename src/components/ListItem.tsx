@@ -6,6 +6,8 @@ import Check from "@/images/check.svg";
 import { PropsWithChildren } from "react";
 import formatDateToYYYYMMDD from "@/utils/formatDateToYYYYMMDD";
 import InactiveLayer from "@/components/InactiveLayer";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 
 type ListItemProps = {
   CardImage?: React.ReactNode;
@@ -96,22 +98,11 @@ type SubInfoProps = {
   capacity: number;
 };
 ListItem.SubInfo = ({ date, participantCount, capacity }: SubInfoProps) => {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const month = String(date.getMonth() + 1);
-    const day = String(date.getDate());
-    return `${month}월 ${day}일`;
-  };
-
-  const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    return `${hours}:${minutes}`;
-  };
+  const formatDate = format(date, "M월 d일", { locale: ko });
+  const formatTime = format(date, "HH:mm");
   return (
     <div className="flex items-center gap-3 text-sm text-gray-700">
-      <div>{`${formatDate(date)} · ${formatTime(date)}`}</div>
+      <div>{`${formatDate} · ${formatTime}`}</div>
       <CapacityStatus>
         {participantCount}/{capacity}
       </CapacityStatus>
