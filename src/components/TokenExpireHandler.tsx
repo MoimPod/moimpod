@@ -3,7 +3,7 @@
 import axiosInstance from "@/lib/axiosInstance";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import LoginModal from "./LoginModal";
+import { LoginPopup } from "./Popup";
 
 function deleteCookie(name: string) {
   if (typeof document !== "undefined") {
@@ -45,5 +45,5 @@ export default function TokenExpireHandler() {
     };
   }, [router]);
 
-  return <LoginModal isOpen={isModalOpen} onClose={closeModal} />;
+  return <LoginPopup isOpen={isModalOpen} onClose={closeModal} />;
 }
