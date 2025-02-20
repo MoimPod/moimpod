@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import Button from "@/components/Button";
+import { LoginPopup, Popup } from "@/components/Popup";
 import { useUserStore } from "@/stores/useUserStore";
 import { copyClipboard } from "@/utils/copyClipboard";
 import { useJoin } from "../_hooks/useJoin";
 import { useGetParticipants } from "../_hooks/useGetParticipants";
 import { useLeaveGathering } from "../_hooks/useLeaveGathering";
 import { useCancelGathering } from "../_hooks/useCancelGathering";
-import { LoginPopup, Popup } from "@/components/Popup";
 
 type FloatingBarProps = {
   gatheringId: string;
