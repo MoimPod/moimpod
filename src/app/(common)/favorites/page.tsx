@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef, useEffect, useCallback } from "react";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useFetchGatherings } from "../_home/_hooks/useFetchGatherings";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
