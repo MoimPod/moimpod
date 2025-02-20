@@ -6,6 +6,11 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
 
+const GatheringType = {
+  OFFICE_STRETCHING: "달램핏 오피스 스트레칭",
+  MINDFULNESS: "달램핏 마인드풀니스",
+  WORKATION: "워케이션",
+};
 export default function MyReviews() {
   const id = useUserStore((state) => state.user?.id) as number;
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyReviews(id);
@@ -55,7 +60,7 @@ export default function MyReviews() {
                         <Score score={review.score} />
                         <ListItem.Body>{review.comment}</ListItem.Body>
                         <ListItem.ServiceInfo>
-                          {review.Gathering.type} · {review.Gathering.location}
+                          {GatheringType[review.Gathering.type]} 이용 · {review.Gathering.location}
                         </ListItem.ServiceInfo>
                       </div>
                       <ListItem.MetaInfo secondary={review.createdAt} />
