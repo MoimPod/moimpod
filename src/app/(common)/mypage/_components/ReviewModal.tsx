@@ -80,10 +80,10 @@ export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModa
           />
         </div>
         <div className="flex gap-4">
-          <Button styleType={"outline"} onClick={onClose}>
+          <Button className="w-full" styleType={"outline"} onClick={onClose}>
             취소
           </Button>
-          <Button type="submit" disabled={!isValid}>
+          <Button className="w-full" type="submit" disabled={!isValid}>
             리뷰 등록
           </Button>
         </div>
