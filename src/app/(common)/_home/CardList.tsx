@@ -78,7 +78,7 @@ export default function CardList() {
           <>
             {filteredCards?.map((card) => (
               <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />
-            ))}{" "}
+            ))}
             {/* 무한 스크롤 감지용 div */}
             <div ref={observerRef} className="h-10"></div>
           </>
