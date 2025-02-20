@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
-import ServiceTab from "@/app/(common)/_home/_components/SeviceTab";
+import ServiceTab from "@/app/(common)/_home/_components/ServiceTab";
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
 import Card from "@/components/Card";
 import Button from "@/components/Button";
@@ -82,7 +82,7 @@ export default function CardList() {
           <>
             {filteredCards?.map((card) => (
               <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />
-            ))}{" "}
+            ))}
             {/* 무한 스크롤 감지용 div */}
             <div ref={observerRef} className="h-10"></div>
           </>
