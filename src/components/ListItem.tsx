@@ -5,7 +5,7 @@ import { cn } from "@/utils/classnames";
 import Check from "@/images/check.svg";
 import { PropsWithChildren } from "react";
 import formatDateToYYYYMMDD from "@/utils/formatDateToYYYYMMDD";
-import InactiveLayer from "@/components/InactiveLayout";
+import InactiveLayer from "@/components/InactiveLayer";
 
 type ListItemProps = {
   CardImage?: React.ReactNode;
