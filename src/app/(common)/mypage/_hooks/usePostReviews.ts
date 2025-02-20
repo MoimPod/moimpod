@@ -16,6 +16,7 @@ export default function usePostReviews() {
     mutationFn: postReviews,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-gatherings"] });
+      queryClient.invalidateQueries({ queryKey: ["reviewable-gatherings"] });
     },
   });
 }
