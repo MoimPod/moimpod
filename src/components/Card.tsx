@@ -1,8 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 import { CardData } from "@/stores/useGatheringStore";
+import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import Image from "next/image";
 import ProgressBar from "./ProgressBar";
 import ChipInfo from "./ChipInfo";
@@ -22,10 +23,13 @@ export default function Card({
   image,
 }: CardData) {
   const router = useRouter();
+  const { toggleFavorite, favorites } = useFavoritesStore();
 
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
   const isClosed = Boolean(registrationEnd && new Date(registrationEnd) < new Date()); //모집이 마감되었는지
-  const [isLiked, setIsLiked] = useState(false);
+  //const [isLiked, setIsLiked] = useState(false);
+
+  const isLiked = favorites.includes(id.toString());
 
   const handleCardClick = () => {
     router.push(`gathering/${id}`);
@@ -33,7 +37,7 @@ export default function Card({
 
   const handleLikeClick = (event: React.MouseEvent) => {
     event.stopPropagation();
-    setIsLiked((prev) => !prev);
+    toggleFavorite(id.toString()); // 찜한 모임 토글
   };
 
   return (
