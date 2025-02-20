@@ -1,7 +1,29 @@
+"use client";
+
+import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import Avatar from "./Avatar";
 
 export default function Header() {
+  const user = useUserStore();
+  const [token, setToken] = useState<string | undefined>(undefined);
+  const [profileBtn, setProfileBtn] = useState(false);
+
+  function getCookie(name: string): string | undefined {
+    if (typeof document === "undefined") return undefined;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(";").shift();
+    return undefined;
+  }
+
+  useEffect(() => {
+    const tokenFromCookie = getCookie("token");
+    setToken(tokenFromCookie);
+  }, []);
+
   return (
     <header className="sticky top-0 z-50 h-[56px] border-b-2 border-black bg-primary-color px-4 md:h-[60px]">
       <div className="m-auto flex h-full max-w-[1200px] flex-row items-center justify-between">
@@ -24,9 +46,38 @@ export default function Header() {
             모든 리뷰
           </Link>
         </nav>
-        <Link href={"/sign-in"} className="header-link">
-          로그인
-        </Link>
+        {token ? (
+          <div className="relative">
+            <button
+              onClick={() => {
+                setProfileBtn((prev) => !prev);
+              }}
+              className="flex items-center justify-center"
+            >
+              <Avatar size={"md"} imageUrl={user.user?.image} />
+            </button>
+            {profileBtn ? (
+              <div className="absolute right-0 top-[calc(100%+8px)] h-20 w-[110px] rounded-xl bg-white shadow-md xl:left-0 xl:top-[calc(100%+10px)]">
+                <Link
+                  href={"/mypage"}
+                  className="flex h-10 w-full items-center px-4 text-base font-medium text-gray-800"
+                >
+                  마이페이지
+                </Link>
+                <button className="flex h-10 w-full items-center px-4 text-left text-base font-medium text-gray-800">
+                  로그아웃
+                </button>
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+        ) : (
+          <Link href={"/sign-in"} className="header-link flex items-center gap-2">
+            <Avatar size={"md"} imageUrl={user.user?.image} />
+            <span>로그인</span>
+          </Link>
+        )}
       </div>
     </header>
   );
