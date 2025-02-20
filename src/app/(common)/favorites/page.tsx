@@ -42,7 +42,7 @@ export default function Page() {
   }, [handleObserver]);
 
   return (
-    <div>
+    <div className="w-full">
       <div className="mb-5 flex gap-6 pt-8">
         <FavoritesLogo />
         <div>
