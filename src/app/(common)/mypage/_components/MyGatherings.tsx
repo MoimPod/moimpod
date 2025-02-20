@@ -70,15 +70,24 @@ export default function MyGatherings() {
                     />
                   </div>
                 </div>
-                <Button
-                  onClick={gathering.isCompleted ? () => handleOpen(gathering.id) : () => mutation.mutate(gathering.id)}
-                  className="mt-[18px] w-full max-w-[120px]"
-                  size="sm"
-                  styleType={gathering.isCompleted ? "solid" : "outline"}
-                >
-                  {/*모임이 끝났으면 리뷰 작성 / 아니면 예약 취소 */}
-                  {gathering.isCompleted ? "리뷰 작성하기" : "예약 취소하기"}
-                </Button>
+                {gathering.isReviewed ? (
+                  <Button className={"mt-[18px] w-full max-w-[120px]"} size={"sm"} styleType={"solid"} disabled>
+                    리뷰 작성 완료
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={
+                      gathering.isCompleted ? () => handleOpen(gathering.id) : () => mutation.mutate(gathering.id)
+                    }
+                    className={"mt-[18px] w-full max-w-[120px]"}
+                    size={"sm"}
+                    styleType={gathering.isCompleted ? "solid" : "outline"}
+                    disabled={!!gathering.canceledAt}
+                  >
+                    {/*모임이 끝났으면 리뷰 작성 / 아니면 예약 취소 */}
+                    {gathering.isCompleted ? "리뷰 작성하기" : "예약 취소하기"}
+                  </Button>
+                )}
               </ListItem>
             </div>
           ))}
