@@ -3,11 +3,13 @@
 import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
 
 export default function Header() {
   const user = useUserStore();
+  const router = useRouter();
   const [token, setToken] = useState<string | undefined>(undefined);
   const [profileBtn, setProfileBtn] = useState(false);
 
@@ -23,6 +25,15 @@ export default function Header() {
     const tokenFromCookie = getCookie("token");
     setToken(tokenFromCookie);
   }, []);
+
+  const handleLogout = () => {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/";
+    if (typeof window !== "undefined" && window.localStorage) {
+      localStorage.removeItem("user-storage");
+      localStorage.removeItem("favorites-storage");
+    }
+    router.push("/sign-in");
+  };
 
   return (
     <header className="sticky top-0 z-50 h-[56px] border-b-2 border-black bg-primary-color px-4 md:h-[60px]">
@@ -57,14 +68,19 @@ export default function Header() {
               <Avatar size={"md"} imageUrl={user.user?.image} />
             </button>
             {profileBtn ? (
-              <div className="absolute right-0 top-[calc(100%+8px)] h-20 w-[110px] rounded-xl bg-white shadow-md xl:left-0 xl:top-[calc(100%+10px)]">
+              <div className="absolute right-0 top-[calc(100%+8px)] h-20 w-[110px] rounded-xl bg-white shadow-md xl:top-[calc(100%+10px)]">
                 <Link
                   href={"/mypage"}
                   className="flex h-10 w-full items-center px-4 text-base font-medium text-gray-800"
                 >
                   마이페이지
                 </Link>
-                <button className="flex h-10 w-full items-center px-4 text-left text-base font-medium text-gray-800">
+                <button
+                  onClick={() => {
+                    handleLogout();
+                  }}
+                  className="flex h-10 w-full items-center px-4 text-left text-base font-medium text-gray-800"
+                >
                   로그아웃
                 </button>
               </div>
@@ -74,7 +90,6 @@ export default function Header() {
           </div>
         ) : (
           <Link href={"/sign-in"} className="header-link flex items-center gap-2">
-            <Avatar size={"md"} imageUrl={user.user?.image} />
             <span>로그인</span>
           </Link>
         )}
