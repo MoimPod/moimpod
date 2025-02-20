@@ -1,5 +1,5 @@
 import MypageContent from "@/app/(common)/mypage/_components/MypageContent";
-import ProfileSection from "@/components/ProfileSection/ProfileSection";
+import ProfileSection from "@/app/(common)/mypage/_components/ProfileSection/ProfileSection";
 
 export default function Page() {
   return (
