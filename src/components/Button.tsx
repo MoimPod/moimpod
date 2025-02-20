@@ -20,7 +20,7 @@ export default function Button({
   ...rest
 }: ButtonProps) {
   const baseStyles =
-    "w-full py-[10px] inline-flex items-center justify-center rounded-[12px] font-semibold disabled:cursor-not-allowed";
+    "py-[10px] inline-flex items-center justify-center rounded-[12px] font-semibold disabled:cursor-not-allowed";
 
   const variantStyles = {
     solid: "bg-orange-600 text-white hover:bg-orange-700 active:bg-orange-800 disabled:bg-gray-400",
