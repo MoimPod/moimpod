@@ -68,69 +68,71 @@ export default function MyGatherings() {
   return (
     <>
       {allGatherings.length ? (
-        <div className="w-full">
-          <div className="flex-1 divide-y-2 divide-dashed">
-            {allGatherings.map((gathering) => (
-              <div className="relative py-6" key={gathering.id}>
-                <ListItem
-                  CardImage={
-                    <Image
-                      src={gathering.image}
-                      alt="모임 이미지"
-                      width={280}
-                      height={156}
-                      className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
-                    />
-                  }
-                  canceledAt={gathering.canceledAt}
-                  handleCancel={() => mutation.mutate(gathering.id)}
-                  className="justify-between"
-                >
-                  <div className="flex flex-col gap-2.5">
-                    <ListItem.Status
-                      isCompleted={gathering.isCompleted}
-                      participantCount={gathering.participantCount}
-                    />
-                    <div className="flex flex-col gap-1">
-                      <ListItem.Title title={gathering.name} subtitle={gathering.location} />
-                      <ListItem.SubInfo
-                        date={gathering.dateTime}
-                        participantCount={gathering.participantCount}
-                        capacity={gathering.capacity}
+        <>
+          <div className="w-full">
+            <div className="flex-1 divide-y-2 divide-dashed">
+              {allGatherings.map((gathering) => (
+                <div className="relative py-6" key={gathering.id}>
+                  <ListItem
+                    CardImage={
+                      <Image
+                        src={gathering.image}
+                        alt="모임 이미지"
+                        width={280}
+                        height={156}
+                        className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
                       />
+                    }
+                    canceledAt={gathering.canceledAt}
+                    handleCancel={() => mutation.mutate(gathering.id)}
+                    className="justify-between"
+                  >
+                    <div className="flex flex-col gap-2.5">
+                      <ListItem.Status
+                        isCompleted={gathering.isCompleted}
+                        participantCount={gathering.participantCount}
+                      />
+                      <div className="flex flex-col gap-1">
+                        <ListItem.Title title={gathering.name} subtitle={gathering.location} />
+                        <ListItem.SubInfo
+                          date={gathering.dateTime}
+                          participantCount={gathering.participantCount}
+                          capacity={gathering.capacity}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  {gathering.isReviewed ? (
-                    <Button className={"mt-[18px] w-full max-w-[120px]"} size={"sm"} styleType={"solid"} disabled>
-                      리뷰 작성 완료
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={
-                        gathering.isCompleted ? () => handleOpen(gathering.id) : () => mutation.mutate(gathering.id)
-                      }
-                      className={"mt-[18px] w-full max-w-[120px]"}
-                      size={"sm"}
-                      styleType={gathering.isCompleted ? "solid" : "outline"}
-                      disabled={!!gathering.canceledAt}
-                    >
-                      {/*모임이 끝났으면 리뷰 작성 / 아니면 예약 취소 */}
-                      {gathering.isCompleted ? "리뷰 작성하기" : "예약 취소하기"}
-                    </Button>
-                  )}
-                </ListItem>
-              </div>
-            ))}
+                    {gathering.isReviewed ? (
+                      <Button className={"mt-[18px] w-full max-w-[120px]"} size={"sm"} styleType={"solid"} disabled>
+                        리뷰 작성 완료
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={
+                          gathering.isCompleted ? () => handleOpen(gathering.id) : () => mutation.mutate(gathering.id)
+                        }
+                        className={"mt-[18px] w-full max-w-[120px]"}
+                        size={"sm"}
+                        styleType={gathering.isCompleted ? "solid" : "outline"}
+                        disabled={!!gathering.canceledAt}
+                      >
+                        {/*모임이 끝났으면 리뷰 작성 / 아니면 예약 취소 */}
+                        {gathering.isCompleted ? "리뷰 작성하기" : "예약 취소하기"}
+                      </Button>
+                    )}
+                  </ListItem>
+                </div>
+              ))}
+            </div>
+            <div ref={observerRef} className="h-10" />
+            {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
           </div>
-          <div ref={observerRef} className="h-10" />
-          {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
-        </div>
+          <ReviewModal isOpen={isModalOpen} onClose={handleClose} gatheringId={selectedGathering as number} />
+        </>
       ) : (
         <div className="flex flex-1 items-center justify-center">
           <p>신청한 모임이 아직 없어요</p>
         </div>
       )}
-      <ReviewModal isOpen={isModalOpen} onClose={handleClose} gatheringId={selectedGathering as number} />
     </>
   );
 }
