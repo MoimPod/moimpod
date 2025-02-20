@@ -21,13 +21,22 @@ export const useInfiniteScroll = ({ fetchNextPage, hasNextPage, isFetchingNextPa
   );
 
   useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, { threshold: 1.0 });
+    if (!window.IntersectionObserver) {
+      console.warn("IntersectionObserver is not supported in this browser");
+      return;
+    }
 
-    if (observerRef.current) observer.observe(observerRef.current);
+    try {
+      const observer = new IntersectionObserver(handleObserver, { threshold: 1.0 });
 
-    return () => {
-      if (observerRef.current) observer.unobserve(observerRef.current);
-    };
+      if (observerRef.current) observer.observe(observerRef.current);
+
+      return () => {
+        if (observerRef.current) observer.unobserve(observerRef.current);
+      };
+    } catch (error) {
+      console.error("Failed to initialize IntersectionObserver:", error);
+    }
   }, [handleObserver]);
 
   return { observerRef, isFetchingNextPage };
