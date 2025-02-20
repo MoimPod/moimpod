@@ -2,7 +2,7 @@
 
 import { useUserStore } from "@/stores/useUserStore";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export const useCheckAuth = () => {
   const user = useUserStore((state) => state.user);
@@ -16,8 +16,9 @@ export const useCheckAuth = () => {
       // 로그인 상태일 때 콜백 (모달 열기)
       if (callback) callback();
     } else {
-      saveAuthModalState(true);
-      setAuthModalOpen(true);
+      // 로그인이 안됐을 때
+      saveAuthModalState(true); // "로그인 후 모달을 다시 열어야 한다"는 정보 저장
+      setAuthModalOpen(true); // "로그인이 필요합니다" 모달 열기
     }
   };
 

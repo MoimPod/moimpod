@@ -50,17 +50,20 @@ export default function SignIn() {
       document.cookie = `token=${result.token};`;
       const userInfo = await getUser(result.token);
 
+      // 열어야할 모달이 있는지 확인
       const shouldOpenModal = restoreAuthModalState();
-      clearAuthModalState();
 
       // user 정보 저장하기
       setUser(userInfo); // setUser 호출
       // 로그인 성공 이후 main으로 이동
       router.push("/");
 
+      // 모임 만들기 모달 열기
       if (shouldOpenModal) {
         useUserStore.getState().setShouldOpenCreateModal(true);
       }
+      // 모달 상태 초기화
+      clearAuthModalState();
     } else {
       if (result.status === 401) {
         setError("password", { type: "manual", message: "비밀번호가 아이디와 일치하지 않습니다." });
