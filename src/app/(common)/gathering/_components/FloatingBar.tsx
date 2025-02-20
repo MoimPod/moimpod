@@ -2,14 +2,13 @@
 
 import { useState } from "react";
 import Button from "@/components/Button";
-import Modal from "@/components/Modal";
-import LoginModal from "@/components/LoginModal";
 import { useUserStore } from "@/stores/useUserStore";
 import { copyClipboard } from "@/utils/copyClipboard";
 import { useJoin } from "../_hooks/useJoin";
 import { useGetParticipants } from "../_hooks/useGetParticipants";
 import { useLeaveGathering } from "../_hooks/useLeaveGathering";
 import { useCancelGathering } from "../_hooks/useCancelGathering";
+import { LoginPopup, Popup } from "@/components/Popup";
 
 type FloatingBarProps = {
   gatheringId: string;
@@ -60,19 +59,16 @@ export default function FloatingBar({ gatheringId, hostUserId }: FloatingBarProp
             공유하기
           </Button>
         </Container>
-        <Modal isOpen={!!activeModal} onClose={closeModal}>
-          {activeModal === "cancel" && (
-            <>
-              <div>모임을 취소하시겠습니까?</div>
-              <div className="flex">
-                <Button styleType="outline" onClick={closeModal}>
-                  아니요
-                </Button>
-                <Button onClick={() => mutateCancelGathering(gatheringId)}>예</Button>
-              </div>
-            </>
-          )}
-        </Modal>
+        {activeModal === "cancel" && (
+          <Popup
+            type={"confirm"}
+            isOpen={!!activeModal}
+            onClose={closeModal}
+            onClick={() => mutateCancelGathering(gatheringId)}
+          >
+            <div>모임을 취소하시겠습니까?</div>
+          </Popup>
+        )}
       </>
     );
 
@@ -94,7 +90,7 @@ export default function FloatingBar({ gatheringId, hostUserId }: FloatingBarProp
           </Button>
         )}
       </Container>
-      {activeModal === MODAL.join && <LoginModal isOpen={!user && !!activeModal} onClose={closeModal} />}
+      {activeModal === MODAL.join && <LoginPopup isOpen={!user && !!activeModal} onClose={closeModal} />}
     </>
   );
 }
