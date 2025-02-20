@@ -18,7 +18,7 @@ export default function Reviews({ gatheringId }: { gatheringId: string }) {
   const handlePageChange = (page: number) => {
     const newSearchParams = new URLSearchParams(searchParams.toString());
 
-    const limit = 2;
+    const limit = 4;
     const offset = (page - 1) * limit;
 
     newSearchParams.set("offset", offset.toString());
