@@ -1,17 +1,21 @@
 "use client";
 
+import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
 
 export default function Header() {
   const user = useUserStore();
   const router = useRouter();
+  const pathname = usePathname();
   const [token, setToken] = useState<string | undefined>(undefined);
   const [profileBtn, setProfileBtn] = useState(false);
+  const favorites = useFavoritesStore((state) => state.favorites);
+  const favoritesCount = favorites.length;
 
   function getCookie(name: string): string | undefined {
     if (typeof document === "undefined") return undefined;
@@ -26,34 +30,48 @@ export default function Header() {
     setToken(tokenFromCookie);
   }, []);
 
+  useEffect(() => {
+    setProfileBtn(false);
+  }, [pathname]);
+
+  const getLinkClass = (path: string) => (pathname === path ? "header-link active" : "header-link");
+
   const handleLogout = () => {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/";
     if (typeof window !== "undefined" && window.localStorage) {
       localStorage.removeItem("user-storage");
       localStorage.removeItem("favorites-storage");
     }
-    router.push("/sign-in");
+    setProfileBtn(false);
+    if (pathname === "/") {
+      window.location.reload();
+    } else {
+      router.push("/");
+    }
   };
 
   return (
-    <header className="sticky top-0 z-50 h-[56px] border-b-2 border-black bg-primary-color px-4 md:h-[60px]">
+    <header className="sticky top-0 z-50 h-[56px] bg-primary-color px-4 md:h-[60px]">
       <div className="m-auto flex h-full max-w-[1200px] flex-row items-center justify-between">
         <nav className="flex h-full flex-row items-center gap-3 md:gap-6">
           {/* 768px 이하에서 보이는 로고 */}
           <Link href={"/"} className="block md:hidden">
-            <Image src={"/images/mobile_logo.svg"} alt={"모바일 로고"} width={56} height={27} />
+            <Image src={"/images/mobile_logo.svg"} alt={"모바일 로고"} width={40} height={40} />
           </Link>
           {/* 768px 이상에서 보이는 로고 */}
           <Link href={"/"} className="hidden md:block">
-            <Image src={"/images/desktop_logo.svg"} alt={"데스크탑 로고"} width={73} height={35} />
+            <Image src={"/images/desktop_logo.svg"} alt={"데스크탑 로고"} width={108} height={40} />
           </Link>
-          <Link href={"/"} className="header-link">
+          <Link href={"/"} className={getLinkClass("/")}>
             모임 찾기
           </Link>
-          <Link href={"/favorites"} className="header-link">
-            찜한 모임
+          <Link href={"/favorites"} className={`${getLinkClass("/favorites")} gap-1`}>
+            찜한 모임{" "}
+            <b className="rounded-full bg-black px-2 text-xs font-semibold text-white">
+              {favoritesCount > 0 && `${favoritesCount}`}
+            </b>
           </Link>
-          <Link href={"/reviews"} className="header-link">
+          <Link href={"/reviews"} className={getLinkClass("/reviews")}>
             모든 리뷰
           </Link>
         </nav>
