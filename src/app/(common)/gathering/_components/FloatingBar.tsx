@@ -7,7 +7,7 @@ import { useUserStore } from "@/stores/useUserStore";
 import { copyClipboard } from "@/utils/copyClipboard";
 import { useJoin } from "../_hooks/useJoin";
 import { useGetParticipants } from "../_hooks/useGetParticipants";
-import { useLeaveGathering } from "../_hooks/useLeaveGathering";
+import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import { useCancelGathering } from "../_hooks/useCancelGathering";
 
 type FloatingBarProps = {
@@ -31,7 +31,7 @@ export default function FloatingBar({ gatheringId, hostUserId }: FloatingBarProp
 
   const { data: participantIdList } = useGetParticipants(gatheringId);
   const { mutate: mutateJoin, isPending } = useJoin(gatheringId);
-  const { mutate: mutateLeaveGathering } = useLeaveGathering(gatheringId);
+  const { mutate: mutateLeaveGathering } = useLeaveGathering([gatheringId, "participants"]);
   const { mutate: mutateCancelGathering } = useCancelGathering();
 
   const isHost = user?.id === hostUserId;

@@ -6,7 +6,6 @@ import Score from "@/components/Score";
 export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
   return (
     <div className="flex flex-col">
-      <h1 className="text-lg font-semibold">이용자들은 이 프로그램을 이렇게 느꼈어요!</h1>
       <div className="flex flex-col gap-4">
         {reviewList.map((item) => (
           <div key={item.id}>

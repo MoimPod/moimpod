@@ -16,6 +16,8 @@ type UserStore = {
   user: User | null;
   setUser: (user: User) => void;
   clearUser: () => void;
+  shouldOpenCreateModal: boolean;
+  setShouldOpenCreateModal: (isOpen: boolean) => void;
 };
 
 const getStorage = () => {
@@ -29,8 +31,10 @@ export const useUserStore = create<UserStore>()(
   persist(
     (set) => ({
       user: null,
+      shouldOpenCreateModal: false,
       setUser: (user) => set({ user }),
       clearUser: () => set({ user: null }),
+      setShouldOpenCreateModal: (isOpen) => set({ shouldOpenCreateModal: isOpen }),
     }),
     {
       name: "user-storage",

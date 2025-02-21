@@ -1,6 +1,7 @@
 "use client";
 
 import MyGatherings from "@/app/(common)/mypage/_components/MyGatherings";
+import MyReviews from "@/app/(common)/mypage/_components/MyReviews";
 import ReviewableGatherings from "@/app/(common)/mypage/_components/ReviewableGatherings";
 import CategoryButton from "@/components/CategoryButton";
 import Tab from "@/components/Tab";
@@ -40,6 +41,7 @@ export default function MypageContent() {
         {/* <div className="flex-1 border border-black">여기</div> */}
         {selectedTab === "나의 모임" && <MyGatherings />}
         {selectedTab === "나의 리뷰" && selectedCategory === "작성 가능한 리뷰" && <ReviewableGatherings />}
+        {selectedTab === "나의 리뷰" && selectedCategory === "작성한 리뷰" && <MyReviews />}
       </div>
     </div>
   );
