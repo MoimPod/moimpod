@@ -12,7 +12,7 @@ import { useGetMyGatherings } from "@/app/(common)/mypage/_hooks/useGetMyGatheri
 
 export default function ReviewableGatherings() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyGatherings(
-    ["reviewable-gatherings"],
+    ["mypage", "reviews", "reviewable"],
     { completed: true, reviewed: false },
   );
   const [isModalOpen, setModalOpen] = useState(false);

@@ -15,8 +15,12 @@ export default function usePostReviews() {
   return useMutation({
     mutationFn: postReviews,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["my-gatherings"] });
-      queryClient.invalidateQueries({ queryKey: ["reviewable-gatherings"] });
+      queryClient.invalidateQueries({
+        predicate: (query) => {
+          const key = query.queryKey;
+          return key[0] === "mypage" && (key[1] === "reviews" || key[1] === "gatherings");
+        },
+      });
     },
   });
 }
