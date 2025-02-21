@@ -7,7 +7,7 @@ type SortOption = { label: string; value: string };
 
 type SortButtonProps = {
   setSortType: (sortType: string) => void;
-  sortOption: SortOption[];
+  sortOption: readonly SortOption[];
   defaultSort?: string;
 };
 
