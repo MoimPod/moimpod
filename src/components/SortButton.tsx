@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import SortIcon from "@/images/sort_icon.svg";
 
 type SortOption = { label: string; value: string };
@@ -14,6 +14,19 @@ type SortButtonProps = {
 export default function SortButton({ setSortType, sortOption, defaultSort }: SortButtonProps) {
   const [isSortDropdownOpen, setSortDropdownOpen] = useState(false);
   const [selectedSort, setSelectedSort] = useState(defaultSort ?? sortOption[0]?.value);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setSortDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isSortDropdownOpen]);
 
   // 정렬 옵션 선택
   const handleSort = (sortType: string) => {
@@ -23,7 +36,7 @@ export default function SortButton({ setSortType, sortOption, defaultSort }: Sor
   };
 
   return (
-    <div>
+    <div ref={dropdownRef} className="relative">
       {/* 정렬 버튼 */}
       <button
         onClick={() => setSortDropdownOpen(!isSortDropdownOpen)}
@@ -39,7 +52,7 @@ export default function SortButton({ setSortType, sortOption, defaultSort }: Sor
 
       {/* 드롭다운 메뉴 */}
       {isSortDropdownOpen && (
-        <div className="absolute z-10 w-[110px] rounded-lg border bg-white p-2 text-sm font-medium shadow-md">
+        <div className="absolute z-10 w-[110px] rounded-lg border bg-white p-2 text-sm font-medium shadow-md max-md:right-0">
           {sortOption.map(({ label, value }) => (
             <div key={value} onClick={() => handleSort(value)} className="rounded-lg p-2 hover:bg-sky-100">
               {label}

@@ -39,7 +39,7 @@ export default function Dropdown({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isOpen]);
 
   const handleSelect = (option: string) => {
     onSelect(option);
