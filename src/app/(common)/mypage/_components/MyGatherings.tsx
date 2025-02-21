@@ -27,7 +27,8 @@ import { useGetMyGatherings } from "@/app/(common)/mypage/_hooks/useGetMyGatheri
 // isCompleted가 true, isReviewed가 true => 리뷰 작성 x
 export default function MyGatherings() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyGatherings([
-    "my-gatherings",
+    "mypage",
+    "gatherings",
   ]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedGathering, setSelectedGathering] = useState<number | null>(null);
@@ -40,7 +41,7 @@ export default function MyGatherings() {
     setModalOpen(false);
   };
 
-  const mutation = useLeaveGathering(["my-gatherings"]);
+  const mutation = useLeaveGathering(["gatherings"]);
 
   // 무한 스크롤을 감지할 ref
   const { observerRef } = useInfiniteScroll({

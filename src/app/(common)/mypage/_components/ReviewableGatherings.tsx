@@ -12,7 +12,7 @@ import { useGetMyGatherings } from "@/app/(common)/mypage/_hooks/useGetMyGatheri
 
 export default function ReviewableGatherings() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyGatherings(
-    ["reviewable-gatherings"],
+    ["mypage", "reviews", "reviewable"],
     { completed: true, reviewed: false },
   );
   const [isModalOpen, setModalOpen] = useState(false);
@@ -99,7 +99,7 @@ export default function ReviewableGatherings() {
         </>
       ) : (
         <div className="flex flex-1 items-center justify-center">
-          <p>리뷰 작성 가능한 모임이 없어요</p>
+          <p>아직 작성 가능한 리뷰가 없어요</p>
         </div>
       )}
     </>

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Header() {
   const user = useUserStore();
@@ -16,6 +17,7 @@ export default function Header() {
   const [profileBtn, setProfileBtn] = useState(false);
   const favorites = useFavoritesStore((state) => state.favorites);
   const favoritesCount = favorites.length;
+  const queryClient = useQueryClient();
 
   function getCookie(name: string): string | undefined {
     if (typeof document === "undefined") return undefined;
@@ -43,6 +45,7 @@ export default function Header() {
       localStorage.removeItem("favorites-storage");
     }
     setProfileBtn(false);
+    queryClient.removeQueries({ queryKey: ["mypage"] });
     if (pathname === "/") {
       window.location.reload();
     } else {
