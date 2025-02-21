@@ -1,5 +1,5 @@
-import Modal from "@/components/Modal";
 import Button from "@/components/Button";
+import Modal from "@/components/Modal";
 
 type PopupProps = {
   isOpen: boolean;

@@ -86,10 +86,16 @@ export default function SignIn() {
     <div className="flex min-h-screen w-full items-center justify-center bg-white p-4">
       <div className="flex w-full flex-col lg:max-w-[608px] xl:max-w-[510px]">
         <form onSubmit={handleSubmit(handleLogin)} className="flex w-full flex-col rounded-3xl bg-white p-4">
-          <div className="flex flex-col items-center justify-center gap-4">
+          <button
+            type="button"
+            onClick={() => {
+              router.push("/");
+            }}
+            className="flex flex-col items-center justify-center gap-4"
+          >
             <Image src={"/images/auth_icon.svg"} alt={""} width={50} height={50} />
             <p className="text-center text-xl font-semibold text-gray-800">로그인</p>
-          </div>
+          </button>
           <div className="m-auto w-full max-w-[500px]">
             <div className="flex flex-col gap-2 pt-8">
               <label htmlFor="email" className="text-sm font-semibold text-gray-800">
@@ -129,7 +135,7 @@ export default function SignIn() {
                 </button>
               </div>
             </div>
-            <Button size="lg" disabled={!isValid} className="mt-10" type="submit">
+            <Button disabled={!isValid} className="mt-10 w-full" type="submit">
               로그인
             </Button>
             <div className="flex-ro mt-6 flex justify-center">
