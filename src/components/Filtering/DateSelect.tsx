@@ -36,7 +36,7 @@ export default function DateSelect({ onDateChange }: DateSelectProps) {
   }, [isDateDropdownOpen]);
 
   return (
-    <div className="relative max-w-sm" ref={dropdownRef}>
+    <div className="relative w-full" ref={dropdownRef}>
       {/* 드롭다운 버튼 */}
       <Dropdown
         selected={selectedDate ? format(selectedDate, "yy/MM/dd") : "날짜 선택"}
