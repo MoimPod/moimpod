@@ -6,19 +6,17 @@ import LocationSelect from "@/components/Filtering/LocationSelect";
 import SortButton from "@/components/Filtering/SortButton";
 
 type GatheringFiltersProps = {
-  onChange: (filters: { city?: string; district?: string; dateTime?: string; sortBy?: string }) => void;
+  onChange: (filters: { location?: string; dateTime?: string; sortBy?: string }) => void;
 };
 
 export default function GatheringFilters({ onChange }: GatheringFiltersProps) {
-  const [selectedCity, setSelectedCity] = useState<string>("");
-  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+  const [selectedLocation, setSelectedLocation] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [sortType, setSortType] = useState<string>("registrationEnd"); // 기본값: 마감 임박
 
   const handleFilterChange = () => {
     onChange({
-      city: selectedCity || undefined,
-      district: selectedDistrict || undefined,
+      location: selectedLocation || undefined,
       dateTime: selectedDate ? selectedDate.toISOString() : undefined,
       sortBy: sortType,
     });
@@ -28,14 +26,9 @@ export default function GatheringFilters({ onChange }: GatheringFiltersProps) {
     <div className="flex items-center justify-between">
       <div className="flex flex-wrap gap-3 md:flex-nowrap">
         <LocationSelect
-          selectedCity={selectedCity}
-          setSelectedCity={(city) => {
-            setSelectedCity(city);
-            handleFilterChange();
-          }}
-          selectedDistrict={selectedDistrict}
-          setSelectedDistrict={(district) => {
-            setSelectedDistrict(district);
+          selectedLocation={selectedLocation}
+          setSelectedLocation={(location) => {
+            setSelectedLocation(location);
             handleFilterChange();
           }}
         />
