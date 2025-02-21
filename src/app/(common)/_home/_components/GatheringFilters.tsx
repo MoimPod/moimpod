@@ -3,11 +3,17 @@
 import { useState } from "react";
 import DateSelect from "@/components/Filtering/DateSelect";
 import LocationSelect from "@/components/Filtering/LocationSelect";
-import SortButton from "@/components/Filtering/SortButton";
+import SortButton from "@/components/SortButton";
 
 type GatheringFiltersProps = {
   onChange: (filters: { city?: string; district?: string; dateTime?: string; sortBy?: string }) => void;
 };
+
+const sortOption = [
+  { label: "마감 임박", value: "registrationEnd" },
+  { label: "참여 인원 순", value: "participantCount" },
+  { label: "모임 날짜 순", value: "dateTime" },
+] as const;
 
 export default function GatheringFilters({ onChange }: GatheringFiltersProps) {
   const [selectedCity, setSelectedCity] = useState<string>("");
@@ -53,6 +59,7 @@ export default function GatheringFilters({ onChange }: GatheringFiltersProps) {
           setSortType(sort);
           handleFilterChange();
         }}
+        sortOption={sortOption}
       />
     </div>
   );
