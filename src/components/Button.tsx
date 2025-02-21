@@ -23,9 +23,9 @@ export default function Button({
     "py-[10px] inline-flex items-center justify-center rounded-[12px] font-semibold disabled:cursor-not-allowed";
 
   const variantStyles = {
-    solid: "bg-orange-600 text-white hover:bg-orange-700 active:bg-orange-800 disabled:bg-gray-400",
+    solid: "bg-blue-6 text-white hover:bg-blue-7 active:bg-blue-8 disabled:bg-mono-6",
     outline:
-      "border border-orange-600 text-orange-600 hover:border-orange-500 hover:text-orange-500 active:text-orange-700 active:border-orange-700 disabled:border-gray-400 disabled:text-gray-400",
+      "border border-blue-6 text-blue-6 hover:border-blue-7 hover:text-blue-7 active:text-blue-8 active:border-blue-8 disabled:border-mono-6 disabled:text-mono-6",
   };
 
   const sizeStyles = {
