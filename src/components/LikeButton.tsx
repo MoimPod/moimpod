@@ -19,7 +19,7 @@ export default function LikeButton({ onClick, isClosed, isLiked, className, ...r
   };
   return (
     <button
-      className={`group flex ${isClosed ? "h-9 w-full max-w-[116px] md:size-12" : "size-12"} items-center justify-center rounded-full ${isClicked || isClosed ? "border-0 bg-orange-50" : "border-2 border-gray-200 bg-white"} ${className}`}
+      className={`group flex ${isClosed ? "h-9 w-full max-w-[116px] md:size-12" : "size-12"} items-center justify-center rounded-full ${isClicked || isClosed ? "border-0 bg-blue-2" : "border-2 border-gray-200 bg-white"} ${className}`}
       onClick={handleClick}
       {...rest}
     >
@@ -27,13 +27,13 @@ export default function LikeButton({ onClick, isClosed, isLiked, className, ...r
       {isClosed ? (
         <>
           <Bye className="group-hover:animate-hand-wave" />
-          <span className="text-xs text-orange-600 md:hidden">모임 보내주기</span>
+          <span className="text-xs text-blue-6 md:hidden">모임 보내주기</span>
         </>
       ) : (
         <Heart
           fill="#fff"
           stroke="#9CA3AF"
-          className={`transition-all ${isClicked ? "animate-heart-scale-up fill-red-600 stroke-none" : ""}`}
+          className={`transition-all ${isClicked ? "animate-heart-scale-up fill-blue-6 stroke-none" : ""}`}
         />
       )}
     </button>
