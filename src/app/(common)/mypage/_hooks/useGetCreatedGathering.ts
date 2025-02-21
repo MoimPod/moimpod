@@ -2,7 +2,6 @@ import axiosInstance from "@/lib/axiosInstance";
 import { CardData } from "@/stores/useGatheringStore";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-// 공통 데이터 가져오기 함수 (sortBy와 sortOrder는 고정)
 const fetchMyCreatedGatherings = async ({ pageParam = 0, userId }: { pageParam: number; userId: number }) => {
   const response = await axiosInstance.get<CardData[]>("gatherings", {
     params: {
