@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
 import ServiceTab from "@/app/(common)/_home/_components/ServiceTab";
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
@@ -8,6 +8,9 @@ import Card from "@/components/Card";
 import Button from "@/components/Button";
 import GatheringLogo from "@/images/gathering_logo.svg";
 import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
+import { useCheckAuth } from "@/app/(common)/_home/_hooks/useCheckAuth";
+import { LoginPopup } from "@/components/Popup";
+import { useUserStore } from "@/stores/useUserStore";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 export default function CardList() {
@@ -16,7 +19,22 @@ export default function CardList() {
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings(filters);
 
-  const handleOpen = () => setIsModalOpen(true);
+  // 로그인 체크 훅
+  const { checkAuth, isAuthModalOpen, setAuthModalOpen } = useCheckAuth();
+
+  const shouldOpenCreateModal = useUserStore((state) => state.shouldOpenCreateModal);
+  const setShouldOpenCreateModal = useUserStore((state) => state.setShouldOpenCreateModal);
+
+  useEffect(() => {
+    if (shouldOpenCreateModal) {
+      setIsModalOpen(true);
+      setShouldOpenCreateModal(false); // 상태 초기화
+    }
+  }, [shouldOpenCreateModal]);
+
+  const handleOpen = () => {
+    checkAuth(() => setIsModalOpen(true)); // 로그인 여부 확인 후 실행
+  };
   const handleClose = () => setIsModalOpen(false);
 
   // 무한 스크롤 훅 사용
@@ -43,6 +61,12 @@ export default function CardList() {
             <Button styleType="solid" size="sm" className="h-10 md:h-11" onClick={handleOpen}>
               모임 만들기
             </Button>
+            <LoginPopup
+              isOpen={isAuthModalOpen}
+              onClose={() => {
+                setAuthModalOpen(false);
+              }}
+            />
           </div>
         </div>
       </div>

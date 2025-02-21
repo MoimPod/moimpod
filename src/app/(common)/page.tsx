@@ -4,7 +4,7 @@ import CardList from "./_home/CardList";
 
 export default function Home() {
   return (
-    <div>
+    <div className="w-full">
       <CardList />
     </div>
   );
