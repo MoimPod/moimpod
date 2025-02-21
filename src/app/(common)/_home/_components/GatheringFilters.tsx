@@ -24,22 +24,21 @@ export default function GatheringFilters({ onChange }: GatheringFiltersProps) {
 
   return (
     <div className="flex items-center justify-between">
-      <div className="flex flex-wrap gap-3 md:flex-nowrap">
+      <div className="flex gap-3">
         <LocationSelect
           selectedLocation={selectedLocation}
           setSelectedLocation={(location) => {
             setSelectedLocation(location);
             handleFilterChange();
           }}
+          className="w-full"
         />
-        <div className="sm:w-auto">
-          <DateSelect
-            onDateChange={(date) => {
-              setSelectedDate(date);
-              handleFilterChange();
-            }}
-          />
-        </div>
+        <DateSelect
+          onDateChange={(date) => {
+            setSelectedDate(date);
+            handleFilterChange();
+          }}
+        />
       </div>
       <SortButton
         setSortType={(sort) => {

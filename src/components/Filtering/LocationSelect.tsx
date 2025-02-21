@@ -12,7 +12,7 @@ export default function LocationSelect({ className, selectedLocation = "", setSe
   const locations: string[] = ["건대입구", "을지로3가", "신림", "홍대입구"];
 
   return (
-    <div className="flex gap-3">
+    <div className="flex w-full">
       <Dropdown
         options={locations}
         selected={selectedLocation}
