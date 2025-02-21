@@ -23,3 +23,7 @@ body {
 .header-link {
   @apply flex h-full items-center justify-center text-sm font-semibold text-white hover:text-black md:text-base;
 }
+
+.header-link.active {
+  @apply text-black;
+}
