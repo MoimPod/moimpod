@@ -75,7 +75,7 @@ export default function MyReviews() {
         </>
       ) : (
         <div className="flex flex-1 items-center justify-center">
-          <p>아직 작성 가능한 리뷰가 없어요</p>
+          <p>아직 작성한 리뷰가 없어요</p>
         </div>
       )}
     </>
