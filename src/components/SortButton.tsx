@@ -22,10 +22,12 @@ export default function SortButton({ setSortType, sortOption, defaultSort }: Sor
         setSortDropdownOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    if (isSortDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
   }, [isSortDropdownOpen]);
 
   // 정렬 옵션 선택
