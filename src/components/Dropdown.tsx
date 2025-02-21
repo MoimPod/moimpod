@@ -70,9 +70,9 @@ export default function Dropdown({
       {isOpen &&
         (children ??
           (options?.length ? (
-            <div className="absolute z-10 rounded-xl border bg-white p-2 text-sm font-medium shadow-md">
+            <div className="absolute z-10 w-full rounded-xl border bg-white p-2 text-sm font-medium shadow-md">
               {options.map((option) => (
-                <div key={option} onClick={() => handleSelect(option)} className="rounded-xl p-2 hover:bg-orange-100">
+                <div key={option} onClick={() => handleSelect(option)} className="rounded-xl p-2 hover:bg-sky-100">
                   {option}
                 </div>
               ))}
