@@ -1,19 +1,31 @@
 "use client";
 
+import { clearAuthModalState, restoreAuthModalState } from "@/app/(common)/_home/_hooks/useCheckAuth";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { useUserStore } from "@/stores/useUserStore";
+import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { restoreAuthModalState, clearAuthModalState } from "@/app/(common)/_home/_hooks/useCheckAuth";
 
 type FormValues = {
   email: string;
   password: string;
+};
+
+type User = {
+  teamId: number;
+  id: number;
+  email: string;
+  name: string;
+  companyName: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export default function SignIn() {
@@ -27,6 +39,7 @@ export default function SignIn() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const router = useRouter();
   const setUser = useUserStore((state) => state.setUser);
+  const queryClient = useQueryClient();
 
   const handleLogin = async (data: FormValues) => {
     const { email, password } = data;
@@ -44,26 +57,31 @@ export default function SignIn() {
       clearErrors("password");
     }
     if (LoginError) return;
+
     const result = await postSignIn({ email, password });
     if (result.token) {
-      // 토큰이 들어왔을때 cookies로 저장하기
+      // 토큰 저장
       document.cookie = `token=${result.token};`;
-      const userInfo = await getUser(result.token);
-
-      // 열어야할 모달이 있는지 확인
-      const shouldOpenModal = restoreAuthModalState();
-
-      // user 정보 저장하기
-      setUser(userInfo); // setUser 호출
-      // 로그인 성공 이후 main으로 이동
-      router.push("/");
-
-      // 모임 만들기 모달 열기
-      if (shouldOpenModal) {
-        useUserStore.getState().setShouldOpenCreateModal(true);
-      }
-      // 모달 상태 초기화
-      clearAuthModalState();
+      // TanStack Query를 사용하여 유저 정보 불러오기 (제네릭을 통해 User 타입 지정)
+      queryClient
+        .fetchQuery<User>({
+          queryKey: ["user", result.token],
+          queryFn: () => getUser(result.token),
+        })
+        .then((userInfo) => {
+          const shouldOpenModal = restoreAuthModalState();
+          // user 정보 저장
+          setUser(userInfo);
+          // 로그인 성공 후 메인 페이지로 이동
+          router.push("/");
+          if (shouldOpenModal) {
+            useUserStore.getState().setShouldOpenCreateModal(true);
+          }
+          clearAuthModalState();
+        })
+        .catch((error) => {
+          console.error("유저 정보를 불러오는 중 에러 발생:", error);
+        });
     } else {
       if (result.status === 401) {
         setError("password", { type: "manual", message: "비밀번호가 아이디와 일치하지 않습니다." });
@@ -83,15 +101,11 @@ export default function SignIn() {
     }
   };
 
-  const getUser = async (token: string) => {
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/user`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return response.data;
-    } catch (error) {
-      return error;
-    }
+  const getUser = async (token: string): Promise<User> => {
+    const response = await axios.get<User>(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/user`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
   };
 
   return (
