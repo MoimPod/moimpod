@@ -50,8 +50,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
 
   // 모임 관련 데이터
   const [formData, setFormData] = useState({
-    selectedCity: "",
-    selectedDistrict: "",
+    selectedLocation: "",
     image: null as File | null,
     meetingDateTime: null as Date | null,
     deadlineDateTime: null as Date | null,
@@ -98,8 +97,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   // 초기화 함수
   const resetFormData = () => {
     setFormData({
-      selectedCity: "",
-      selectedDistrict: "",
+      selectedLocation: "",
       image: null,
       meetingDateTime: null,
       deadlineDateTime: null,
@@ -156,11 +154,9 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <FormField label="장소">
           <div className="border-none">
             <LocationSelect
-              selectedCity={formData.selectedCity}
-              setSelectedCity={(city) => updateFormData("selectedCity", city)}
-              selectedDistrict={formData.selectedDistrict}
-              setSelectedDistrict={(district) => updateFormData("selectedDistrict", district)}
-              className="border-none text-gray-400"
+              selectedLocation={formData.selectedLocation}
+              setSelectedLocation={(location) => updateFormData("selectedLocation", location)}
+              className="w-full border-none text-gray-400"
             />
           </div>
         </FormField>
