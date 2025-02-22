@@ -23,8 +23,8 @@ export type ReviewQuery = {
   registrationEnd?: string;
   sortBy?: "createdAt" | "score" | "participantCount";
   sortOrder?: "asc" | "desc";
-  limit?: number;
-  offset?: number;
+  limit?: number | string;
+  offset?: number | string;
 };
 
 export type GatheringType = {
