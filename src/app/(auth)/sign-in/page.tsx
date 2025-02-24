@@ -3,6 +3,7 @@
 import { clearAuthModalState, restoreAuthModalState } from "@/app/(common)/_home/_hooks/useCheckAuth";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import { getUser, User } from "@/lib/axiosInstance";
 import { useUserStore } from "@/stores/useUserStore";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -15,17 +16,6 @@ import { useForm } from "react-hook-form";
 type FormValues = {
   email: string;
   password: string;
-};
-
-type User = {
-  teamId: number;
-  id: number;
-  email: string;
-  name: string;
-  companyName: string;
-  image: string;
-  createdAt: string;
-  updatedAt: string;
 };
 
 export default function SignIn() {
@@ -65,8 +55,8 @@ export default function SignIn() {
       // TanStack Query를 사용하여 유저 정보 불러오기 (제네릭을 통해 User 타입 지정)
       queryClient
         .fetchQuery<User>({
-          queryKey: ["user", result.token],
-          queryFn: () => getUser(result.token),
+          queryKey: ["user"],
+          queryFn: getUser,
         })
         .then((userInfo) => {
           const shouldOpenModal = restoreAuthModalState();
@@ -99,13 +89,6 @@ export default function SignIn() {
     } catch (error) {
       return error;
     }
-  };
-
-  const getUser = async (token: string): Promise<User> => {
-    const response = await axios.get<User>(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/user`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return response.data;
   };
 
   return (

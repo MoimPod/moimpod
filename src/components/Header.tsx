@@ -2,12 +2,12 @@
 
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useUserStore } from "@/stores/useUserStore";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
-import { useQueryClient } from "@tanstack/react-query";
 
 export default function Header() {
   const user = useUserStore();
@@ -46,6 +46,7 @@ export default function Header() {
     }
     setProfileBtn(false);
     queryClient.removeQueries({ queryKey: ["mypage"] });
+    queryClient.removeQueries({ queryKey: ["user"] });
     if (pathname === "/") {
       window.location.reload();
     } else {
