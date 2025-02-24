@@ -8,7 +8,7 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type FormValues = {
@@ -25,6 +25,8 @@ export default function SignUp() {
   const router = useRouter();
   // 홈버튼 눌렀을때 나오는 modal
   const [isOpenPopup, setIsOpenPopup] = useState(false);
+
+  const [LoginProgress, setLoginProgress] = useState(false);
 
   const {
     register,
@@ -68,6 +70,7 @@ export default function SignUp() {
       clearErrors("passwordCheck");
     }
     if (InvalidError) return;
+    setLoginProgress(true);
     const result = await postSignUp({ name, email, companyName, password });
     if (result.message === "사용자 생성 성공") {
       setIsModal(true);
@@ -75,6 +78,7 @@ export default function SignUp() {
       if (result.message === "Database error") {
         setError("email", { type: "manual", message: "중복된 이메일입니다." });
       }
+      setLoginProgress(false);
     }
   };
 
@@ -86,6 +90,16 @@ export default function SignUp() {
       console.error("회원가입에 실패 하였습니다.", error);
     }
   };
+
+  useEffect(() => {
+    if (!LoginProgress) {
+      const tokenExists = document.cookie.split(";").some((cookie) => cookie.trim().startsWith("token="));
+      if (tokenExists) {
+        alert("비정상적인 접근입니다.");
+        window.location.href = "/";
+      }
+    }
+  }, [LoginProgress]);
 
   // 비밀번호 변경시 보이는 icon
   const [passwordVisible, setPasswordVisible] = useState(false);

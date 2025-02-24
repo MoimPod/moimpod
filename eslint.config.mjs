@@ -24,6 +24,7 @@ export default [
         fetch: "readonly",
         window: "readonly",
         localStorage: "readonly",
+        alert: "readonly",
       },
     },
     plugins: {

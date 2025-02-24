@@ -10,7 +10,7 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type FormValues = {
@@ -27,6 +27,7 @@ export default function SignIn() {
     formState: { errors, isValid },
   } = useForm<FormValues>({ mode: "onChange" });
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [LoginProgress, setLoginProgress] = useState(false);
   const router = useRouter();
   const setUser = useUserStore((state) => state.setUser);
   const queryClient = useQueryClient();
@@ -47,7 +48,7 @@ export default function SignIn() {
       clearErrors("password");
     }
     if (LoginError) return;
-
+    setLoginProgress(true);
     const result = await postSignIn({ email, password });
     if (result.token) {
       // 토큰 저장
@@ -79,6 +80,7 @@ export default function SignIn() {
       if (result.status === 404) {
         setError("email", { type: "manual", message: "존재하지 않는 아이디입니다." });
       }
+      setLoginProgress(false);
     }
   };
 
@@ -90,6 +92,16 @@ export default function SignIn() {
       return error;
     }
   };
+
+  useEffect(() => {
+    if (!LoginProgress) {
+      const tokenExists = document.cookie.split(";").some((cookie) => cookie.trim().startsWith("token="));
+      if (tokenExists) {
+        alert("비정상적인 접근입니다.");
+        window.location.href = "/";
+      }
+    }
+  }, [LoginProgress]);
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-white p-4">
