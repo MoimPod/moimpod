@@ -3,7 +3,7 @@ import axiosInstance from "@/lib/axiosInstance";
 
 export type CardData = {
   id: number;
-  type: string;
+  type: "DALLAEMFIT" | "WORKATION";
   name: string;
   location: string;
   dateTime: string;
