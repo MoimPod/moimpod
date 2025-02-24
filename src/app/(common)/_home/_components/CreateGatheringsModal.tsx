@@ -9,21 +9,12 @@ import CategoryButton from "@/components/CategoryButton";
 import MeetingForm from "@/app/(common)/_home/_components/MeetingForm";
 import { useForm } from "react-hook-form";
 import { isValid as isValidDate } from "date-fns";
-import { useCreateGathering } from "../_hooks/useCreateGathering";
+import { useCreateGathering, FormDataType } from "../_hooks/useCreateGathering";
+import { utcToZonedTime, format } from "date-fns";
 
 type CreateGatheringsModalProps = {
   isOpen: boolean;
   onClose: () => void;
-};
-
-type FormValues = {
-  name: string;
-  location: string;
-  image: File | null;
-  service: string;
-  meetingDateTime: string;
-  deadlineDateTime: string;
-  capacity: string;
 };
 
 // 공통 입력 필드 컴포넌트
@@ -44,7 +35,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     setError,
     setValue,
     formState: { errors, isValid },
-  } = useForm<FormValues>({
+  } = useForm<FormDataType>({
     mode: "onChange",
   });
 
@@ -52,6 +43,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   const [formData, setFormData] = useState({
     selectedLocation: "",
     image: null as File | null,
+    imageName: "",
     meetingDateTime: null as Date | null,
     deadlineDateTime: null as Date | null,
   });
@@ -64,20 +56,24 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     setFormData((prev) => ({
       ...prev,
       [key]: value,
-      ...(key === "selectedCity" && { selectedDistrict: "" }),
     }));
   };
+
+  // 장소 선택 시 react-hook-form 값에도 반영되도록 useEffect 추가
+  // useEffect(() => {
+  //   setValue("location", formData.selectedLocation);
+  // }, [formData.selectedLocation, setValue]);
 
   // 날짜 선택 시 setValue로 react-hook-form에 반영
   useEffect(() => {
     if (formData.meetingDateTime && isValidDate(formData.meetingDateTime)) {
-      setValue("meetingDateTime", formData.meetingDateTime.toISOString());
+      setValue("dateTime", format(formData.meetingDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
     }
   }, [formData.meetingDateTime, setValue]);
 
   useEffect(() => {
     if (formData.deadlineDateTime && isValidDate(formData.deadlineDateTime)) {
-      setValue("deadlineDateTime", formData.deadlineDateTime.toISOString());
+      setValue("registrationEnd", format(formData.deadlineDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
     }
   }, [formData.deadlineDateTime, setValue]);
 
@@ -85,11 +81,17 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      updateFormData("imageName", file.name);
+
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         const base64String = reader.result as string;
-        updateFormData("image", base64String); // Base64 문자열 저장
+        const prefixPattern = /^data:image\/[a-z]+;base64,/;
+        const base64Data = base64String.replace(prefixPattern, "");
+
+        setValue("image", base64Data);
+        updateFormData("image", base64Data); // Base64 문자열 저장
       };
     }
   };
@@ -99,6 +101,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     setFormData({
       selectedLocation: "",
       image: null,
+      imageName: "",
       meetingDateTime: null,
       deadlineDateTime: null,
     });
@@ -114,9 +117,21 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   const { mutate: createGathering, isPending } = useCreateGathering();
 
   // 제출 확인용
-  const onSubmit = (data: FormValues) => {
-    console.log("폼 데이터:", data);
-    createGathering(data, {
+  const onSubmit = (data: FormDataType) => {
+    const requestData = new FormData();
+    requestData.append("name", data.name);
+    requestData.append("location", data.location);
+    requestData.append("type", data.type);
+    requestData.append("dateTime", data.dateTime);
+    requestData.append("registrationEnd", data.registrationEnd);
+    requestData.append("capacity", String(data.capacity));
+    requestData.append("image", data.image);
+
+    for (let [key, value] of requestData.entries()) {
+      console.log(key, value);
+    }
+
+    createGathering(requestData, {
       onSuccess: () => {
         onClose();
       },
@@ -155,7 +170,10 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           <div className="border-none">
             <LocationSelect
               selectedLocation={formData.selectedLocation}
-              setSelectedLocation={(location) => updateFormData("selectedLocation", location)}
+              setSelectedLocation={(location) => {
+                updateFormData("selectedLocation", location);
+                setValue("location", location);
+              }}
               className="w-full border-none text-gray-400"
             />
           </div>
@@ -165,9 +183,9 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         <FormField label="이미지">
           <div className="flex">
             <div
-              className={`w-full rounded-xl bg-gray-50 px-4 py-2.5 text-sm ${formData.image?.name ? "text-gray-900" : "text-gray-400"}`}
+              className={`w-full rounded-xl bg-gray-50 px-4 py-2.5 text-sm ${formData.imageName ? "text-gray-900" : "text-gray-400"}`}
             >
-              {formData.image?.name || "이미지를 첨부해주세요."}
+              {formData.imageName || "이미지를 첨부해주세요."}
             </div>
             <input
               type="file"
@@ -189,11 +207,17 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           </div>
         </FormField>
 
+        <input type="hidden" {...register("type", { required: "서비스 종류를 선택해주세요." })} />
+
         {/* 서비스 선택 */}
         <FormField label="선택 서비스">
-          <CategoryButton categories={["달램핏", "워케이션"]} setValue={(value) => setValue("service", value)}>
-            <CategoryButton.Checkbox category="달램핏" subText="오피스 스트레칭" />
-            <CategoryButton.Checkbox category="워케이션" />
+          <CategoryButton
+            categories={["OFFICE_STRETCHING", "MINDFULNESS", "WORKATION"]}
+            setValue={(value) => setValue("type", value)}
+          >
+            <CategoryButton.Checkbox category="OFFICE_STRETCHING" subText="달램핏" />
+            <CategoryButton.Checkbox category="MINDFULNESS" subText="달램핏" />
+            <CategoryButton.Checkbox category="WORKATION" />
           </CategoryButton>
         </FormField>
 
@@ -230,11 +254,11 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         {/* 모임 정원 */}
         <FormField label="모임 정원">
           <Input
-            placeholder="최소 3인 이상 입력해주세요."
+            placeholder="최소 5인 이상 입력해주세요."
             register={register("capacity", {
               required: "정원을 입력해주세요.",
-              min: { value: 3, message: "모임 정원은 최소 3명 이상이어야 합니다." },
-              max: { value: 20, message: "모임 정원은 최대 20명까지만 가능합니다." },
+              min: { value: 5, message: "모임 정원은 최소 5명 이상이어야 합니다." },
+              max: { value: 30, message: "모임 정원은 최대 30명까지만 가능합니다." },
               pattern: { value: /^[0-9]+$/, message: "숫자만 입력해주세요." },
             })}
           />

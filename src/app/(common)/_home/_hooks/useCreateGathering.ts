@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "@/lib/axiosInstance";
 
-type FormData = {
+export type FormDataType = {
   name: string;
   location: string;
-  image: File | null;
-  service: string;
-  meetingDateTime: string;
-  deadlineDateTime: string;
-  capacity: string;
+  image: string;
+  type: string;
+  dateTime: string;
+  registrationEnd: string;
+  capacity: number;
 };
 
 export const useCreateGathering = () => {
@@ -16,7 +16,11 @@ export const useCreateGathering = () => {
 
   return useMutation({
     mutationFn: async (formData: FormData) => {
-      const response = await axiosInstance.post("/gatherings", formData);
+      const response = await axiosInstance.post("/gatherings", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       return response.data;
     },
     onSuccess: () => {
