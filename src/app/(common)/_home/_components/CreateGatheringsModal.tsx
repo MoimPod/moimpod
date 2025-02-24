@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { isValid as isValidDate } from "date-fns";
 import { useCreateGathering, FormDataType } from "@/app/(common)/_home/_hooks/useCreateGathering";
 import { format } from "date-fns";
+import defaultImage from "@/images/default_image.png";
 
 type CreateGatheringsModalProps = {
   isOpen: boolean;
@@ -74,7 +75,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   }, [formData.deadlineDateTime, setValue]);
 
   // 이미지 파일 전송
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       updateFormData("imageName", file.name);
@@ -104,7 +105,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   const { mutate: createGathering, isPending } = useCreateGathering();
 
   // 제출 확인용
-  const onSubmit = (data: FormDataType) => {
+  const onSubmit = async (data: FormDataType) => {
     const requestData = new FormData();
     requestData.append("name", data.name);
     requestData.append("location", data.location);
@@ -112,7 +113,16 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     requestData.append("dateTime", data.dateTime);
     requestData.append("registrationEnd", data.registrationEnd);
     requestData.append("capacity", String(data.capacity));
-    requestData.append("image", data.image);
+    if (data.image) {
+      requestData.append("image", data.image);
+    } else {
+      // 기본 이미지를 File 객체로 변환
+      const response = await fetch(defaultImage.src);
+      const blob = await response.blob();
+      const defaultFile = new File([blob], "default_image.png", { type: blob.type });
+
+      requestData.append("image", defaultFile);
+    }
 
     createGathering(requestData, {
       onSuccess: () => {
