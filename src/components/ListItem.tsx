@@ -41,14 +41,14 @@ ListItem.StatusChip = ({ styleType, children }: StatusChipProps) => {
   const baseStyles = "break-keep rounded-3xl px-3 py-[6px] text-sm";
 
   const variantStyles = {
-    upcoming: "bg-orange-100 text-orange-600",
+    upcoming: "bg-blue-1 text-blue-6",
     completed: "bg-gray-200 text-gray-500",
-    confirmed: "flex items-center gap-1 border border-orange-100 bg-white text-orange-600",
+    confirmed: "flex items-center gap-1 border border-blue-2 bg-white text-blue-6",
     waiting: "border border-gray-200 bg-white text-gray-500",
   };
   return (
     <li className={cn(baseStyles, variantStyles[styleType])}>
-      {styleType === "confirmed" && <Check className="text-orange-500" />}
+      {styleType === "confirmed" && <Check className="text-blue-5" />}
       {children}
     </li>
   );
