@@ -98,16 +98,18 @@ export default function SignUp() {
           onSubmit={handleSubmit(handleSignUp)}
           className="m-auto flex w-full flex-col rounded-3xl bg-white px-4 py-8 md:max-w-[608px] xl:m-0 xl:max-w-[510px] xl:px-14"
         >
-          <button
-            type="button"
-            onClick={() => {
-              setIsOpenPopup(true);
-            }}
-            className="flex flex-col items-center justify-center gap-4"
-          >
-            <Image src={"/images/auth_icon.svg"} alt={""} width={50} height={50} />
+          <div className="flex flex-col items-center justify-center gap-4">
+            <button
+              type="button"
+              onClick={() => {
+                setIsOpenPopup(true);
+              }}
+              className="flex flex-col items-center justify-center gap-4"
+            >
+              <Image src={"/images/auth_icon.svg"} alt={""} width={50} height={50} />
+            </button>
             <p className="text-center text-xl font-semibold text-gray-800">회원가입</p>
-          </button>
+          </div>
           <div className="m-auto w-full max-w-[500px]">
             <div className="flex flex-col gap-2 pt-8">
               <label htmlFor="userName" className="text-sm font-semibold text-gray-800">
