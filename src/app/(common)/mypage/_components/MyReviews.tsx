@@ -1,9 +1,9 @@
 import { useGetMyReviews } from "@/app/(common)/mypage/_hooks/useGetMyReviews";
+import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import ListItem from "@/components/ListItem";
 import Score from "@/components/Score";
 import Spinner from "@/components/Spinner";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
 
 const GatheringType = {
@@ -12,8 +12,8 @@ const GatheringType = {
   WORKATION: "워케이션",
 };
 export default function MyReviews() {
-  const id = useUserStore((state) => state.user?.id) as number;
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyReviews(id);
+  const { data: userData } = useGetUserInfo();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyReviews(userData?.id ?? 0);
 
   const { observerRef } = useInfiniteScroll({
     hasNextPage,

@@ -1,14 +1,15 @@
 import { useGetMyCreatedGatherings } from "@/app/(common)/mypage/_hooks/useGetCreatedGathering";
+import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import ListItem from "@/components/ListItem";
 import Spinner from "@/components/Spinner";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
 
 export default function MyCreatedGatherings() {
-  // TODO: 회원정보 불러오기가 tanstack query로 바뀌면 바꿀 것
-  const id = useUserStore((state) => state.user?.id) as number;
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyCreatedGatherings(id);
+  const { data: userData } = useGetUserInfo();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyCreatedGatherings(
+    userData?.id ?? 0,
+  );
   const allGatherings = data?.pages.flatMap((page) => page.data) || [];
   const { observerRef } = useInfiniteScroll({
     hasNextPage,
