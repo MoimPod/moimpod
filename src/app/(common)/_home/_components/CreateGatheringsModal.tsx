@@ -10,7 +10,6 @@ import MeetingForm from "@/app/(common)/_home/_components/MeetingForm";
 import { useForm } from "react-hook-form";
 import { isValid as isValidDate } from "date-fns";
 import { useCreateGathering, FormDataType } from "@/app/(common)/_home/_hooks/useCreateGathering";
-import { formatSeoulTime } from "@/app/(common)/_home/_hooks/dateUtill";
 import { format } from "date-fns";
 
 type CreateGatheringsModalProps = {
