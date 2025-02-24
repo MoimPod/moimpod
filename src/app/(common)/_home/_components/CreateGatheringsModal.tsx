@@ -134,7 +134,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      className="flex h-screen w-full flex-col sm:fixed sm:overflow-auto md:h-[802px] md:max-w-[520px]"
+      className="flex h-screen w-full flex-col max-sm:fixed max-sm:overflow-auto md:h-[750px] md:max-w-[520px]"
     >
       <label className="mb-3 text-lg font-semibold">모임 만들기</label>
       <form onSubmit={handleSubmit(onSubmit)}>
