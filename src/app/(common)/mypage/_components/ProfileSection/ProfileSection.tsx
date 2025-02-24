@@ -32,7 +32,7 @@ export default function ProfileSection() {
   };
 
   return (
-    <section className="relative w-full rounded-3xl border-2 border-gray-200 bg-white pb-5">
+    <section className="relative w-full overflow-hidden rounded-3xl border-2 border-gray-200 bg-white pb-5">
       <ProfileHeader onEditClick={handleOpen} />
       <ProfileEditModal isOpen={isModal} onClose={handleClose} companyName={data?.companyName} imageUrl={data?.image} />
       <ProfileInfo email={data?.email} name={data?.name} companyName={data?.companyName} imageUrl={data?.image} />
