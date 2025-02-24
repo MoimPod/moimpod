@@ -9,8 +9,8 @@ import CategoryButton from "@/components/CategoryButton";
 import MeetingForm from "@/app/(common)/_home/_components/MeetingForm";
 import { useForm } from "react-hook-form";
 import { isValid as isValidDate } from "date-fns";
-import { useCreateGathering, FormDataType } from "../_hooks/useCreateGathering";
-import { format } from "date-fns";
+import { useCreateGathering, FormDataType } from "@/app/(common)/_home/_hooks/useCreateGathering";
+import { formatSeoulTime } from "@/app/(common)/_home/_hooks/dateUtill";
 
 type CreateGatheringsModalProps = {
   isOpen: boolean;
@@ -62,17 +62,13 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   // 날짜 선택 시 setValue로 react-hook-form에 반영
   useEffect(() => {
     if (formData.meetingDateTime && isValidDate(formData.meetingDateTime)) {
-      // 서울 시간으로 변경 (+ 9시간)
-      const seoulDate = new Date(formData.meetingDateTime.getTime() + 9 * 60 * 60 * 1000);
-      setValue("dateTime", format(seoulDate, "yyyy-MM-dd'T'HH:mm:ss"));
+      setValue("dateTime", formatSeoulTime(formData.meetingDateTime));
     }
   }, [formData.meetingDateTime, setValue]);
 
   useEffect(() => {
     if (formData.deadlineDateTime && isValidDate(formData.deadlineDateTime)) {
-      // 서울 시간으로 변경 (+ 9시간)
-      const seoulDate = new Date(formData.deadlineDateTime.getTime() + 9 * 60 * 60 * 1000);
-      setValue("registrationEnd", format(seoulDate, "yyyy-MM-dd'T'HH:mm:ss"));
+      setValue("registrationEnd", formatSeoulTime(formData.deadlineDateTime));
     }
   }, [formData.deadlineDateTime, setValue]);
 
