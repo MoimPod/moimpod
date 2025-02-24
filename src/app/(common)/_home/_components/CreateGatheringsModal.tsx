@@ -62,6 +62,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   // 날짜 선택 시 setValue로 react-hook-form에 반영
   useEffect(() => {
     if (formData.meetingDateTime && isValidDate(formData.meetingDateTime)) {
+      // 서울 시간으로 변경 (+ 9시간)
       const seoulDate = new Date(formData.meetingDateTime.getTime() + 9 * 60 * 60 * 1000);
       setValue("dateTime", format(seoulDate, "yyyy-MM-dd'T'HH:mm:ss"));
     }
@@ -69,6 +70,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
 
   useEffect(() => {
     if (formData.deadlineDateTime && isValidDate(formData.deadlineDateTime)) {
+      // 서울 시간으로 변경 (+ 9시간)
       const seoulDate = new Date(formData.deadlineDateTime.getTime() + 9 * 60 * 60 * 1000);
       setValue("registrationEnd", format(seoulDate, "yyyy-MM-dd'T'HH:mm:ss"));
     }
