@@ -38,6 +38,7 @@ export default function CustomTimepicker({ selectedTime, onTimeChange }: Timepic
         <div className="flex max-h-48 w-16 flex-col overflow-auto">
           {hours.map((hour) => (
             <button
+              type="button"
               key={hour}
               className={`p-1 text-sm ${
                 time.startsWith(hour.toString().padStart(2, "0"))
@@ -55,6 +56,7 @@ export default function CustomTimepicker({ selectedTime, onTimeChange }: Timepic
         <div className="flex max-h-48 w-16 flex-col overflow-auto">
           {minutes.map((minute) => (
             <button
+              type="button"
               key={minute}
               className={`p-1 text-sm ${time.includes(`:${minute}`) ? "rounded-lg bg-primary-color text-white" : "hover:bg-gray-200"}`}
               onClick={() => handleTimeSelect(Number(time.split(":")[0]), minute, time.split(" ")[1])}
@@ -68,6 +70,7 @@ export default function CustomTimepicker({ selectedTime, onTimeChange }: Timepic
         <div className="flex max-h-48 w-16 flex-col overflow-auto">
           {periods.map((period) => (
             <button
+              type="button"
               key={period}
               className={`p-1 text-sm ${time.includes(period) ? "rounded-lg bg-primary-color text-white" : "hover:bg-gray-200"}`}
               onClick={() => handleTimeSelect(Number(time.split(":")[0]), time.split(":")[1].split(" ")[0], period)}

@@ -51,6 +51,7 @@ export default function DateSelect({ onDateChange }: DateSelectProps) {
             {/* 버튼 */}
             <div className="mt-3 flex justify-center gap-2">
               <Button
+                type="button"
                 styleType="outline"
                 size="sm"
                 className="h-10 w-[118px]"
@@ -61,6 +62,7 @@ export default function DateSelect({ onDateChange }: DateSelectProps) {
                 초기화
               </Button>
               <Button
+                type="button"
                 styleType="solid"
                 size="sm"
                 className="h-10 w-[118px]"

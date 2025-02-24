@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { isValid as isValidDate } from "date-fns";
 import { useCreateGathering, FormDataType } from "@/app/(common)/_home/_hooks/useCreateGathering";
 import { formatSeoulTime } from "@/app/(common)/_home/_hooks/dateUtill";
+import { format } from "date-fns";
 
 type CreateGatheringsModalProps = {
   isOpen: boolean;
@@ -62,13 +63,14 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   // 날짜 선택 시 setValue로 react-hook-form에 반영
   useEffect(() => {
     if (formData.meetingDateTime && isValidDate(formData.meetingDateTime)) {
-      setValue("dateTime", formatSeoulTime(formData.meetingDateTime));
+      setValue("dateTime", format(formData.meetingDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
+      console.log(format(formData.meetingDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
     }
   }, [formData.meetingDateTime, setValue]);
 
   useEffect(() => {
     if (formData.deadlineDateTime && isValidDate(formData.deadlineDateTime)) {
-      setValue("registrationEnd", formatSeoulTime(formData.deadlineDateTime));
+      setValue("registrationEnd", format(formData.deadlineDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
     }
   }, [formData.deadlineDateTime, setValue]);
 
@@ -177,6 +179,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
               onChange={handleImageChange}
             />
             <Button
+              type="button"
               styleType="outline"
               size="sm"
               className="ml-3 w-24"
@@ -197,9 +200,9 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
             categories={["OFFICE_STRETCHING", "MINDFULNESS", "WORKATION"]}
             setValue={(value) => setValue("type", value)}
           >
-            <CategoryButton.Checkbox category="OFFICE_STRETCHING" label="오피스 스트레칭" subText="달램핏" />
-            <CategoryButton.Checkbox category="MINDFULNESS" label="마인드 풀니스" subText="달램핏" />
-            <CategoryButton.Checkbox category="WORKATION" label="워케이션" />
+            <CategoryButton.Checkbox category="달램핏" label="오피스 스트레칭" subText="OFFICE_STRETCHING" />
+            <CategoryButton.Checkbox category="달램핏" label="마인드 풀니스" subText="MINDFULNESS" />
+            <CategoryButton.Checkbox category="워케이션" label="워케이션" subText="WORKATION" />
           </CategoryButton>
         </FormField>
 

@@ -22,12 +22,12 @@ export default function Card({
   capacity,
   image,
 }: CardData) {
+  console.log("card에 넘어간 dateTime", dateTime);
   const router = useRouter();
   const { toggleFavorite, favorites } = useFavoritesStore();
 
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
   const isClosed = Boolean(registrationEnd && new Date(registrationEnd) < new Date()); //모집이 마감되었는지
-  //const [isLiked, setIsLiked] = useState(false);
 
   const isLiked = favorites.includes(id.toString());
 
