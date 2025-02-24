@@ -22,7 +22,6 @@ export default function Card({
   capacity,
   image,
 }: CardData) {
-  console.log("card에 넘어간 dateTime", dateTime);
   const router = useRouter();
   const { toggleFavorite, favorites } = useFavoritesStore();
 
