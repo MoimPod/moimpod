@@ -1,9 +1,9 @@
 "use client";
 
 import { clearAuthModalState, restoreAuthModalState } from "@/app/(common)/_home/_hooks/useCheckAuth";
+import { getUser, User } from "@/app/api/getUser";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import { getUser, User } from "@/lib/axiosInstance";
 import { useUserStore } from "@/stores/useUserStore";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
