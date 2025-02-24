@@ -11,6 +11,7 @@ import Tag from "./Tag";
 import AnimatedParticipantCount from "./AnimateParticipantCount";
 import LikeButton from "./LikeButton";
 import JoinArrow from "@/images/join_now_arrow.svg";
+import OpenGathering from "@/images/open_gathering_icon.svg";
 
 export default function Card({
   id,
@@ -69,9 +70,12 @@ export default function Card({
           <LikeButton onClick={handleLikeClick} isLiked={isLiked} isClosed={isClosed} className="ml-auto md:mt-3" />
         </div>
 
-        {/* 인원 정보 */}
-        <div className="mt-5 text-sm text-gray-500">
-          <AnimatedParticipantCount participantCount={participantCount} capacity={capacity} />
+        <div className="mt-5 flex items-center gap-3">
+          {/* 인원 정보 */}
+          <div className="text-sm text-gray-500">
+            <AnimatedParticipantCount participantCount={participantCount} capacity={capacity} />
+          </div>
+          {participantCount === capacity ? <OpenGathering /> : null}
         </div>
 
         <div className="flex items-center gap-x-5">

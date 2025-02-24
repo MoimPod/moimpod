@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect } from "react";
+import ParticipantIcon from "@/images/participant_icon.svg";
 
 type AnimatedCountProps = {
   participantCount: number;
@@ -22,7 +23,8 @@ export default function AnimatedParticipantCount({ participantCount, capacity }:
   }, [participantCount]);
 
   return (
-    <p className="mt-5 text-sm text-gray-500">
+    <p className="flex items-center text-sm text-gray-900">
+      <ParticipantIcon className="mr-1" />
       <motion.span>{rounded}</motion.span>/{capacity}
     </p>
   );
