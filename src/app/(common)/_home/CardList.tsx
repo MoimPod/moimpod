@@ -15,7 +15,7 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 export default function CardList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filters, setFilters] = useState<{ city?: string; district?: string; dateTime?: string; sortBy?: string }>({});
+  const [filters, setFilters] = useState<{ location?: string; dateTime?: string; sortBy?: string }>({});
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings(filters);
 
