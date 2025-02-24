@@ -197,9 +197,9 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
             categories={["OFFICE_STRETCHING", "MINDFULNESS", "WORKATION"]}
             setValue={(value) => setValue("type", value)}
           >
-            <CategoryButton.Checkbox category="OFFICE_STRETCHING" subText="달램핏" />
-            <CategoryButton.Checkbox category="MINDFULNESS" subText="달램핏" />
-            <CategoryButton.Checkbox category="WORKATION" />
+            <CategoryButton.Checkbox category="OFFICE_STRETCHING" label="오피스 스트레칭" subText="달램핏" />
+            <CategoryButton.Checkbox category="MINDFULNESS" label="마인드 풀니스" subText="달램핏" />
+            <CategoryButton.Checkbox category="WORKATION" label="워케이션" />
           </CategoryButton>
         </FormField>
 
