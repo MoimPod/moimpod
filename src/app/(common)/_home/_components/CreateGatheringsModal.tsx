@@ -10,7 +10,7 @@ import MeetingForm from "@/app/(common)/_home/_components/MeetingForm";
 import { useForm } from "react-hook-form";
 import { isValid as isValidDate } from "date-fns";
 import { useCreateGathering, FormDataType } from "../_hooks/useCreateGathering";
-import { utcToZonedTime, format } from "date-fns";
+import { format } from "date-fns";
 
 type CreateGatheringsModalProps = {
   isOpen: boolean;
@@ -67,13 +67,15 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   // 날짜 선택 시 setValue로 react-hook-form에 반영
   useEffect(() => {
     if (formData.meetingDateTime && isValidDate(formData.meetingDateTime)) {
-      setValue("dateTime", format(formData.meetingDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
+      const seoulDate = new Date(formData.meetingDateTime.getTime() + 9 * 60 * 60 * 1000);
+      setValue("dateTime", format(seoulDate, "yyyy-MM-dd'T'HH:mm:ss"));
     }
   }, [formData.meetingDateTime, setValue]);
 
   useEffect(() => {
     if (formData.deadlineDateTime && isValidDate(formData.deadlineDateTime)) {
-      setValue("registrationEnd", format(formData.deadlineDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
+      const seoulDate = new Date(formData.deadlineDateTime.getTime() + 9 * 60 * 60 * 1000);
+      setValue("registrationEnd", format(seoulDate, "yyyy-MM-dd'T'HH:mm:ss"));
     }
   }, [formData.deadlineDateTime, setValue]);
 
@@ -82,19 +84,29 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     const file = e.target.files?.[0];
     if (file) {
       updateFormData("imageName", file.name);
-
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        const prefixPattern = /^data:image\/[a-z]+;base64,/;
-        const base64Data = base64String.replace(prefixPattern, "");
-
-        setValue("image", base64Data);
-        updateFormData("image", base64Data); // Base64 문자열 저장
-      };
+      // base64 변환 없이 file 객체를 바로 저장
+      setValue("image", file);
+      updateFormData("image", file);
     }
   };
+
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     updateFormData("imageName", file.name);
+
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onloadend = () => {
+  //       const base64String = reader.result as string;
+  //       const prefixPattern = /^data:image\/[a-z]+;base64,/;
+  //       const base64Data = base64String.replace(prefixPattern, "");
+
+  //       setValue("image", base64Data);
+  //       updateFormData("image", base64Data); // Base64 문자열 저장
+  //     };
+  //   }
+  // };
 
   // 초기화 함수
   const resetFormData = () => {

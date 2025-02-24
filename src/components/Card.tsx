@@ -22,6 +22,8 @@ export default function Card({
   capacity,
   image,
 }: CardData) {
+  console.log("CardData:", { name, image });
+
   const router = useRouter();
   const { toggleFavorite, favorites } = useFavoritesStore();
 
