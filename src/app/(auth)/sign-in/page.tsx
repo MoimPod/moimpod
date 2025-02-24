@@ -98,7 +98,7 @@ export default function SignIn() {
       const tokenExists = document.cookie.split(";").some((cookie) => cookie.trim().startsWith("token="));
       if (tokenExists) {
         alert("비정상적인 접근입니다.");
-        window.location.href = "/";
+        router.push("/");
       }
     }
   }, [LoginProgress]);
