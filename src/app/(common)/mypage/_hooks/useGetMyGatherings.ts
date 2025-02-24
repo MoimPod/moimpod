@@ -38,6 +38,6 @@ export const useGetMyGatherings = (queryKey: string[], filters: FetchMyGathering
     queryFn: ({ pageParam }) => fetchMyGatherings({ pageParam, filters }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextOffset,
-    staleTime: 60000,
+    staleTime: 300000,
   });
 };

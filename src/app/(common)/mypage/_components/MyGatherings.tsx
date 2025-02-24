@@ -27,7 +27,7 @@ import { useGetMyGatherings } from "@/app/(common)/mypage/_hooks/useGetMyGatheri
 // isCompleted가 true, isReviewed가 true => 리뷰 작성 x
 export default function MyGatherings() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyGatherings([
-    "mypage",
+    "user",
     "gatherings",
   ]);
   const [isModalOpen, setModalOpen] = useState(false);
