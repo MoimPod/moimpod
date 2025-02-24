@@ -59,11 +59,6 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     }));
   };
 
-  // 장소 선택 시 react-hook-form 값에도 반영되도록 useEffect 추가
-  // useEffect(() => {
-  //   setValue("location", formData.selectedLocation);
-  // }, [formData.selectedLocation, setValue]);
-
   // 날짜 선택 시 setValue로 react-hook-form에 반영
   useEffect(() => {
     if (formData.meetingDateTime && isValidDate(formData.meetingDateTime)) {
@@ -79,34 +74,15 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     }
   }, [formData.deadlineDateTime, setValue]);
 
-  // 이미지 파일 string 전환
+  // 이미지 파일 전송
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       updateFormData("imageName", file.name);
-      // base64 변환 없이 file 객체를 바로 저장
       setValue("image", file);
       updateFormData("image", file);
     }
   };
-
-  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files?.[0];
-  //   if (file) {
-  //     updateFormData("imageName", file.name);
-
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onloadend = () => {
-  //       const base64String = reader.result as string;
-  //       const prefixPattern = /^data:image\/[a-z]+;base64,/;
-  //       const base64Data = base64String.replace(prefixPattern, "");
-
-  //       setValue("image", base64Data);
-  //       updateFormData("image", base64Data); // Base64 문자열 저장
-  //     };
-  //   }
-  // };
 
   // 초기화 함수
   const resetFormData = () => {
@@ -138,10 +114,6 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     requestData.append("registrationEnd", data.registrationEnd);
     requestData.append("capacity", String(data.capacity));
     requestData.append("image", data.image);
-
-    for (let [key, value] of requestData.entries()) {
-      console.log(key, value);
-    }
 
     createGathering(requestData, {
       onSuccess: () => {

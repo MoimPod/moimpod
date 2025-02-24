@@ -4,7 +4,7 @@ import axiosInstance from "@/lib/axiosInstance";
 export type FormDataType = {
   name: string;
   location: string;
-  image: string;
+  image: File;
   type: string;
   dateTime: string;
   registrationEnd: string;
