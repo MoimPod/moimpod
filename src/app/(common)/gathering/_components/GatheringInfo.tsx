@@ -7,16 +7,20 @@ import ConfirmedStamp from "@/components/ConfirmedStamp";
 import DashedLine from "@/components/DashedLine";
 import GatheredProfiles from "./GatheredProfiles";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
-import type { GatheringType } from "../types";
+import { useGetParticipants } from "@/app/(common)/gathering/_hooks/useGetParticipants";
+import type { GatheringType, GatheringParticipantType } from "../types";
 
 export type GatheringProps = {
   gatheringId: string;
   gathering: GatheringType;
-  profileImages: (string | null)[];
+  profileImages?: (string | null)[];
 };
 
-export default function GatheringInfo({ gatheringId, gathering, profileImages }: GatheringProps) {
+export default function GatheringInfo({ gatheringId, gathering }: GatheringProps) {
   const MIN_COUNT = 5;
+
+  const { data: participants } = useGetParticipants(gatheringId);
+  const profileImages = participants?.map((item: GatheringParticipantType) => item.User.image) || [];
 
   const { name, dateTime, location, participantCount, capacity } = gathering;
 
@@ -39,8 +43,8 @@ export default function GatheringInfo({ gatheringId, gathering, profileImages }:
       <div className="p-6">
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="text-sm font-semibold text-gray-900">모집정원 {participantCount}명</div>
-            <GatheredProfiles count={participantCount} profileImages={profileImages} />
+            <div className="text-sm font-semibold text-gray-900">모집정원 {profileImages.length}명</div>
+            <GatheredProfiles profileImages={profileImages} />
           </div>
           {MIN_COUNT <= participantCount && <ConfirmedStamp />}
         </div>

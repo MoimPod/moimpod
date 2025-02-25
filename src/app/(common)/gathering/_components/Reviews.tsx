@@ -2,33 +2,40 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useQueryParams } from "@/hooks/useQueryParams";
 import ReviewList from "../_components/ReviewList";
 import Pagination from "../_components/Pagination";
 import { useGetReviews } from "../_hooks/useGetReviews";
-import { useQueryParams } from "@/hooks/useQueryParams";
+import {
+  QUERY_PARAMS,
+  SORT_OPTIONS,
+  SORT_BY,
+  SORT_ORDER,
+  DEFAULT_QUERY_VALUES,
+  REVIEW_LIMIT,
+} from "../_utils/constants";
+import { getInitialFilter } from "../_utils/queryUtils";
+import type { ReviewQuery } from "../types";
 
-const SORT = {
-  latest: "latest",
-  scoreDesc: "score-desc",
-  scoreAsc: "score-asc",
-};
-
-export default function Reviews({ gatheringId }: { gatheringId: string }) {
+export default function Reviews({ gatheringId, reviewQuery }: { gatheringId: string; reviewQuery: ReviewQuery }) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const paramsObj = useQueryParams();
   const params = new URLSearchParams(searchParams.toString());
-  const { data } = useGetReviews(gatheringId, paramsObj);
+  const query = Object.keys(paramsObj).length ? paramsObj : reviewQuery;
 
-  const [filter, setFilter] = useState(SORT.latest);
+  const { data } = useGetReviews(gatheringId, query);
+
+  // 현재 URL의 정렬 기준을 기반으로 초기 필터 설정
+  const [filter, setFilter] = useState(getInitialFilter(searchParams));
 
   const handlePageChange = (page: number) => {
-    const limit = 4;
+    const limit = REVIEW_LIMIT;
     const offset = (page - 1) * limit;
 
-    params.set("offset", offset.toString());
-    params.set("limit", limit.toString());
+    params.set(QUERY_PARAMS.OFFSET, offset.toString());
+    params.set(QUERY_PARAMS.LIMIT, limit.toString());
 
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -36,33 +43,37 @@ export default function Reviews({ gatheringId }: { gatheringId: string }) {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
 
-    if (value === SORT.latest) {
-      params.set("sortBy", "createdAt");
-      params.set("sortOrder", "desc");
-    } else if (value === SORT.scoreAsc) {
-      params.set("sortBy", "score");
-      params.set("sortOrder", "asc");
+    if (value === SORT_OPTIONS.LATEST) {
+      params.set(QUERY_PARAMS.SORT_BY, SORT_BY.CREATED_AT);
+      params.set(QUERY_PARAMS.SORT_ORDER, SORT_ORDER.DESC);
+    } else if (value === SORT_OPTIONS.SCORE_ASC) {
+      params.set(QUERY_PARAMS.SORT_BY, SORT_BY.SCORE);
+      params.set(QUERY_PARAMS.SORT_ORDER, SORT_ORDER.ASC);
     } else {
-      params.set("sortBy", "score");
-      params.set("sortOrder", "desc");
+      params.set(QUERY_PARAMS.SORT_BY, SORT_BY.SCORE);
+      params.set(QUERY_PARAMS.SORT_ORDER, SORT_ORDER.DESC);
     }
+
+    params.set(QUERY_PARAMS.OFFSET, "0"); // 첫페이지로
 
     setFilter(value);
 
     router.push(`${pathname}?${params.toString()}`);
   };
 
+  // 기본 URL 쿼리 값을 설정하는 useEffect
   useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
+    const defaultParams = new URLSearchParams(params.toString());
 
-    // sortBy, sortOrder가 없으면 기본값을 추가
-    if (!params.has("sortBy") || !params.has("sortOrder")) {
-      params.set("sortBy", "createdAt");
-      params.set("sortOrder", "desc");
+    if (!defaultParams.has(QUERY_PARAMS.GATHERING_ID)) {
+      defaultParams.set(QUERY_PARAMS.GATHERING_ID, gatheringId);
     }
 
-    // 현재 URL을 기본 정렬값이 적용된 URL로 변경
-    router.replace(`${pathname}?${params.toString()}`);
+    Object.entries(DEFAULT_QUERY_VALUES).forEach(([key, value]) => {
+      if (!defaultParams.has(key)) defaultParams.set(key, value);
+    });
+
+    router.replace(`${pathname}?${defaultParams.toString()}`);
   }, []);
 
   if (data.reviews.length === 0) {
@@ -75,9 +86,9 @@ export default function Reviews({ gatheringId }: { gatheringId: string }) {
         <h1 className="text-lg font-semibold">이용자들은 이 프로그램을 이렇게 느꼈어요!</h1>
 
         <select value={filter} onChange={handleChange}>
-          <option value="latest">최신순</option>
-          <option value="score-desc">리뷰 높은순</option>
-          <option value="score-asc">리뷰 낮은순</option>
+          <option value={SORT_OPTIONS.LATEST}>최신순</option>
+          <option value={SORT_OPTIONS.SCORE_DESC}>리뷰 높은순</option>
+          <option value={SORT_OPTIONS.SCORE_ASC}>리뷰 낮은순</option>
         </select>
       </div>
 
