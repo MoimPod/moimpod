@@ -7,7 +7,7 @@ type InactiveLayerProps = {
 };
 export default function InactiveLayer({ onClick, message, isCompleted }: InactiveLayerProps) {
   return (
-    <div className="absolute flex h-full w-full flex-col-reverse items-center justify-center gap-6 rounded-3xl bg-black bg-opacity-80 md:flex-col">
+    <div className="absolute flex h-full w-full flex-col-reverse items-center justify-center gap-6 rounded-xl bg-black bg-opacity-80 md:flex-col md:rounded-3xl">
       {!isCompleted && (
         <LikeButton className="md:absolute md:right-6 md:top-6 md:ml-auto" isClosed onClick={onClick} isLiked={false} />
       )}
