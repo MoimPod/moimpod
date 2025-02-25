@@ -53,7 +53,7 @@ export default function MyReviews() {
               key={review.id}
               className="w-full justify-between"
             >
-              <div className="flex h-full w-full flex-col gap-2 border-b-2 border-dashed">
+              <div className="flex h-full w-full flex-col gap-2 border-b-2 border-dashed pb-6">
                 <div className="flex flex-col gap-2.5">
                   <Score score={review.score} />
                   <ListItem.Body>{review.comment}</ListItem.Body>
