@@ -33,41 +33,37 @@ export default function MyCreatedGatherings() {
     <>
       {allGatherings.length ? (
         <>
-          <div className="w-full">
-            <div className="flex-1 divide-y-2 divide-dashed">
-              {allGatherings.map((gathering) => (
-                <div className="relative py-6" key={gathering.id}>
-                  <ListItem
-                    CardImage={
-                      <Image
-                        src={gathering.image}
-                        alt="모임 이미지"
-                        width={280}
-                        height={156}
-                        className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
-                      />
-                    }
-                    className="justify-between"
-                    canceledAt={gathering.canceledAt}
-                    isCompleted={false}
-                  >
-                    <div className="flex flex-col gap-2.5">
-                      <div className="flex flex-col gap-1">
-                        <ListItem.Title title={gathering.name} subtitle={gathering.location} />
-                        <ListItem.SubInfo
-                          date={gathering.dateTime}
-                          participantCount={gathering.participantCount}
-                          capacity={gathering.capacity}
-                        />
-                      </div>
-                    </div>
-                  </ListItem>
+          {allGatherings.map((gathering) => (
+            <div className="relative py-6" key={gathering.id}>
+              <ListItem
+                CardImage={
+                  <Image
+                    src={gathering.image}
+                    alt="모임 이미지"
+                    width={280}
+                    height={156}
+                    className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
+                  />
+                }
+                className="justify-between"
+                canceledAt={gathering.canceledAt}
+                isCompleted={false}
+              >
+                <div className="flex flex-col gap-2.5">
+                  <div className="flex flex-col gap-1">
+                    <ListItem.Title title={gathering.name} subtitle={gathering.location} />
+                    <ListItem.SubInfo
+                      date={gathering.dateTime}
+                      participantCount={gathering.participantCount}
+                      capacity={gathering.capacity}
+                    />
+                  </div>
                 </div>
-              ))}
+              </ListItem>
             </div>
-            <div ref={observerRef} className="h-10" />
-            {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
-          </div>
+          ))}
+          <div ref={observerRef} className="h-10" />
+          {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
         </>
       ) : (
         <div className="flex flex-1 items-center justify-center">

@@ -20,6 +20,7 @@ export default function MypageContent() {
   const [selectedTab, setSelectedTab] = useState(TAB_ITEMS[0]);
   // '나의 리뷰' 탭일 때만 카테고리를 보여줌
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
+
   return (
     <div className="flex flex-1 flex-col gap-6 border-t-2 border-gray-900 bg-white px-6 pt-6">
       <Tab
@@ -38,8 +39,7 @@ export default function MypageContent() {
           </Tab.Item>
         ))}
       </Tab>
-      <div className="flex flex-1">
-        {/* <div className="flex-1 border border-black">여기</div> */}
+      <div className={`flex flex-1 flex-col ${selectedCategory !== "작성한 리뷰" && "divide-y-2 divide-dashed"}`}>
         {selectedTab === "나의 모임" && <MyGatherings />}
         {selectedTab === "나의 리뷰" && selectedCategory === "작성 가능한 리뷰" && <ReviewableGatherings />}
         {selectedTab === "나의 리뷰" && selectedCategory === "작성한 리뷰" && <MyReviews />}
