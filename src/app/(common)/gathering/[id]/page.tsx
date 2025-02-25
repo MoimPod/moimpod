@@ -1,6 +1,7 @@
-import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import axiosInstance from "@/lib/axiosInstance";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import getQueryClient from "@/lib/getQueryClient";
 import Gathering from "../_components/Gathering";
 import Reviews from "../_components/Reviews";
 import FloatingBar from "../_components/FloatingBar";
@@ -24,7 +25,7 @@ export default async function Page({
   const limit = query.limit ?? REVIEW_LIMIT.toString();
   const reviewParams = { limit, offset, sortBy, sortOrder };
 
-  const queryClient = new QueryClient();
+  const queryClient = getQueryClient();
 
   // 서버에서 데이터를 미리 가져와 캐싱
   await Promise.all([
