@@ -26,8 +26,8 @@ export const SORT_ORDER = {
 } as const;
 
 export const DEFAULT_QUERY_VALUES = {
+  [QUERY_PARAMS.LIMIT]: REVIEW_LIMIT.toString(),
+  [QUERY_PARAMS.OFFSET]: "0",
   [QUERY_PARAMS.SORT_BY]: "createdAt",
   [QUERY_PARAMS.SORT_ORDER]: "desc",
-  [QUERY_PARAMS.OFFSET]: "0",
-  [QUERY_PARAMS.LIMIT]: REVIEW_LIMIT.toString(),
 } as const;

@@ -22,28 +22,30 @@ export default async function Page({
   const sortOrder = query.sortOrder ?? "desc";
   const offset = query.offset ?? "0";
   const limit = query.limit ?? REVIEW_LIMIT.toString();
-  const reviewParams = { sortBy, sortOrder, offset, limit };
+  const reviewParams = { limit, offset, sortBy, sortOrder };
 
   const queryClient = new QueryClient();
 
   // 서버에서 데이터를 미리 가져와 캐싱
-  await queryClient.prefetchQuery({
-    queryKey: ["participants", gatheringId],
-    queryFn: async () => {
-      const { data } = await axiosInstance.get(`/gatherings/${gatheringId}/participants`);
-      return data;
-    },
-  });
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: ["participants", gatheringId],
+      queryFn: async () => {
+        const { data } = await axiosInstance.get(`/gatherings/${gatheringId}/participants`);
+        return data;
+      },
+    }),
 
-  await queryClient.prefetchQuery({
-    queryKey: ["reviews", { gatheringId, ...reviewParams }],
-    queryFn: async () => {
-      const { data } = await axiosInstance.get(`/gatherings/${gatheringId}/reviews`, {
-        params: { gatheringId, ...reviewParams },
-      });
-      return data;
-    },
-  });
+    queryClient.prefetchQuery({
+      queryKey: ["reviews", { gatheringId, ...reviewParams }],
+      queryFn: async () => {
+        const { data } = await axiosInstance.get(`/gatherings/${gatheringId}/reviews`, {
+          params: { gatheringId, ...reviewParams },
+        });
+        return data;
+      },
+    }),
+  ]);
 
   const dehydratedState = dehydrate(queryClient);
 
