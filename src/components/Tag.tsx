@@ -1,5 +1,5 @@
 import Alarm from "@/images/alarm.svg";
-import { format, isAfter, isToday, differenceInDays, parseISO, isBefore } from "date-fns";
+import { format, formatISO, isBefore, isToday, differenceInDays, parseISO } from "date-fns";
 
 type TagProps = {
   registrationEnd: string; // 모집 마감 날짜를 받음
@@ -7,12 +7,13 @@ type TagProps = {
 
 export default function Tag({ registrationEnd }: TagProps) {
   const now = new Date();
+  const nowUTC = parseISO(formatISO(now)); // 현재 시간을 UTC 형식으로 변환
   const endDate = parseISO(registrationEnd); // 문자열을 Date 객체로 변환
 
   let displayText = "";
 
   if (isToday(endDate)) {
-    if (isBefore(endDate, now)) {
+    if (isBefore(endDate, nowUTC)) {
       // 현재 시간보다 마감 시간이 지났다면 "모집 마감" 출력
       displayText = "모집 마감";
     } else {
@@ -22,12 +23,10 @@ export default function Tag({ registrationEnd }: TagProps) {
 
       displayText = minutes === "00" ? `오늘 ${hours}시 마감` : `오늘 ${hours}시 ${minutes}분 마감`;
     }
-  } else if (isBefore(endDate, now)) {
-    // 날짜가 지났다면 태그 표시 X
-    return null;
   } else {
     // 날짜가 남았다면 "N일 후 마감"으로 표시
     const daysLeft = differenceInDays(endDate, now);
+
     displayText = `${daysLeft}일 후 마감`;
   }
 
