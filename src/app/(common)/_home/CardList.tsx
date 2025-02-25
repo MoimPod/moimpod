@@ -21,7 +21,6 @@ export default function CardList() {
 
   // 로그인 체크 훅
   const { checkAuth, isAuthModalOpen, setAuthModalOpen } = useCheckAuth();
-
   const shouldOpenCreateModal = useUserStore((state) => state.shouldOpenCreateModal);
   const setShouldOpenCreateModal = useUserStore((state) => state.setShouldOpenCreateModal);
 
@@ -36,6 +35,11 @@ export default function CardList() {
     checkAuth(() => setIsModalOpen(true)); // 로그인 여부 확인 후 실행
   };
   const handleClose = () => setIsModalOpen(false);
+
+  // 부모에서 필터를 업데이트할 때 기존 상태와 병합하는 함수
+  const handleFilterChange = (newFilter: Partial<typeof filters>) => {
+    setFilters((prev) => ({ ...prev, ...newFilter }));
+  };
 
   // 무한 스크롤 훅 사용
   const { observerRef } = useInfiniteScroll({ fetchNextPage, hasNextPage, isFetchingNextPage });
@@ -72,9 +76,9 @@ export default function CardList() {
       </div>
       <hr className="my-3" />
       <div className="px-6">
-        <GatheringFilters onChange={setFilters} />
+        <GatheringFilters onChange={handleFilterChange} />
 
-        {data?.pages[0].data.length === 0 || filteredCards?.length === 0 ? (
+        {data?.pages[0].data.length === 0 ? (
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>아직 모임이 없어요</p>
             <p className="mt-2">지금 바로 모임을 만들어보세요</p>
@@ -84,10 +88,10 @@ export default function CardList() {
             {filteredCards?.map((card) => (
               <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />
             ))}
-            {/* 무한 스크롤 감지용 div */}
-            <div ref={observerRef} className="h-10"></div>
           </>
         )}
+        {/* 무한 스크롤 감지용 div */}
+        <div ref={observerRef} className="h-10"></div>
         {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
       </div>
 
