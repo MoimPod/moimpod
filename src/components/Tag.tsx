@@ -12,22 +12,21 @@ export default function Tag({ registrationEnd }: TagProps) {
   let displayText = "";
 
   if (isToday(endDate)) {
-    // 오늘 마감인 경우
-    if (isAfter(endDate, now)) {
+    if (isBefore(endDate, now)) {
+      // 현재 시간보다 마감 시간이 지났다면 "모집 마감" 출력
+      displayText = "모집 마감";
+    } else {
       // 시간이 남았다면
       const hours = format(endDate, "HH");
       const minutes = format(endDate, "mm");
 
       displayText = minutes === "00" ? `오늘 ${hours}시 마감` : `오늘 ${hours}시 ${minutes}분 마감`;
-    } else {
-      // 시간 지났다면
-      displayText = "모집 마감";
     }
   } else if (isBefore(endDate, now)) {
     // 날짜가 지났다면 태그 표시 X
     return null;
   } else {
-    // 날짜가 남았다면
+    // 날짜가 남았다면 "N일 후 마감"으로 표시
     const daysLeft = differenceInDays(endDate, now);
     displayText = `${daysLeft}일 후 마감`;
   }

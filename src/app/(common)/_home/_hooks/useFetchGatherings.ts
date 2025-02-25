@@ -18,6 +18,7 @@ export const useFetchGatherings = (filters?: FetchParams) => {
         const response = await axiosInstance.get<CardData[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
           params: { ...filters, limit: 10, offset: pageParam },
         });
+        console.log("카드 확인용: ", response.data);
         return {
           data: response.data,
           nextOffset: response.data.length === 10 ? pageParam + 10 : null, // 다음 데이터가 있다면 마지막 id 저장
