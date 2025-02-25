@@ -15,7 +15,13 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 export default function CardList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filters, setFilters] = useState<{ city?: string; district?: string; dateTime?: string; sortBy?: string }>({});
+  const [filters, setFilters] = useState<{
+    city?: string;
+    district?: string;
+    dateTime?: string;
+    sortBy?: string;
+    type?: string;
+  }>({});
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings(filters);
 
@@ -44,10 +50,11 @@ export default function CardList() {
   // 무한 스크롤 훅 사용
   const { observerRef } = useInfiniteScroll({ fetchNextPage, hasNextPage, isFetchingNextPage });
 
-  // 마감되지 않은 모임만 필터링
-  const filteredCards = data?.pages.flatMap((page) =>
-    page.data.filter((card) => !card.registrationEnd || new Date(card.registrationEnd) >= new Date()),
-  );
+  // 마감되지 않은 모임 필터 적용
+  const filteredCards =
+    data?.pages
+      .flatMap((page) => page.data)
+      .filter((card) => !card.registrationEnd || new Date(card.registrationEnd) >= new Date()) || [];
 
   return (
     <div>
@@ -60,9 +67,13 @@ export default function CardList() {
       </div>
       <div className="px-6 pt-6">
         <div className="flex items-center">
-          <ServiceTab />
+          <ServiceTab
+            onCategoryChange={(type) => {
+              handleFilterChange({ type }); // 필터링 값 업데이트
+            }}
+          />
           <div className="ml-auto w-[114px]">
-            <Button styleType="solid" size="sm" className="h-10 md:h-11" onClick={handleOpen}>
+            <Button styleType="solid" size="sm" className="h-10 px-3 md:h-11" onClick={handleOpen}>
               모임 만들기
             </Button>
             <LoginPopup
