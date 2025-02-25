@@ -16,7 +16,7 @@ export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
               </div>
               <ListItem.MetaInfo primary={item.user.name} secondary={item.createdAt} />
             </ListItem>
-            <DashedLine />
+            <DashedLine className="mt-4" />
           </div>
         ))}
       </div>

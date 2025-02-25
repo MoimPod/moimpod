@@ -12,7 +12,7 @@ export const useJoin = (gatheringId: string) => {
     mutationFn: (gatheringId: string) => joinGathering(gatheringId),
     onSuccess: () =>
       queryClient.invalidateQueries({
-        queryKey: [gatheringId, "participants"],
+        queryKey: ["participants", gatheringId],
       }),
     onError: (e) => console.error(e.message),
   });

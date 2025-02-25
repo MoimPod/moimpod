@@ -4,7 +4,7 @@ import type { GatheringType } from "@/app/(common)/gathering/types";
 
 type GatheringProps = {
   gathering: GatheringType;
-  profileImages: (string | null)[];
+  profileImages?: (string | null)[];
 };
 
 export default function Gathering({ gathering, profileImages }: GatheringProps) {

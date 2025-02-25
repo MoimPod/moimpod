@@ -29,10 +29,12 @@ export default function FloatingBar({ gatheringId, hostUserId }: FloatingBarProp
 
   const { user } = useUserStore();
 
-  const { data: participantIdList } = useGetParticipants(gatheringId);
+  const { data: participantList } = useGetParticipants(gatheringId);
   const { mutate: mutateJoin, isPending } = useJoin(gatheringId);
-  const { mutate: mutateLeaveGathering } = useLeaveGathering([gatheringId, "participants"]);
+  const { mutate: mutateLeaveGathering } = useLeaveGathering(["participants", gatheringId]);
   const { mutate: mutateCancelGathering } = useCancelGathering();
+
+  const participantIdList = participantList?.map((participant) => participant.userId);
 
   const isHost = user?.id === hostUserId;
   const isJoined = user ? participantIdList?.includes(user?.id) : false;
