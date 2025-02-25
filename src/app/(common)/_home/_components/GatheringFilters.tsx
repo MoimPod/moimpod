@@ -14,7 +14,6 @@ type GatheringFiltersProps = {
 const sortOption = [
   { label: "마감 임박", value: "registrationEnd" },
   { label: "참여 인원 순", value: "participantCount" },
-  // { label: "모임 날짜 순", value: "dateTime" },
 ] as const;
 
 export default function GatheringFilters({ onChange }: GatheringFiltersProps) {
@@ -52,8 +51,8 @@ export default function GatheringFilters({ onChange }: GatheringFiltersProps) {
             onDateChange={(date) => {
               if (date) {
                 const formattedDate = format(date, "yyyy-MM-dd");
-                params.set("dateTime", formattedDate);
-                router.push(`${pathname}?${formattedDate}`);
+                params.set("date", formattedDate);
+                router.push(`${pathname}?${params.toString()}`);
                 onChange({ date: formattedDate });
               } else {
                 params.delete("date");
