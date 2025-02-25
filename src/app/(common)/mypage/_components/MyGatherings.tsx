@@ -82,6 +82,7 @@ export default function MyGatherings() {
                         className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
                       />
                     }
+                    isCompleted={gathering.isCompleted}
                     canceledAt={gathering.canceledAt}
                     handleCancel={() => mutation.mutate(gathering.id)}
                     className="justify-between"
