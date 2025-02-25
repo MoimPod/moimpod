@@ -34,7 +34,8 @@ export default function ReviewableGatherings() {
     isFetchingNextPage,
     fetchNextPage,
   });
-  const allGatherings = data?.pages.flatMap((page) => page.data) || [];
+  // 페이지 내부 내용 중 canceledAt이 null인 모임만
+  const allGatherings = (data?.pages.flatMap((page) => page.data) || []).filter((gathering) => !gathering.canceledAt);
 
   if (isLoading)
     return (
