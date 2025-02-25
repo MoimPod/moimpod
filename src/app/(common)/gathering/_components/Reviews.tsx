@@ -14,6 +14,7 @@ import {
   DEFAULT_QUERY_VALUES,
   REVIEW_LIMIT,
 } from "../_utils/constants";
+import { getInitialFilter } from "../_utils/queryUtils";
 import type { ReviewQuery } from "../types";
 
 export default function Reviews({ gatheringId, reviewQuery }: { gatheringId: string; reviewQuery: ReviewQuery }) {
@@ -26,7 +27,8 @@ export default function Reviews({ gatheringId, reviewQuery }: { gatheringId: str
 
   const { data } = useGetReviews(gatheringId, query);
 
-  const [filter, setFilter] = useState(SORT_OPTIONS.LATEST);
+  // 현재 URL의 정렬 기준을 기반으로 초기 필터 설정
+  const [filter, setFilter] = useState(getInitialFilter(searchParams));
 
   const handlePageChange = (page: number) => {
     const limit = REVIEW_LIMIT;
@@ -59,6 +61,7 @@ export default function Reviews({ gatheringId, reviewQuery }: { gatheringId: str
     router.push(`${pathname}?${params.toString()}`);
   };
 
+  // 기본 URL 쿼리 값을 설정하는 useEffect
   useEffect(() => {
     const defaultParams = new URLSearchParams(params.toString());
 
