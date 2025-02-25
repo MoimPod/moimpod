@@ -6,7 +6,7 @@ import MyReviews from "@/app/(common)/mypage/_components/MyReviews";
 import ReviewableGatherings from "@/app/(common)/mypage/_components/ReviewableGatherings";
 import CategoryButton from "@/components/CategoryButton";
 import Tab from "@/components/Tab";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const TAB_ITEMS = ["나의 모임", "나의 리뷰", "내가 만든 모임"];
 const CATEGORIES = ["작성 가능한 리뷰", "작성한 리뷰"];
@@ -21,6 +21,12 @@ export default function MypageContent() {
   // '나의 리뷰' 탭일 때만 카테고리를 보여줌
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
 
+  useEffect(() => {
+    // '나의 리뷰'가 아닌 탭으로 이동할 경우 카테고리를 기본값으로 초기화
+    if (selectedTab !== "나의 리뷰") {
+      setSelectedCategory(CATEGORIES[0]);
+    }
+  }, [selectedTab]);
   return (
     <div className="flex flex-1 flex-col gap-6 border-t-2 border-gray-900 bg-white px-6 pt-6">
       <Tab
@@ -35,7 +41,13 @@ export default function MypageContent() {
       >
         {TAB_ITEMS.map((tabItem, idx) => (
           <Tab.Item key={tabItem} index={idx}>
-            <button onClick={() => setSelectedTab(tabItem)}>{tabItem}</button>
+            <button
+              onClick={() => {
+                setSelectedTab(tabItem);
+              }}
+            >
+              {tabItem}
+            </button>
           </Tab.Item>
         ))}
       </Tab>
