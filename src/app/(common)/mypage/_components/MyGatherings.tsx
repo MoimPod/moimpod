@@ -41,7 +41,7 @@ export default function MyGatherings() {
     setModalOpen(false);
   };
 
-  const mutation = useLeaveGathering(["gatherings"]);
+  const mutation = useLeaveGathering(["user", "gatherings"]);
 
   // 무한 스크롤을 감지할 ref
   const { observerRef } = useInfiniteScroll({
