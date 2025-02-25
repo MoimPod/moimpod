@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { format } from "date-fns";
 import DateSelect from "@/components/Filtering/DateSelect";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import SortButton from "@/components/SortButton";
 
 type GatheringFiltersProps = {
-  onChange: (filters: Partial<{ location?: string; dateTime?: string; sortBy?: string }>) => void;
+  onChange: (filters: Partial<{ location?: string; date?: string; sortBy?: string }>) => void;
 };
 
 const sortOption = [
@@ -49,7 +50,16 @@ export default function GatheringFilters({ onChange }: GatheringFiltersProps) {
           />
           <DateSelect
             onDateChange={(date) => {
-              onChange({ dateTime: date ? date.toISOString() : undefined });
+              if (date) {
+                const formattedDate = format(date, "yyyy-MM-dd");
+                params.set("dateTime", formattedDate);
+                router.push(`${pathname}?${formattedDate}`);
+                onChange({ date: formattedDate });
+              } else {
+                params.delete("date");
+                router.push(`${pathname}`); // url 초기화
+                onChange({ date: undefined });
+              }
             }}
           />
         </div>

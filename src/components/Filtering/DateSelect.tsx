@@ -57,6 +57,7 @@ export default function DateSelect({ onDateChange }: DateSelectProps) {
                 className="h-10 w-[118px]"
                 onClick={() => {
                   setSelectedDate(null);
+                  onDateChange(null);
                 }}
               >
                 초기화
@@ -69,6 +70,7 @@ export default function DateSelect({ onDateChange }: DateSelectProps) {
                 disabled={!tempSelectedDate} // 날짜가 선택되지 않으면 비활성화
                 onClick={() => {
                   setSelectedDate(tempSelectedDate);
+                  onDateChange(tempSelectedDate);
                   setDateDropdownOpen(false);
                 }}
               >

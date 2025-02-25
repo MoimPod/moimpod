@@ -4,7 +4,7 @@ import axiosInstance from "@/lib/axiosInstance";
 
 type FetchParams = {
   location?: string;
-  dateTime?: string;
+  date?: string;
   sortBy?: string;
   sortOrder?: "asc"; // 오름차순 정렬
 };
