@@ -27,7 +27,6 @@ export default function Card({
 
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
   const isClosed = Boolean(registrationEnd && new Date(registrationEnd) < new Date()); //모집이 마감되었는지
-  //const [isLiked, setIsLiked] = useState(false);
 
   const isLiked = favorites.includes(id.toString());
 
