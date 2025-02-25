@@ -61,6 +61,7 @@ export default function ServiceTab({ onCategoryChange }: ServiceTabProps) {
         {SERVICE_TABS.map((tabItem, idx) => (
           <Tab.Item key={tabItem.name} index={idx}>
             <button onClick={() => handleTabChange(tabItem.name)}>{tabItem.name}</button>
+            <tabItem.icon />
           </Tab.Item>
         ))}
       </Tab>
