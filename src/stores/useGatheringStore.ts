@@ -22,7 +22,7 @@ type GatheringStore = {
   selectedCategory: string;
   sortBy: string;
   selectedDateTime: string | null;
-  setFilters: (filters: { location?: string; category?: string; dateTime?: string; sortBy?: string }) => void;
+  setFilters: (filters: { location?: string; category?: string; date?: string; sortBy?: string }) => void;
   fetchGatherings: () => Promise<void>;
 };
 

@@ -64,7 +64,6 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   useEffect(() => {
     if (formData.meetingDateTime && isValidDate(formData.meetingDateTime)) {
       setValue("dateTime", format(formData.meetingDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
-      console.log(format(formData.meetingDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
     }
   }, [formData.meetingDateTime, setValue]);
 

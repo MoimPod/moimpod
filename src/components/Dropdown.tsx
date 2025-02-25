@@ -63,7 +63,7 @@ export default function Dropdown({
     <div className="relative w-full" ref={dropdownRef}>
       <div
         className={cn(
-          "mb-2 flex w-full cursor-pointer items-center justify-between rounded-xl border p-2 text-sm font-medium",
+          "mb-2 flex w-28 cursor-pointer items-center justify-between rounded-xl border p-2 text-sm font-medium",
           className,
           isOpen ? "bg-gray-900 text-white" : "bg-gray-50",
           selected ? "text-gray-800" : "",

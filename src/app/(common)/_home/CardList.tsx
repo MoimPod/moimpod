@@ -16,9 +16,8 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 export default function CardList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filters, setFilters] = useState<{
-    city?: string;
-    district?: string;
-    dateTime?: string;
+    location?: string;
+    date?: string;
     sortBy?: string;
     type?: string;
   }>({});
