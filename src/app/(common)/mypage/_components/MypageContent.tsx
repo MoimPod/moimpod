@@ -39,7 +39,9 @@ export default function MypageContent() {
           </Tab.Item>
         ))}
       </Tab>
-      <div className={`flex flex-1 flex-col ${selectedCategory !== "작성한 리뷰" && "divide-y-2 divide-dashed"}`}>
+      <div
+        className={`flex flex-1 flex-col ${selectedCategory !== "작성한 리뷰" ? "divide-y-2 divide-dashed" : "gap-6"}`}
+      >
         {selectedTab === "나의 모임" && <MyGatherings />}
         {selectedTab === "나의 리뷰" && selectedCategory === "작성 가능한 리뷰" && <ReviewableGatherings />}
         {selectedTab === "나의 리뷰" && selectedCategory === "작성한 리뷰" && <MyReviews />}
