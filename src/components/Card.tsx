@@ -82,7 +82,7 @@ export default function Card({
             <div className="text-sm text-gray-500">
               <AnimatedParticipantCount participantCount={participantCount} capacity={capacity} />
             </div>
-            {participantCount === capacity ? <ConfirmedStamp /> : null}
+            {participantCount >= 5 ? <ConfirmedStamp /> : null}
           </div>
 
           <div className="flex items-center gap-x-5">
