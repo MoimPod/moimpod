@@ -86,23 +86,25 @@ export default function CardList() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // 스크롤 이벤트 핸들러
-  const handleScroll = () => {
-    if (scrollContainerRef.current) {
-      setScrollTop(scrollContainerRef.current.scrollTop);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollContainerRef.current) {
+        setScrollTop(scrollContainerRef.current.scrollTop);
+      }
+    };
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
     }
-  };
+    return () => {
+      if (container) {
+        container.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
 
   return (
-    <div className="relative">
-      {/* 상단 페이드 아웃 효과 */}
-      <div
-        className="pointer-events-none absolute left-0 top-0 z-10 h-12 w-full bg-gradient-to-b from-white to-transparent transition-opacity duration-300"
-        style={{ opacity: scrollTop > 20 ? 1 : 0 }}
-      />
-
-      {/* 하단 페이드 인 효과 */}
-      <div className="pointer-events-none absolute bottom-0 left-0 z-10 h-12 w-full bg-gradient-to-t from-white to-transparent" />
-
+    <div className="relative h-screen">
       <div className="mb-5 flex gap-6 pt-8">
         <GatheringLogo />
         <div>
@@ -132,6 +134,11 @@ export default function CardList() {
       </div>
       <hr className="my-3" />
       <GatheringFilters onChange={handleFilterChange} />
+      {/* 상단 페이드 아웃 효과 */}
+      <div
+        className="pointer-events-none absolute left-0 z-10 h-12 w-full bg-gradient-to-t from-transparent to-gray-50"
+        style={{ opacity: scrollTop > 10 ? 1 : 0 }}
+      />
 
       <div ref={scrollContainerRef} className="relative max-h-[80vh] overflow-y-auto px-6">
         {data?.pages[0].data.length === 0 ? (
@@ -149,6 +156,8 @@ export default function CardList() {
         {/* 무한 스크롤 감지용 div */}
         <div ref={observerRef} className="h-10"></div>
         {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
+        {/* 하단 페이드 인 효과 */}
+        <div className="pointer-events-none absolute bottom-0 left-0 z-10 h-12 w-full bg-gradient-to-t from-white to-transparent" />
       </div>
 
       <CreateGatheringsModal isOpen={isModalOpen} onClose={handleClose} />
