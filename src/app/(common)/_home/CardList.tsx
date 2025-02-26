@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
 import ServiceTab from "@/app/(common)/_home/_components/ServiceTab";
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
@@ -14,13 +15,22 @@ import { useUserStore } from "@/stores/useUserStore";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 export default function CardList() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParamsString = searchParams.toString();
+
+  const filters = useMemo(
+    () => ({
+      location: searchParams.get("location") || undefined,
+      date: searchParams.get("date") || undefined,
+      sortBy: searchParams.get("sortBy") || undefined,
+      type: searchParams.get("type") || undefined,
+    }),
+    [searchParamsString],
+  );
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filters, setFilters] = useState<{
-    location?: string;
-    date?: string;
-    sortBy?: string;
-    type?: string;
-  }>({});
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings(filters);
 
@@ -41,21 +51,25 @@ export default function CardList() {
   };
   const handleClose = () => setIsModalOpen(false);
 
-  // 부모에서 필터를 업데이트할 때 기존 상태와 병합하는 함수
+  // 필터를 업데이트 : searchParamsString을 사용하여 불필요한 재생성 방지
   const handleFilterChange = useCallback(
     (newFilter: Partial<typeof filters>) => {
-      setFilters((prev) => {
-        const updatedFilters = { ...prev, ...newFilter };
+      const params = new URLSearchParams(searchParamsString);
 
-        // 상태가 변경되지 않았다면 업데이트 방지 (무한 루프 방지)
-        if (JSON.stringify(prev) === JSON.stringify(updatedFilters)) {
-          return prev;
+      Object.entries(newFilter).forEach(([key, value]) => {
+        if (value) {
+          params.set(key, value);
+        } else {
+          params.delete(key);
         }
-
-        return updatedFilters;
       });
+      const newParamsString = params.toString();
+
+      if (newParamsString !== searchParamsString) {
+        router.push(`${pathname}?${newParamsString}`);
+      }
     },
-    [setFilters],
+    [searchParamsString, router, pathname],
   );
 
   // 무한 스크롤 훅 사용
