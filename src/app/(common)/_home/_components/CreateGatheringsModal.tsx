@@ -163,8 +163,8 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
             <LocationSelect
               selectedLocation={formData.selectedLocation}
               setSelectedLocation={(location) => {
-                updateFormData("selectedLocation", location);
-                setValue("location", location);
+                updateFormData("selectedLocation", location || "");
+                setValue("location", location || "");
               }}
               className="w-full border-none text-gray-400"
             />
