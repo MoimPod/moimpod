@@ -101,15 +101,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     }
   }, [isOpen, reset]);
 
-  useEffect(() => {
-    console.log("🟢 isValid 상태:", isValid);
-  }, [isValid]);
-
   const { mutate: createGathering, isPending } = useCreateGathering();
-
-  useEffect(() => {
-    console.log("🔵 isPending 상태:", isPending);
-  }, [isPending]);
 
   // 제출 확인용
   const onSubmit = async (data: FormDataType) => {
