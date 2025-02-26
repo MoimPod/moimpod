@@ -69,7 +69,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
 
   useEffect(() => {
     if (formData.deadlineDateTime && isValidDate(formData.deadlineDateTime)) {
-      setValue("dateTime", dayjs(formData.deadlineDateTime).format("YYYY-MM-DDTHH:mm:ss"));
+      setValue("registrationEnd", dayjs(formData.deadlineDateTime).format("YYYY-MM-DDTHH:mm:ss"));
     }
   }, [formData.deadlineDateTime, setValue]);
 
