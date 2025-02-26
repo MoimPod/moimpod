@@ -18,29 +18,21 @@ export type CardData = {
 type GatheringStore = {
   allCards: CardData[]; // API에서 받아온 전체 모임 데이터
   filteredCards: CardData[]; // 필터링된 모임 데이터
-  selectedCity: string;
-  selectedDistrict: string;
+  selectedLocation: string;
   selectedCategory: string;
   sortBy: string;
-  selectedDateTime: string | null;
-  setFilters: (filters: {
-    city?: string;
-    district?: string;
-    category?: string;
-    dateTime?: string;
-    sortBy?: string;
-  }) => void;
+  selectedDate: string | null;
+  setFilters: (filters: { location?: string; category?: string; date?: string; sortBy?: string }) => void;
   fetchGatherings: () => Promise<void>;
 };
 
 export const useGatheringStore = create<GatheringStore>((set, get) => ({
   allCards: [],
   filteredCards: [],
-  selectedCity: "",
-  selectedDistrict: "",
+  selectedLocation: "",
   selectedCategory: "전체",
-  sortBy: "dateTime",
-  selectedDateTime: null,
+  sortBy: "date",
+  selectedDate: null,
   setFilters: (filters) => {
     set((state) => ({
       ...state,
@@ -48,17 +40,17 @@ export const useGatheringStore = create<GatheringStore>((set, get) => ({
     }));
   },
   fetchGatherings: async () => {
-    const { selectedCity, selectedDistrict, selectedCategory, selectedDateTime, sortBy } = get();
+    const { selectedLocation, selectedCategory, selectedDate, sortBy } = get();
 
     try {
       const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
         params: {
           id: undefined, // 특정 id 검색이 필요할 때 사용
           type: selectedCategory !== "전체" ? selectedCategory : undefined, // DALLAEMFIT, WORKATION 등
-          location: selectedCity || undefined, // 선택한 시/도
-          dateTime: selectedDateTime || undefined, // 특정 날짜 선택
+          location: selectedLocation || undefined, // 선택한 장소
+          date: selectedDate || undefined, // 특정 날짜 선택
           createdBy: undefined, // 특정 사용자가 만든 모임 검색 시 사용
-          sortBy, // dateTime, registrationEnd, participantCount 등
+          sortBy, // date, registrationEnd, participantCount 등
         },
       });
 

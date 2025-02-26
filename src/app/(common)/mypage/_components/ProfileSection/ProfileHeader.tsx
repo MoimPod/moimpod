@@ -6,7 +6,7 @@ type ProfileHeaderProps = {
 // 제목 및 편집 버튼
 export default function ProfileHeader({ onEditClick }: ProfileHeaderProps) {
   return (
-    <div className="flex h-[64px] w-full items-start justify-between rounded-t-3xl bg-[url('/images/profile_background.svg')] bg-cover bg-right bg-no-repeat px-6 pt-4">
+    <div className="flex h-[64px] w-full items-start justify-between bg-blue-4 px-6 pt-4">
       <span className="text-lg font-semibold">내 프로필</span>
       <button onClick={onEditClick}>
         <Edit width="32" height="32" className="text-gray-200" />

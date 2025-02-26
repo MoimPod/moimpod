@@ -94,10 +94,10 @@ export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyNam
           />
         </div>
         <div className="flex gap-4">
-          <Button onClick={onClose} styleType="outline">
+          <Button onClick={onClose} styleType="outline" className="w-full">
             취소
           </Button>
-          <Button type="submit" disabled={!isDirty || !isValid}>
+          <Button type="submit" disabled={!isDirty || !isValid} className="w-full">
             수정하기
           </Button>
         </div>

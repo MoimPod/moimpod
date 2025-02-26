@@ -3,11 +3,12 @@
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Modal from "@/components/Modal";
+import { Popup } from "@/components/Popup";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type FormValues = {
@@ -22,6 +23,10 @@ export default function SignUp() {
   // 회원가입 성공시 modal
   const [isModal, setIsModal] = useState(false);
   const router = useRouter();
+  // 홈버튼 눌렀을때 나오는 modal
+  const [isOpenPopup, setIsOpenPopup] = useState(false);
+
+  const [LoginProgress, setLoginProgress] = useState(false);
 
   const {
     register,
@@ -65,6 +70,7 @@ export default function SignUp() {
       clearErrors("passwordCheck");
     }
     if (InvalidError) return;
+    setLoginProgress(true);
     const result = await postSignUp({ name, email, companyName, password });
     if (result.message === "사용자 생성 성공") {
       setIsModal(true);
@@ -72,6 +78,7 @@ export default function SignUp() {
       if (result.message === "Database error") {
         setError("email", { type: "manual", message: "중복된 이메일입니다." });
       }
+      setLoginProgress(false);
     }
   };
 
@@ -83,6 +90,16 @@ export default function SignUp() {
       console.error("회원가입에 실패 하였습니다.", error);
     }
   };
+
+  useEffect(() => {
+    if (!LoginProgress) {
+      const tokenExists = document.cookie.split(";").some((cookie) => cookie.trim().startsWith("token="));
+      if (tokenExists) {
+        alert("비정상적인 접근입니다.");
+        router.push("/");
+      }
+    }
+  }, [LoginProgress]);
 
   // 비밀번호 변경시 보이는 icon
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -96,7 +113,15 @@ export default function SignUp() {
           className="m-auto flex w-full flex-col rounded-3xl bg-white px-4 py-8 md:max-w-[608px] xl:m-0 xl:max-w-[510px] xl:px-14"
         >
           <div className="flex flex-col items-center justify-center gap-4">
-            <Image src={"/images/auth_icon.svg"} alt={""} width={50} height={50} />
+            <button
+              type="button"
+              onClick={() => {
+                setIsOpenPopup(true);
+              }}
+              className="flex flex-col items-center justify-center gap-4"
+            >
+              <Image src={"/images/auth_icon.svg"} alt={""} width={50} height={50} />
+            </button>
             <p className="text-center text-xl font-semibold text-gray-800">회원가입</p>
           </div>
           <div className="m-auto w-full max-w-[500px]">
@@ -188,7 +213,7 @@ export default function SignUp() {
                 </button>
               </div>
             </div>
-            <Button size="lg" disabled={!isValid} className="mt-10">
+            <Button disabled={!isValid} className="mt-10 w-full">
               확인
             </Button>
             <div className="flex-ro mt-6 flex justify-center">
@@ -202,6 +227,21 @@ export default function SignUp() {
             </div>
           </div>
         </form>
+        <Popup
+          isOpen={isOpenPopup}
+          type="confirm"
+          onClose={() => {
+            setIsOpenPopup(false);
+          }}
+          onClick={() => {
+            router.push("/");
+          }}
+        >
+          <p>
+            정말 나가시겠어요? <br />
+            작성된 내용이 모두 삭제됩니다.
+          </p>
+        </Popup>
         {isModal ? (
           <>
             <Modal

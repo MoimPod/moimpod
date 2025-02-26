@@ -16,6 +16,7 @@ type CategoryButtonProps = {
   children: React.ReactNode;
   className?: string;
   setValue?: (value: string) => void;
+  onChange?: (value: string) => void;
 };
 
 export default function CategoryButton({
@@ -23,6 +24,7 @@ export default function CategoryButton({
   defaultCategory,
   children,
   setValue,
+  onChange,
   className,
 }: CategoryButtonProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>(defaultCategory ?? categories[0]);
@@ -30,6 +32,7 @@ export default function CategoryButton({
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
     setValue?.(category);
+    onChange?.(category);
   };
 
   return (
@@ -55,13 +58,26 @@ CategoryButton.Title = function Title({ category }: { category: string }) {
   );
 };
 
-CategoryButton.Checkbox = function Checkbox({ category, subText }: { category: string; subText?: string }) {
+type CheckboxProps = {
+  category: string;
+  label?: string; // 보여질 라벨(한글)
+  subText: string;
+};
+
+CategoryButton.Checkbox = function Checkbox({ category, label, subText }: CheckboxProps) {
   const { selectedCategory, setSelectedCategory } = useContext(CategoryContext);
-  const isSelected = selectedCategory === category;
+  const isSelected = selectedCategory === subText;
 
   return (
     <button
-      onClick={() => setSelectedCategory(category)}
+      type="button"
+      onClick={() => {
+        if (isSelected) {
+          setSelectedCategory("");
+        } else {
+          setSelectedCategory(subText);
+        }
+      }}
       className={`flex h-[70px] flex-col items-start justify-center rounded-lg border p-2.5 px-4 text-sm font-medium ${
         isSelected ? "bg-gray-900 text-white" : "bg-gray-200"
       }`}
@@ -70,9 +86,10 @@ CategoryButton.Checkbox = function Checkbox({ category, subText }: { category: s
         {isSelected ? <CheckedIcon /> : <UncheckedIcon />}
         <div className="flex flex-col p-1">
           <span className="justify-start font-bold">{category}</span>
-          {subText && (
-            <span className={`text-xs ${isSelected ? "bg-gray-900 text-white" : "bg-gray-200"}`}>{subText}</span>
-          )}
+
+          <span className={`text-xs ${isSelected ? "bg-gray-900 text-white" : "bg-gray-200"}`}>
+            {subText ? (label === "워케이션" ? "" : label) : ""}
+          </span>
         </div>
       </div>
     </button>

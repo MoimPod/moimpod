@@ -1,11 +1,14 @@
 "use client";
 
 import CardList from "./_home/CardList";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
-    <div>
-      <CardList />
+    <div className="w-full">
+      <Suspense>
+        <CardList />
+      </Suspense>
     </div>
   );
 }

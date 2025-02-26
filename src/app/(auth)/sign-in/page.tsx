@@ -1,13 +1,16 @@
 "use client";
 
+import { clearAuthModalState, restoreAuthModalState } from "@/app/(common)/_home/_hooks/useCheckAuth";
+import { getUser, User } from "@/app/api/getUser";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { useUserStore } from "@/stores/useUserStore";
+import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type FormValues = {
@@ -24,8 +27,10 @@ export default function SignIn() {
     formState: { errors, isValid },
   } = useForm<FormValues>({ mode: "onChange" });
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [LoginProgress, setLoginProgress] = useState(false);
   const router = useRouter();
   const setUser = useUserStore((state) => state.setUser);
+  const queryClient = useQueryClient();
 
   const handleLogin = async (data: FormValues) => {
     const { email, password } = data;
@@ -43,15 +48,31 @@ export default function SignIn() {
       clearErrors("password");
     }
     if (LoginError) return;
+    setLoginProgress(true);
     const result = await postSignIn({ email, password });
     if (result.token) {
-      // 토큰이 들어왔을때 cookies로 저장하기
+      // 토큰 저장
       document.cookie = `token=${result.token};`;
-      const userInfo = await getUser(result.token);
-      // user 정보 저장하기
-      setUser(userInfo); // setUser 호출
-      // 로그인 성공 이후 main으로 이동
-      router.push("/");
+      // TanStack Query를 사용하여 유저 정보 불러오기 (제네릭을 통해 User 타입 지정)
+      queryClient
+        .fetchQuery<User>({
+          queryKey: ["user"],
+          queryFn: getUser,
+        })
+        .then((userInfo) => {
+          const shouldOpenModal = restoreAuthModalState();
+          // user 정보 저장
+          setUser(userInfo);
+          // 로그인 성공 후 메인 페이지로 이동
+          router.push("/");
+          if (shouldOpenModal) {
+            useUserStore.getState().setShouldOpenCreateModal(true);
+          }
+          clearAuthModalState();
+        })
+        .catch((error) => {
+          console.error("유저 정보를 불러오는 중 에러 발생:", error);
+        });
     } else {
       if (result.status === 401) {
         setError("password", { type: "manual", message: "비밀번호가 아이디와 일치하지 않습니다." });
@@ -59,6 +80,7 @@ export default function SignIn() {
       if (result.status === 404) {
         setError("email", { type: "manual", message: "존재하지 않는 아이디입니다." });
       }
+      setLoginProgress(false);
     }
   };
 
@@ -71,23 +93,29 @@ export default function SignIn() {
     }
   };
 
-  const getUser = async (token: string) => {
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/user`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return response.data;
-    } catch (error) {
-      return error;
+  useEffect(() => {
+    if (!LoginProgress) {
+      const tokenExists = document.cookie.split(";").some((cookie) => cookie.trim().startsWith("token="));
+      if (tokenExists) {
+        alert("비정상적인 접근입니다.");
+        router.push("/");
+      }
     }
-  };
+  }, [LoginProgress]);
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-white p-4">
       <div className="flex w-full flex-col lg:max-w-[608px] xl:max-w-[510px]">
         <form onSubmit={handleSubmit(handleLogin)} className="flex w-full flex-col rounded-3xl bg-white p-4">
           <div className="flex flex-col items-center justify-center gap-4">
-            <Image src={"/images/auth_icon.svg"} alt={""} width={50} height={50} />
+            <button
+              type="button"
+              onClick={() => {
+                router.push("/");
+              }}
+            >
+              <Image src={"/images/auth_icon.svg"} alt={""} width={50} height={50} />
+            </button>
             <p className="text-center text-xl font-semibold text-gray-800">로그인</p>
           </div>
           <div className="m-auto w-full max-w-[500px]">
@@ -129,7 +157,7 @@ export default function SignIn() {
                 </button>
               </div>
             </div>
-            <Button size="lg" disabled={!isValid} className="mt-10" type="submit">
+            <Button disabled={!isValid} className="mt-10 w-full" type="submit">
               로그인
             </Button>
             <div className="flex-ro mt-6 flex justify-center">

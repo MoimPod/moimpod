@@ -33,12 +33,13 @@ export default function DateSelect({ onDateChange }: DateSelectProps) {
     if (isDateDropdownOpen) {
       setTempSelectedDate(selectedDate);
     }
-  }, [isDateDropdownOpen]);
+  }, [isDateDropdownOpen, selectedDate]);
 
   return (
-    <div className="relative max-w-sm" ref={dropdownRef}>
+    <div className="relative w-full" ref={dropdownRef}>
       {/* 드롭다운 버튼 */}
       <Dropdown
+        open={isDateDropdownOpen}
         selected={selectedDate ? format(selectedDate, "yy/MM/dd") : "날짜 선택"}
         onSelect={() => setDateDropdownOpen(!isDateDropdownOpen)}
         onToggle={setDateDropdownOpen}
@@ -51,22 +52,27 @@ export default function DateSelect({ onDateChange }: DateSelectProps) {
             {/* 버튼 */}
             <div className="mt-3 flex justify-center gap-2">
               <Button
+                type="button"
                 styleType="outline"
                 size="sm"
                 className="h-10 w-[118px]"
                 onClick={() => {
                   setSelectedDate(null);
+                  onDateChange(null);
+                  setDateDropdownOpen(false);
                 }}
               >
                 초기화
               </Button>
               <Button
+                type="button"
                 styleType="solid"
                 size="sm"
                 className="h-10 w-[118px]"
                 disabled={!tempSelectedDate} // 날짜가 선택되지 않으면 비활성화
                 onClick={() => {
                   setSelectedDate(tempSelectedDate);
+                  onDateChange(tempSelectedDate);
                   setDateDropdownOpen(false);
                 }}
               >

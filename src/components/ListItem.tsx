@@ -1,20 +1,35 @@
 import Image from "next/image";
-import Heart from "@/images/heart.svg";
 import Profile from "@/images/profile.svg";
 import CapacityStatus from "@/components/CapacityStatus";
 import { cn } from "@/utils/classnames";
 import Check from "@/images/check.svg";
 import { PropsWithChildren } from "react";
 import formatDateToYYYYMMDD from "@/utils/formatDateToYYYYMMDD";
+import InactiveLayer from "@/components/InactiveLayer";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 
 type ListItemProps = {
   CardImage?: React.ReactNode;
+  canceledAt?: string | null;
+  handleCancel?: () => void;
+  isCompleted?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 // ListItem의 템플릿 컴포넌트
-export default function ListItem({ children, CardImage, className }: PropsWithChildren<ListItemProps>) {
+export default function ListItem({
+  children,
+  CardImage,
+  canceledAt,
+  handleCancel,
+  isCompleted,
+  className,
+}: PropsWithChildren<ListItemProps>) {
   return (
-    <div className={`flex w-full flex-col items-stretch gap-4 border-gray-300 py-6 md:max-w-none md:flex-row`}>
+    <div className={`relative flex w-full flex-col items-stretch gap-4 border-gray-300 md:max-w-none md:flex-row`}>
+      {canceledAt && handleCancel && (
+        <InactiveLayer isCompleted={isCompleted} onClick={handleCancel} message="모집 취소된 모임이에요" />
+      )}
       {CardImage}
       <div className={`flex flex-col ${className}`}>{children}</div>
     </div>
@@ -30,14 +45,14 @@ ListItem.StatusChip = ({ styleType, children }: StatusChipProps) => {
   const baseStyles = "break-keep rounded-3xl px-3 py-[6px] text-sm";
 
   const variantStyles = {
-    upcoming: "bg-orange-100 text-orange-600",
+    upcoming: "bg-blue-1 text-blue-6",
     completed: "bg-gray-200 text-gray-500",
-    confirmed: "flex items-center gap-1 border border-orange-100 bg-white text-orange-600",
+    confirmed: "flex items-center gap-1 border border-blue-2 bg-white text-blue-6",
     waiting: "border border-gray-200 bg-white text-gray-500",
   };
   return (
     <li className={cn(baseStyles, variantStyles[styleType])}>
-      {styleType === "confirmed" && <Check className="text-orange-500" />}
+      {styleType === "confirmed" && <Check className="text-blue-5" />}
       {children}
     </li>
   );
@@ -87,9 +102,11 @@ type SubInfoProps = {
   capacity: number;
 };
 ListItem.SubInfo = ({ date, participantCount, capacity }: SubInfoProps) => {
+  const formatDate = format(date, "M월 d일", { locale: ko });
+  const formatTime = format(date, "HH:mm");
   return (
     <div className="flex items-center gap-3 text-sm text-gray-700">
-      <div>{date}</div>
+      <div>{`${formatDate} · ${formatTime}`}</div>
       <CapacityStatus>
         {participantCount}/{capacity}
       </CapacityStatus>
@@ -104,7 +121,7 @@ ListItem.Body = ({ children }: { children: React.ReactNode }) => {
 
 // 리뷰할 모임에 대한 정보(종류, 장소)
 ListItem.ServiceInfo = ({ children }: { children: React.ReactNode }) => {
-  return <span className="mb-2 text-xs text-gray-700">{children}</span>;
+  return <span className="text-xs text-gray-700">{children}</span>;
 };
 
 // 리뷰 작성자의 정보

@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import Button from "@/components/Button";
-import Modal from "@/components/Modal";
-import LoginModal from "@/components/LoginModal";
+import { LoginPopup, Popup } from "@/components/Popup";
 import { useUserStore } from "@/stores/useUserStore";
 import { copyClipboard } from "@/utils/copyClipboard";
 import { useJoin } from "../_hooks/useJoin";
 import { useGetParticipants } from "../_hooks/useGetParticipants";
-import { useLeaveGathering } from "../_hooks/useLeaveGathering";
+import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import { useCancelGathering } from "../_hooks/useCancelGathering";
 
 type FloatingBarProps = {
@@ -30,10 +29,12 @@ export default function FloatingBar({ gatheringId, hostUserId }: FloatingBarProp
 
   const { user } = useUserStore();
 
-  const { data: participantIdList } = useGetParticipants(gatheringId);
+  const { data: participantList } = useGetParticipants(gatheringId);
   const { mutate: mutateJoin, isPending } = useJoin(gatheringId);
-  const { mutate: mutateLeaveGathering } = useLeaveGathering(gatheringId);
+  const { mutate: mutateLeaveGathering } = useLeaveGathering(["participants", gatheringId]);
   const { mutate: mutateCancelGathering } = useCancelGathering();
+
+  const participantIdList = participantList?.map((participant) => participant.userId);
 
   const isHost = user?.id === hostUserId;
   const isJoined = user ? participantIdList?.includes(user?.id) : false;
@@ -60,19 +61,16 @@ export default function FloatingBar({ gatheringId, hostUserId }: FloatingBarProp
             공유하기
           </Button>
         </Container>
-        <Modal isOpen={!!activeModal} onClose={closeModal}>
-          {activeModal === "cancel" && (
-            <>
-              <div>모임을 취소하시겠습니까?</div>
-              <div className="flex">
-                <Button styleType="outline" onClick={closeModal}>
-                  아니요
-                </Button>
-                <Button onClick={() => mutateCancelGathering(gatheringId)}>예</Button>
-              </div>
-            </>
-          )}
-        </Modal>
+        {activeModal === "cancel" && (
+          <Popup
+            type={"confirm"}
+            isOpen={!!activeModal}
+            onClose={closeModal}
+            onClick={() => mutateCancelGathering(gatheringId)}
+          >
+            <div>모임을 취소하시겠습니까?</div>
+          </Popup>
+        )}
       </>
     );
 
@@ -94,7 +92,7 @@ export default function FloatingBar({ gatheringId, hostUserId }: FloatingBarProp
           </Button>
         )}
       </Container>
-      {activeModal === MODAL.join && <LoginModal isOpen={!user && !!activeModal} onClose={closeModal} />}
+      {activeModal === MODAL.join && <LoginPopup isOpen={!user && !!activeModal} onClose={closeModal} />}
     </>
   );
 }
