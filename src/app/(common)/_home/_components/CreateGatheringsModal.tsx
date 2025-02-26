@@ -10,7 +10,7 @@ import MeetingForm from "@/app/(common)/_home/_components/MeetingForm";
 import { useForm } from "react-hook-form";
 import { isValid as isValidDate } from "date-fns";
 import { useCreateGathering, FormDataType } from "@/app/(common)/_home/_hooks/useCreateGathering";
-import { format } from "date-fns";
+import dayjs from "dayjs";
 import defaultImage from "@/images/default_image.png";
 
 type CreateGatheringsModalProps = {
@@ -63,13 +63,13 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   // 날짜 선택 시 setValue로 react-hook-form에 반영
   useEffect(() => {
     if (formData.meetingDateTime && isValidDate(formData.meetingDateTime)) {
-      setValue("dateTime", format(formData.meetingDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
+      setValue("dateTime", dayjs(formData.meetingDateTime).format("YYYY-MM-DDTHH:mm:ss"));
     }
   }, [formData.meetingDateTime, setValue]);
 
   useEffect(() => {
     if (formData.deadlineDateTime && isValidDate(formData.deadlineDateTime)) {
-      setValue("registrationEnd", format(formData.deadlineDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
+      setValue("dateTime", dayjs(formData.deadlineDateTime).format("YYYY-MM-DDTHH:mm:ss"));
     }
   }, [formData.deadlineDateTime, setValue]);
 
