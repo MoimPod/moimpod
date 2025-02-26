@@ -14,6 +14,7 @@ type DropdownProps = {
   disabled?: boolean;
   className?: string;
   children?: React.ReactNode;
+  open?: boolean;
 };
 
 export default function Dropdown({
@@ -25,14 +26,21 @@ export default function Dropdown({
   disabled = false,
   className,
   children,
+  open,
 }: DropdownProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  //const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = open !== undefined;
+  const isOpen = isControlled ? open : internalOpen;
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
+        if (!isControlled) {
+          setInternalOpen(false);
+        }
+        onToggle?.(false);
       }
     }
     if (isOpen) {
@@ -41,18 +49,21 @@ export default function Dropdown({
         document.removeEventListener("mousedown", handleClickOutside);
       };
     }
-  }, [isOpen]);
+  }, [isOpen, isControlled, onToggle]);
 
   const handleSelect = (option: string) => {
     onSelect(option);
-    setIsOpen(false);
+    if (!isControlled) {
+      setInternalOpen(false);
+    }
+    onToggle?.(false);
   };
 
   return (
     <div className="relative w-full" ref={dropdownRef}>
       <div
         className={cn(
-          "mb-2 flex w-full cursor-pointer items-center justify-between rounded-xl border p-2 text-sm font-medium",
+          "mb-2 flex w-28 cursor-pointer items-center justify-between rounded-xl border p-2 text-sm font-medium",
           className,
           isOpen ? "bg-gray-900 text-white" : "bg-gray-50",
           selected ? "text-gray-800" : "",
@@ -61,7 +72,9 @@ export default function Dropdown({
         onClick={() => {
           if (!disabled) {
             const newState = !isOpen;
-            setIsOpen(newState);
+            if (!isControlled) {
+              setInternalOpen(newState);
+            }
             onToggle?.(newState); // 부모 상태 업데이트
           }
         }}

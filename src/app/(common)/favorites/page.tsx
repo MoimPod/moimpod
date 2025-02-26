@@ -6,6 +6,7 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Card from "@/components/Card";
 import ServiceTab from "@/app/(common)/_home/_components/ServiceTab";
 import FavoritesLogo from "@/images/favorites_logo.svg";
+import { useEffect } from "react";
 
 export default function Page() {
   const { favorites } = useFavoritesStore();
@@ -17,6 +18,13 @@ export default function Page() {
 
   // 찜한 목록에 해당하는 카드만 필터링
   const favoriteCards = allCards.filter((card) => favorites.includes(card.id.toString()));
+
+  // favoriteCards가 없으면 자동으로 추가 데이터 요청
+  useEffect(() => {
+    if (favoriteCards.length === 0 && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [favoriteCards, hasNextPage, fetchNextPage]);
 
   // 무한 스크롤 hook
   const { observerRef } = useInfiniteScroll({ fetchNextPage, hasNextPage, isFetchingNextPage });

@@ -3,10 +3,11 @@ import { CardData } from "@/stores/useGatheringStore";
 import axiosInstance from "@/lib/axiosInstance";
 
 type FetchParams = {
-  city?: string;
-  district?: string;
-  dateTime?: string;
+  location?: string;
+  date?: string;
+  type?: string;
   sortBy?: string;
+  sortOrder?: "asc"; // 오름차순 정렬
 };
 
 // 데이터를 가져오는 함수
