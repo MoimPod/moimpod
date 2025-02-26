@@ -4,7 +4,7 @@ import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useFetchGatherings } from "../_home/_hooks/useFetchGatherings";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Card from "@/components/Card";
-import ServiceTab from "@/app/(common)/_home/_components/ServiceTab";
+import ServiceTab from "@/components/ServiceTab";
 import FavoritesLogo from "@/images/favorites_logo.svg";
 import { useEffect } from "react";
 

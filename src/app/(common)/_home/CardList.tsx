@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
-import ServiceTab from "@/app/(common)/_home/_components/ServiceTab";
+import ServiceTab from "@/components/ServiceTab";
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
 import Card from "@/components/Card";
 import Button from "@/components/Button";
