@@ -52,10 +52,11 @@ const fetchMyReviews = async ({ pageParam = 0, userId }: { pageParam: number; us
 
 export const useGetMyReviews = (userId: number) => {
   return useInfiniteQuery({
-    queryKey: ["mypage", "reviews", "written"],
+    queryKey: ["user", "reviews", "written"],
     queryFn: ({ pageParam }) => fetchMyReviews({ pageParam, userId }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextOffset,
-    staleTime: 60000,
+    staleTime: 300000,
+    enabled: !!userId,
   });
 };
