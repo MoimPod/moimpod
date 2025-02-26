@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
 import ServiceTab from "@/components/ServiceTab";
@@ -81,8 +81,28 @@ export default function CardList() {
       .flatMap((page) => page.data)
       .filter((card) => !card.registrationEnd || new Date(card.registrationEnd) >= new Date()) || [];
 
+  // 스크롤 페이드 효과를 위한 상태값
+  const [scrollTop, setScrollTop] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // 스크롤 이벤트 핸들러
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      setScrollTop(scrollContainerRef.current.scrollTop);
+    }
+  };
+
   return (
-    <div>
+    <div className="relative">
+      {/* 상단 페이드 아웃 효과 */}
+      <div
+        className="pointer-events-none absolute left-0 top-0 z-10 h-12 w-full bg-gradient-to-b from-white to-transparent transition-opacity duration-300"
+        style={{ opacity: scrollTop > 20 ? 1 : 0 }}
+      />
+
+      {/* 하단 페이드 인 효과 */}
+      <div className="pointer-events-none absolute bottom-0 left-0 z-10 h-12 w-full bg-gradient-to-t from-white to-transparent" />
+
       <div className="mb-5 flex gap-6 pt-8">
         <GatheringLogo />
         <div>
@@ -111,8 +131,9 @@ export default function CardList() {
         </div>
       </div>
       <hr className="my-3" />
-      <div className="px-6">
-        <GatheringFilters onChange={handleFilterChange} />
+      <GatheringFilters onChange={handleFilterChange} />
+
+      <div ref={scrollContainerRef} className="relative max-h-[80vh] overflow-y-auto px-6">
         {data?.pages[0].data.length === 0 ? (
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>아직 모임이 없어요</p>
