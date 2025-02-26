@@ -5,7 +5,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import ReviewList from "../_components/ReviewList";
 import Pagination from "../_components/Pagination";
-import { useGetReviews } from "../_hooks/useGetReviews";
+import { useGetReviews } from "@/hooks/useGetReviews";
 import {
   QUERY_PARAMS,
   SORT_OPTIONS,
@@ -77,7 +77,14 @@ export default function Reviews({ gatheringId, reviewQuery }: { gatheringId: str
   }, []);
 
   if (data.reviews.length === 0) {
-    return <div>리뷰가 존재하지 않습니다.</div>;
+    return (
+      <div className="h-full bg-white p-6">
+        <h1 className="text-lg font-semibold">이용자들은 이 프로그램을 이렇게 느꼈어요!</h1>
+        <div className="flex h-full flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
+          아직 리뷰가 없어요
+        </div>
+      </div>
+    );
   }
 
   return (
