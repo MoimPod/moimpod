@@ -32,7 +32,7 @@ export default function GatheringFilters({ onChange }: GatheringFiltersProps) {
     }
     // 기본 정렬값도 전달
     onChange({ sortBy: sortFilter });
-  }, []);
+  }, [onChange, sortFilter, params]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -56,7 +56,7 @@ export default function GatheringFilters({ onChange }: GatheringFiltersProps) {
                 onChange({ date: formattedDate });
               } else {
                 params.delete("date");
-                router.push(`${pathname}`); // url 초기화
+                router.push(`${pathname}?${params.toString()}`);
                 onChange({ date: undefined });
               }
             }}
