@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Button from "@/components/Button";
 import CustomDatepicker from "@/components/Filtering/CustomDatepicker";
-import { format } from "date-fns";
+import dayjs from "dayjs";
 import Dropdown from "@/components/Dropdown";
 
 type DateSelectProps = {
@@ -40,7 +40,7 @@ export default function DateSelect({ onDateChange }: DateSelectProps) {
       {/* 드롭다운 버튼 */}
       <Dropdown
         open={isDateDropdownOpen}
-        selected={selectedDate ? format(selectedDate, "yy/MM/dd") : "날짜 선택"}
+        selected={selectedDate ? dayjs(selectedDate).format("YY/MM/DD") : "날짜 선택"}
         onSelect={() => setDateDropdownOpen(!isDateDropdownOpen)}
         onToggle={setDateDropdownOpen}
         placeholder="날짜 선택"

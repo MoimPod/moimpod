@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { format, isValid } from "date-fns";
+import dayjs from "dayjs";
 import CustomDatepicker from "@/components/Filtering/CustomDatepicker";
 import CustomTimepicker from "@/components/Filtering/CustomTimepicker";
 import CalendarIcon from "@/images/calendar_icon.svg";
@@ -17,7 +17,7 @@ export default function DateTimePicker({ selectedDateTime, onDateTimeChange }: D
   // 선택한 날짜, 시간 저장
   const [selectedDate, setSelectedDate] = useState<Date | null>(selectedDateTime);
   const [selectedTime, setSelectedTime] = useState<string>(
-    selectedDateTime && isValid(selectedDateTime) ? format(selectedDateTime, "HH:mm") : "12:00",
+    selectedDateTime && dayjs(selectedDateTime).isValid() ? dayjs(selectedDateTime).format("HH:mm") : "12:00",
   );
 
   // 외부 클릭 시 드롭다운 닫힘
@@ -41,7 +41,7 @@ export default function DateTimePicker({ selectedDateTime, onDateTimeChange }: D
     newDateTime.setHours(hours);
     newDateTime.setMinutes(minutes);
 
-    if (isValid(newDateTime)) {
+    if (dayjs(newDateTime).isValid()) {
       onDateTimeChange(newDateTime);
     }
   };
@@ -66,12 +66,14 @@ export default function DateTimePicker({ selectedDateTime, onDateTimeChange }: D
     <div className="relative" ref={dropdownRef}>
       {/* 날짜 & 시간 선택 필드 */}
       <div
-        className={`flex w-full cursor-pointer items-center justify-between rounded-lg bg-gray-50 p-2 ${selectedDateTime && isValid(selectedDateTime) ? "text-gray-900" : "text-gray-400"}`}
+        className={`flex w-full cursor-pointer items-center justify-between rounded-lg bg-gray-50 p-2 ${
+          selectedDateTime && dayjs(selectedDateTime).isValid() ? "text-gray-900" : "text-gray-400"
+        }`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="mr-4">
-          {selectedDateTime && isValid(selectedDateTime)
-            ? format(selectedDateTime, "yyyy-MM-dd HH:mm")
+          {selectedDateTime && dayjs(selectedDateTime).isValid()
+            ? dayjs(selectedDateTime).format("YYYY-MM-DD HH:mm")
             : "날짜 & 시간 선택"}
         </span>
         <CalendarIcon />
