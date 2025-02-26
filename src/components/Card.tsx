@@ -12,6 +12,7 @@ import AnimatedParticipantCount from "./AnimateParticipantCount";
 import LikeButton from "./LikeButton";
 import JoinArrow from "@/images/join_now_arrow.svg";
 import ConfirmedStamp from "@/components/ConfirmedStamp";
+import DEFAULT_IMAGE from "@/images/default_image.png";
 
 export default function Card({
   id,
@@ -54,7 +55,7 @@ export default function Card({
         <div className="">
           <Tag registrationEnd={registrationEnd} />
           <Image
-            src={image}
+            src={!image ? DEFAULT_IMAGE : image}
             alt={`${name} 모임 이미지 - ${location}`}
             width={280}
             height={156}
