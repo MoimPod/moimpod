@@ -13,6 +13,7 @@ import { useCheckAuth } from "@/app/(common)/_home/_hooks/useCheckAuth";
 import { LoginPopup } from "@/components/Popup";
 import { useUserStore } from "@/stores/useUserStore";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { Suspense } from "react";
 
 export default function CardList() {
   const searchParams = useSearchParams();
@@ -112,8 +113,9 @@ export default function CardList() {
       </div>
       <hr className="my-3" />
       <div className="px-6">
-        <GatheringFilters onChange={handleFilterChange} />
-
+        <Suspense fallback={<div>로딩 중...</div>}>
+          <GatheringFilters onChange={handleFilterChange} />
+        </Suspense>
         {data?.pages[0].data.length === 0 ? (
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>아직 모임이 없어요</p>
