@@ -14,7 +14,6 @@ function deleteCookie(name: string) {
 function deleteLocalStorage() {
   if (typeof window !== "undefined" && window.localStorage) {
     localStorage.removeItem("user-storage");
-    localStorage.removeItem("favorites-storage");
   }
 }
 
