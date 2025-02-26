@@ -1,14 +1,15 @@
 import { useGetMyCreatedGatherings } from "@/app/(common)/mypage/_hooks/useGetCreatedGathering";
+import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import ListItem from "@/components/ListItem";
 import Spinner from "@/components/Spinner";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
 
 export default function MyCreatedGatherings() {
-  // TODO: 회원정보 불러오기가 tanstack query로 바뀌면 바꿀 것
-  const id = useUserStore((state) => state.user?.id) as number;
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyCreatedGatherings(id);
+  const { data: userData } = useGetUserInfo();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyCreatedGatherings(
+    userData?.id ?? 0,
+  );
   const allGatherings = data?.pages.flatMap((page) => page.data) || [];
   const { observerRef } = useInfiniteScroll({
     hasNextPage,
@@ -32,39 +33,35 @@ export default function MyCreatedGatherings() {
     <>
       {allGatherings.length ? (
         <>
-          <div className="w-full">
-            <div className="flex-1 divide-y-2 divide-dashed">
-              {allGatherings.map((gathering) => (
-                <div className="relative py-6" key={gathering.id}>
-                  <ListItem
-                    CardImage={
-                      <Image
-                        src={gathering.image}
-                        alt="모임 이미지"
-                        width={280}
-                        height={156}
-                        className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
-                      />
-                    }
-                    className="justify-between"
-                  >
-                    <div className="flex flex-col gap-2.5">
-                      <div className="flex flex-col gap-1">
-                        <ListItem.Title title={gathering.name} subtitle={gathering.location} />
-                        <ListItem.SubInfo
-                          date={gathering.dateTime}
-                          participantCount={gathering.participantCount}
-                          capacity={gathering.capacity}
-                        />
-                      </div>
-                    </div>
-                  </ListItem>
+          {allGatherings.map((gathering) => (
+            <div className="relative py-6" key={gathering.id}>
+              <ListItem
+                CardImage={
+                  <Image
+                    src={gathering.image}
+                    alt="모임 이미지"
+                    width={280}
+                    height={156}
+                    className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
+                  />
+                }
+                className="justify-between"
+              >
+                <div className="flex flex-col gap-2.5">
+                  <div className="flex flex-col gap-1">
+                    <ListItem.Title title={gathering.name} subtitle={gathering.location} />
+                    <ListItem.SubInfo
+                      date={gathering.dateTime}
+                      participantCount={gathering.participantCount}
+                      capacity={gathering.capacity}
+                    />
+                  </div>
                 </div>
-              ))}
+              </ListItem>
             </div>
-            <div ref={observerRef} className="h-10" />
-            {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
-          </div>
+          ))}
+          <div ref={observerRef} className="h-10" />
+          {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
         </>
       ) : (
         <div className="flex flex-1 items-center justify-center">

@@ -21,10 +21,11 @@ const fetchMyCreatedGatherings = async ({ pageParam = 0, userId }: { pageParam: 
 
 export const useGetMyCreatedGatherings = (userId: number) => {
   return useInfiniteQuery({
-    queryKey: ["mypage", "gatherings", "created"],
+    queryKey: ["user", "gatherings", "created"],
     queryFn: ({ pageParam }) => fetchMyCreatedGatherings({ pageParam, userId }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextOffset,
-    staleTime: 60000,
+    staleTime: 300000,
+    enabled: !!userId,
   });
 };

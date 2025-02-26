@@ -19,7 +19,7 @@ export const useUpdateUserInfo = () => {
   return useMutation({
     mutationFn: updateUserInfo,
     onSuccess: (data) => {
-      queryClient.setQueryData(["userInfo"], data);
+      queryClient.setQueryData(["user"], data);
     },
   });
 };

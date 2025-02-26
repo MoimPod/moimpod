@@ -13,6 +13,7 @@ type ListItemProps = {
   CardImage?: React.ReactNode;
   canceledAt?: string | null;
   handleCancel?: () => void;
+  isCompleted?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 // ListItem의 템플릿 컴포넌트
@@ -21,11 +22,14 @@ export default function ListItem({
   CardImage,
   canceledAt,
   handleCancel,
+  isCompleted,
   className,
 }: PropsWithChildren<ListItemProps>) {
   return (
     <div className={`relative flex w-full flex-col items-stretch gap-4 border-gray-300 md:max-w-none md:flex-row`}>
-      {canceledAt && handleCancel && <InactiveLayer onClick={handleCancel} message="모집 취소된 모임이에요" />}
+      {canceledAt && handleCancel && (
+        <InactiveLayer isCompleted={isCompleted} onClick={handleCancel} message="모집 취소된 모임이에요" />
+      )}
       {CardImage}
       <div className={`flex flex-col ${className}`}>{children}</div>
     </div>

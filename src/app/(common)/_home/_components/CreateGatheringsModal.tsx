@@ -142,7 +142,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      className="flex h-screen w-full flex-col max-sm:fixed max-sm:overflow-auto md:h-[750px] md:max-w-[520px]"
+      className="flex w-full flex-col max-sm:fixed max-sm:overflow-auto md:max-w-[520px]"
     >
       <label className="mb-3 text-lg font-semibold">모임 만들기</label>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -262,7 +262,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         {errors.root && <p className="mt-1 text-sm text-red-500">{errors.root.message}</p>}
 
         {/* 제출 버튼 */}
-        <Button styleType="solid" size="lg" className="mt-7" disabled={!isValid || isPending} type="submit">
+        <Button styleType="solid" size="lg" className="mt-7 w-full" disabled={!isValid || isPending} type="submit">
           {isPending ? "저장 중..." : "확인"}
         </Button>
       </form>

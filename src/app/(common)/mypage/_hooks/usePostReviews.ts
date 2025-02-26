@@ -18,7 +18,7 @@ export default function usePostReviews() {
       queryClient.invalidateQueries({
         predicate: (query) => {
           const key = query.queryKey;
-          return key[0] === "mypage" && (key[1] === "reviews" || key[1] === "gatherings");
+          return key[0] === "user" && (key[1] === "reviews" || key[1] === "gatherings");
         },
       });
     },

@@ -12,6 +12,7 @@ import AnimatedParticipantCount from "./AnimateParticipantCount";
 import LikeButton from "./LikeButton";
 import JoinArrow from "@/images/join_now_arrow.svg";
 import DEFAULT_IMAGE from "@/images/default_image.png";
+import ConfirmedStamp from "@/components/ConfirmedStamp";
 
 export default function Card({
   id,
@@ -69,9 +70,12 @@ export default function Card({
           <LikeButton onClick={handleLikeClick} isLiked={isLiked} isClosed={isClosed} className="ml-auto md:mt-3" />
         </div>
 
-        {/* 인원 정보 */}
-        <div className="mt-5 text-sm text-gray-500">
-          <AnimatedParticipantCount participantCount={participantCount} capacity={capacity} />
+        <div className="mt-5 flex items-center gap-3">
+          {/* 인원 정보 */}
+          <div className="text-sm text-gray-500">
+            <AnimatedParticipantCount participantCount={participantCount} capacity={capacity} />
+          </div>
+          {participantCount === capacity ? <ConfirmedStamp /> : null}
         </div>
 
         <div className="flex items-center gap-x-5">

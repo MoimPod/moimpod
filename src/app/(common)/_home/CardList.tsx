@@ -15,7 +15,7 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 export default function CardList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filters, setFilters] = useState<{ city?: string; district?: string; dateTime?: string; sortBy?: string }>({});
+  const [filters, setFilters] = useState<{ location?: string; dateTime?: string; sortBy?: string }>({});
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings(filters);
 
@@ -58,7 +58,7 @@ export default function CardList() {
         <div className="flex items-center">
           <ServiceTab />
           <div className="ml-auto w-[114px]">
-            <Button styleType="solid" size="sm" className="h-10 md:h-11" onClick={handleOpen}>
+            <Button styleType="solid" size="sm" className="h-10 w-24 md:h-11" onClick={handleOpen}>
               모임 만들기
             </Button>
             <LoginPopup
