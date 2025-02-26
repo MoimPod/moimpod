@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
 import ServiceTab from "@/app/(common)/_home/_components/ServiceTab";
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
@@ -42,9 +42,21 @@ export default function CardList() {
   const handleClose = () => setIsModalOpen(false);
 
   // 부모에서 필터를 업데이트할 때 기존 상태와 병합하는 함수
-  const handleFilterChange = (newFilter: Partial<typeof filters>) => {
-    setFilters((prev) => ({ ...prev, ...newFilter }));
-  };
+  const handleFilterChange = useCallback(
+    (newFilter: Partial<typeof filters>) => {
+      setFilters((prev) => {
+        const updatedFilters = { ...prev, ...newFilter };
+
+        // 상태가 변경되지 않았다면 업데이트 방지 (무한 루프 방지)
+        if (JSON.stringify(prev) === JSON.stringify(updatedFilters)) {
+          return prev;
+        }
+
+        return updatedFilters;
+      });
+    },
+    [setFilters],
+  );
 
   // 무한 스크롤 훅 사용
   const { observerRef } = useInfiniteScroll({ fetchNextPage, hasNextPage, isFetchingNextPage });
