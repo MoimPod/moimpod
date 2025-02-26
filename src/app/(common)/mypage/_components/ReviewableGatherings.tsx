@@ -3,7 +3,6 @@
 import Spinner from "@/components/Spinner";
 import Image from "next/image";
 import ListItem from "@/components/ListItem";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import { useState } from "react";
 import Button from "@/components/Button";
@@ -11,10 +10,10 @@ import ReviewModal from "@/app/(common)/mypage/_components/ReviewModal";
 import { useGetMyGatherings } from "@/app/(common)/mypage/_hooks/useGetMyGatherings";
 
 export default function ReviewableGatherings() {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyGatherings(
-    ["user", "reviews", "reviewable"],
-    { completed: true, reviewed: false },
-  );
+  const { data, isLoading, error } = useGetMyGatherings(["user", "reviews", "reviewable"], {
+    completed: true,
+    reviewed: false,
+  });
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedGathering, setSelectedGathering] = useState<number | null>(null);
   const handleOpen = (gatheringId: number) => {
@@ -27,15 +26,6 @@ export default function ReviewableGatherings() {
   };
 
   const mutation = useLeaveGathering(["my-gatherings"]);
-
-  // 무한 스크롤을 감지할 ref
-  const { observerRef } = useInfiniteScroll({
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  });
-  // 페이지 내부 내용 중 canceledAt이 null인 모임만
-  const allGatherings = (data?.pages.flatMap((page) => page.data) || []).filter((gathering) => !gathering.canceledAt);
 
   if (isLoading)
     return (
@@ -51,9 +41,9 @@ export default function ReviewableGatherings() {
     );
   return (
     <>
-      {allGatherings.length ? (
+      {data?.length ? (
         <>
-          {allGatherings.map((gathering) => (
+          {data.map((gathering) => (
             <div className="relative py-6" key={gathering.id}>
               <ListItem
                 CardImage={
@@ -90,8 +80,6 @@ export default function ReviewableGatherings() {
               </ListItem>
             </div>
           ))}
-          <div ref={observerRef} className="h-10" />
-          {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
           <ReviewModal isOpen={isModalOpen} onClose={handleClose} gatheringId={selectedGathering as number} />
         </>
       ) : (

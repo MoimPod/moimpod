@@ -3,7 +3,6 @@ import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import ListItem from "@/components/ListItem";
 import Score from "@/components/Score";
 import Spinner from "@/components/Spinner";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Image from "next/image";
 
 const GatheringType = {
@@ -13,15 +12,7 @@ const GatheringType = {
 };
 export default function MyReviews() {
   const { data: userData } = useGetUserInfo();
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyReviews(userData?.id ?? 0);
-
-  const { observerRef } = useInfiniteScroll({
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  });
-
-  const allReviews = data?.pages.flatMap((page) => page.data.data) ?? [];
+  const { data, isLoading, error } = useGetMyReviews(userData?.id ?? 0);
 
   if (isLoading)
     return (
@@ -37,9 +28,9 @@ export default function MyReviews() {
     );
   return (
     <>
-      {allReviews.length ? (
+      {data?.length ? (
         <>
-          {allReviews.map((review) => (
+          {data.map((review) => (
             <ListItem
               CardImage={
                 <Image
@@ -65,8 +56,6 @@ export default function MyReviews() {
               </div>
             </ListItem>
           ))}
-          <div ref={observerRef} className="h-10" />
-          {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
         </>
       ) : (
         <div className="flex flex-1 items-center justify-center">

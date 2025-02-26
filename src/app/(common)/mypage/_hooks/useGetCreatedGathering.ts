@@ -1,30 +1,22 @@
 import axiosInstance from "@/lib/axiosInstance";
 import { CardData } from "@/stores/useGatheringStore";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-const fetchMyCreatedGatherings = async ({ pageParam = 0, userId }: { pageParam: number; userId: number }) => {
+const fetchMyCreatedGatherings = async (userId: number) => {
   const response = await axiosInstance.get<CardData[]>("gatherings", {
     params: {
-      limit: 5,
-      offset: pageParam,
-      sortBy: "dateTime",
-      sortOrder: "desc",
-      createdBy: userId,
+      limit: 100,
+      userId,
     },
   });
 
-  return {
-    data: response.data,
-    nextOffset: response.data.length === 5 ? pageParam + 5 : null,
-  };
+  return response.data;
 };
 
 export const useGetMyCreatedGatherings = (userId: number) => {
-  return useInfiniteQuery({
+  return useQuery({
     queryKey: ["user", "gatherings", "created"],
-    queryFn: ({ pageParam }) => fetchMyCreatedGatherings({ pageParam, userId }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage) => lastPage.nextOffset,
+    queryFn: () => fetchMyCreatedGatherings(userId),
     staleTime: 300000,
     enabled: !!userId,
   });

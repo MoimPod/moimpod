@@ -2,20 +2,11 @@ import { useGetMyCreatedGatherings } from "@/app/(common)/mypage/_hooks/useGetCr
 import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import ListItem from "@/components/ListItem";
 import Spinner from "@/components/Spinner";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Image from "next/image";
 
 export default function MyCreatedGatherings() {
   const { data: userData } = useGetUserInfo();
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyCreatedGatherings(
-    userData?.id ?? 0,
-  );
-  const allGatherings = data?.pages.flatMap((page) => page.data) || [];
-  const { observerRef } = useInfiniteScroll({
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  });
+  const { data, isLoading, error } = useGetMyCreatedGatherings(userData?.id ?? 0);
 
   if (isLoading)
     return (
@@ -31,9 +22,9 @@ export default function MyCreatedGatherings() {
     );
   return (
     <>
-      {allGatherings.length ? (
+      {data?.length ? (
         <>
-          {allGatherings.map((gathering) => (
+          {data.map((gathering) => (
             <div className="relative py-6" key={gathering.id}>
               <ListItem
                 CardImage={
@@ -60,8 +51,6 @@ export default function MyCreatedGatherings() {
               </ListItem>
             </div>
           ))}
-          <div ref={observerRef} className="h-10" />
-          {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
         </>
       ) : (
         <div className="flex flex-1 items-center justify-center">

@@ -5,7 +5,6 @@ import { useState } from "react";
 import ReviewModal from "@/app/(common)/mypage/_components/ReviewModal";
 import Spinner from "@/components/Spinner";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useGetMyGatherings } from "@/app/(common)/mypage/_hooks/useGetMyGatherings";
 
 // 이용 예정 => 모임 참여 신청했고 isCompleted가 false인 경우
@@ -26,10 +25,7 @@ import { useGetMyGatherings } from "@/app/(common)/mypage/_hooks/useGetMyGatheri
 // isCompleted가 true, isReviewed가 false => 리뷰 작성하기
 // isCompleted가 true, isReviewed가 true => 리뷰 작성 x
 export default function MyGatherings() {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyGatherings([
-    "user",
-    "gatherings",
-  ]);
+  const { data, isLoading, error } = useGetMyGatherings(["user", "gatherings"]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedGathering, setSelectedGathering] = useState<number | null>(null);
   const handleOpen = (gatheringId: number) => {
@@ -42,15 +38,6 @@ export default function MyGatherings() {
   };
 
   const mutation = useLeaveGathering(["user", "gatherings"]);
-
-  // 무한 스크롤을 감지할 ref
-  const { observerRef } = useInfiniteScroll({
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  });
-
-  const allGatherings = data?.pages.flatMap((page) => page.data) || [];
 
   if (isLoading)
     return (
@@ -66,9 +53,9 @@ export default function MyGatherings() {
     );
   return (
     <>
-      {allGatherings.length ? (
+      {data?.length ? (
         <>
-          {allGatherings.map((gathering) => (
+          {data?.map((gathering) => (
             <div className="relative py-6" key={gathering.id}>
               <ListItem
                 CardImage={
@@ -117,9 +104,6 @@ export default function MyGatherings() {
               </ListItem>
             </div>
           ))}
-
-          <div ref={observerRef} className="h-10" />
-          {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
           <ReviewModal isOpen={isModalOpen} onClose={handleClose} gatheringId={selectedGathering as number} />
         </>
       ) : (

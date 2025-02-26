@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axiosInstance";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 type Gathering = {
   teamId: number;
@@ -35,27 +35,21 @@ type MyReviews = {
   totalPages: number;
 };
 
-const fetchMyReviews = async ({ pageParam = 0, userId }: { pageParam: number; userId: number }) => {
+const fetchMyReviews = async (userId: number) => {
   const response = await axiosInstance.get<MyReviews>("reviews", {
     params: {
-      limit: 5,
-      offset: pageParam,
+      limit: 100,
       userId,
     },
   });
 
-  return {
-    data: response.data,
-    nextOffset: response.data.data.length === 5 ? pageParam + 5 : null,
-  };
+  return response.data.data;
 };
 
 export const useGetMyReviews = (userId: number) => {
-  return useInfiniteQuery({
+  return useQuery({
     queryKey: ["user", "reviews", "written"],
-    queryFn: ({ pageParam }) => fetchMyReviews({ pageParam, userId }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage) => lastPage.nextOffset,
+    queryFn: () => fetchMyReviews(userId),
     staleTime: 300000,
     enabled: !!userId,
   });
