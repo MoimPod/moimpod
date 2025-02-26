@@ -28,7 +28,6 @@ export default function Dropdown({
   children,
   open,
 }: DropdownProps) {
-  //const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [internalOpen, setInternalOpen] = useState(false);
   const isControlled = open !== undefined;
