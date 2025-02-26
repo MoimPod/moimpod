@@ -10,7 +10,7 @@ import MeetingForm from "@/app/(common)/_home/_components/MeetingForm";
 import { useForm } from "react-hook-form";
 import { isValid as isValidDate } from "date-fns";
 import { useCreateGathering, FormDataType } from "@/app/(common)/_home/_hooks/useCreateGathering";
-import { format } from "date-fns";
+import dayjs from "dayjs";
 import defaultImage from "@/images/default_image.png";
 
 type CreateGatheringsModalProps = {
@@ -63,14 +63,13 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   // 날짜 선택 시 setValue로 react-hook-form에 반영
   useEffect(() => {
     if (formData.meetingDateTime && isValidDate(formData.meetingDateTime)) {
-      setValue("dateTime", format(formData.meetingDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
-      console.log(format(formData.meetingDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
+      setValue("dateTime", dayjs(formData.meetingDateTime).format("YYYY-MM-DDTHH:mm:ss"));
     }
   }, [formData.meetingDateTime, setValue]);
 
   useEffect(() => {
     if (formData.deadlineDateTime && isValidDate(formData.deadlineDateTime)) {
-      setValue("registrationEnd", format(formData.deadlineDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
+      setValue("registrationEnd", dayjs(formData.deadlineDateTime).format("YYYY-MM-DDTHH:mm:ss"));
     }
   }, [formData.deadlineDateTime, setValue]);
 
@@ -142,7 +141,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      className="flex h-screen w-full flex-col max-sm:fixed max-sm:overflow-auto md:h-[750px] md:max-w-[520px]"
+      className="flex w-full flex-col max-sm:fixed max-sm:overflow-auto md:max-w-[520px]"
     >
       <label className="mb-3 text-lg font-semibold">모임 만들기</label>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -164,8 +163,8 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
             <LocationSelect
               selectedLocation={formData.selectedLocation}
               setSelectedLocation={(location) => {
-                updateFormData("selectedLocation", location);
-                setValue("location", location);
+                updateFormData("selectedLocation", location || "");
+                setValue("location", location || "");
               }}
               className="w-full border-none text-gray-400"
             />
@@ -262,7 +261,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         {errors.root && <p className="mt-1 text-sm text-red-500">{errors.root.message}</p>}
 
         {/* 제출 버튼 */}
-        <Button styleType="solid" size="lg" className="mt-7" disabled={!isValid || isPending} type="submit">
+        <Button styleType="solid" size="lg" className="mt-7 w-full" disabled={!isValid || isPending} type="submit">
           {isPending ? "저장 중..." : "확인"}
         </Button>
       </form>

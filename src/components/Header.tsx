@@ -42,7 +42,6 @@ export default function Header() {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/";
     if (typeof window !== "undefined" && window.localStorage) {
       localStorage.removeItem("user-storage");
-      localStorage.removeItem("favorites-storage");
     }
     setProfileBtn(false);
     queryClient.removeQueries({ queryKey: ["mypage"] });
