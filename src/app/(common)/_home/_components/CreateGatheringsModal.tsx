@@ -8,7 +8,8 @@ import LocationSelect from "@/components/Filtering/LocationSelect";
 import Input from "@/components/Input";
 import Modal from "@/components/Modal";
 import defaultImage from "@/images/default_image.png";
-import { format, isValid as isValidDate } from "date-fns";
+import { isValid as isValidDate } from "date-fns";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -62,14 +63,13 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   // 날짜 선택 시 setValue로 react-hook-form에 반영
   useEffect(() => {
     if (formData.meetingDateTime && isValidDate(formData.meetingDateTime)) {
-      setValue("dateTime", format(formData.meetingDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
-      console.log(format(formData.meetingDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
+      setValue("dateTime", dayjs(formData.meetingDateTime).format("YYYY-MM-DDTHH:mm:ss"));
     }
   }, [formData.meetingDateTime, setValue]);
 
   useEffect(() => {
     if (formData.deadlineDateTime && isValidDate(formData.deadlineDateTime)) {
-      setValue("registrationEnd", format(formData.deadlineDateTime, "yyyy-MM-dd'T'HH:mm:ss"));
+      setValue("registrationEnd", dayjs(formData.deadlineDateTime).format("YYYY-MM-DDTHH:mm:ss"));
     }
   }, [formData.deadlineDateTime, setValue]);
 
@@ -163,8 +163,8 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
             <LocationSelect
               selectedLocation={formData.selectedLocation}
               setSelectedLocation={(location) => {
-                updateFormData("selectedLocation", location);
-                setValue("location", location);
+                updateFormData("selectedLocation", location || "");
+                setValue("location", location || "");
               }}
               className="w-full border-none text-gray-400"
             />

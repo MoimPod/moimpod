@@ -16,6 +16,7 @@ type CategoryButtonProps = {
   children: React.ReactNode;
   className?: string;
   setValue?: (value: string) => void;
+  onChange?: (value: string) => void;
 };
 
 export default function CategoryButton({
@@ -23,6 +24,7 @@ export default function CategoryButton({
   defaultCategory,
   children,
   setValue,
+  onChange,
   className,
 }: CategoryButtonProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>(defaultCategory ?? categories[0]);
@@ -30,6 +32,7 @@ export default function CategoryButton({
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
     setValue?.(category);
+    onChange?.(category);
   };
 
   return (

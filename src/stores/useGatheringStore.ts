@@ -21,8 +21,8 @@ type GatheringStore = {
   selectedLocation: string;
   selectedCategory: string;
   sortBy: string;
-  selectedDateTime: string | null;
-  setFilters: (filters: { location?: string; category?: string; dateTime?: string; sortBy?: string }) => void;
+  selectedDate: string | null;
+  setFilters: (filters: { location?: string; category?: string; date?: string; sortBy?: string }) => void;
   fetchGatherings: () => Promise<void>;
 };
 
@@ -31,8 +31,8 @@ export const useGatheringStore = create<GatheringStore>((set, get) => ({
   filteredCards: [],
   selectedLocation: "",
   selectedCategory: "전체",
-  sortBy: "dateTime",
-  selectedDateTime: null,
+  sortBy: "date",
+  selectedDate: null,
   setFilters: (filters) => {
     set((state) => ({
       ...state,
@@ -40,7 +40,7 @@ export const useGatheringStore = create<GatheringStore>((set, get) => ({
     }));
   },
   fetchGatherings: async () => {
-    const { selectedLocation, selectedCategory, selectedDateTime, sortBy } = get();
+    const { selectedLocation, selectedCategory, selectedDate, sortBy } = get();
 
     try {
       const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
@@ -48,9 +48,9 @@ export const useGatheringStore = create<GatheringStore>((set, get) => ({
           id: undefined, // 특정 id 검색이 필요할 때 사용
           type: selectedCategory !== "전체" ? selectedCategory : undefined, // DALLAEMFIT, WORKATION 등
           location: selectedLocation || undefined, // 선택한 장소
-          dateTime: selectedDateTime || undefined, // 특정 날짜 선택
+          date: selectedDate || undefined, // 특정 날짜 선택
           createdBy: undefined, // 특정 사용자가 만든 모임 검색 시 사용
-          sortBy, // dateTime, registrationEnd, participantCount 등
+          sortBy, // date, registrationEnd, participantCount 등
         },
       });
 
