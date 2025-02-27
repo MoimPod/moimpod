@@ -12,6 +12,7 @@ import defaultImage from "@/images/default_image.png";
 import { isValid as isValidDate } from "date-fns";
 import dayjs from "dayjs";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 type CreateGatheringsModalProps = {
   isOpen: boolean;
@@ -42,6 +43,8 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   } = useForm<FormDataType>({
     mode: "onChange",
   });
+
+  const router = useRouter();
 
   // 모임 관련 데이터
   const [formData, setFormData] = useState({
@@ -148,8 +151,9 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     }
 
     createGathering(requestData, {
-      onSuccess: () => {
+      onSuccess: (response) => {
         onClose();
+        router.push(`/gathering/${response.id}`); // 생성된 모임 상세 페이지로 이동
       },
       onError: (err) => {
         console.error("API 요청 실패:", err);
@@ -187,7 +191,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
             <LocationSelect
               selectedLocation={formData.selectedLocation}
               setSelectedLocation={(location) => {
-                if (location === undefined) {
+                if (!location) {
                   setError("location", {
                     type: "manual",
                     message: "지역을 선택해주세요.",
