@@ -36,6 +36,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     setError,
     setValue,
     formState: { errors, isValid },
+    trigger,
   } = useForm<FormDataType>({
     mode: "onChange",
   });
@@ -49,15 +50,21 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     deadlineDateTime: null as Date | null,
   });
 
+  // 모든 필드의 유효성 검사 실행
+  useEffect(() => {
+    trigger();
+  }, [Object.values(formData)]);
+
   // 마감 날짜 오류 메시지
   const [errorMessage, setErrorMessage] = useState("");
 
   // formData 업데이트 함수
   const updateFormData = (key: string, value: string | File | Date | null) => {
-    setFormData((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+    setFormData((prev) => {
+      const updatedFormData = { ...prev, [key]: value };
+      trigger(); // 값 변경 후 유효성 검사 실행
+      return updatedFormData;
+    });
   };
 
   // 날짜 선택 시 setValue로 react-hook-form에 반영
@@ -78,8 +85,9 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     const file = e.target.files?.[0];
     if (file) {
       updateFormData("imageName", file.name);
-      setValue("image", file);
+      setValue("image", file, { shouldValidate: true });
       updateFormData("image", file);
+      trigger("image");
     }
   };
 
@@ -164,7 +172,8 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
               selectedLocation={formData.selectedLocation}
               setSelectedLocation={(location) => {
                 updateFormData("selectedLocation", location || "");
-                setValue("location", location || "");
+                setValue("location", location || "", { shouldValidate: true });
+                trigger("location");
               }}
               className="w-full border-none text-gray-400"
             />
