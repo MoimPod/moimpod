@@ -32,7 +32,7 @@ export default function CardList() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings(filters);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useFetchGatherings(filters);
 
   // 로그인 체크 훅
   const { checkAuth, isAuthModalOpen, setAuthModalOpen } = useCheckAuth();
@@ -117,7 +117,11 @@ export default function CardList() {
       <hr className="my-3" />
       <div className="">
         <GatheringFilters onChange={handleFilterChange} />
-        {data?.pages[0].data.length === 0 ? (
+        {isLoading ? ( // 첫 페이지 로딩 중일 때
+          <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
+            <p>모임 정보를 불러오는 중...</p>
+          </div>
+        ) : data?.pages[0].data.length === 0 ? ( // 첫 페이지 로딩 후 데이터 없을 때
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>아직 모임이 없어요</p>
             <p className="mt-2">지금 바로 모임을 만들어보세요</p>
@@ -130,8 +134,9 @@ export default function CardList() {
           </>
         )}
         {/* 무한 스크롤 감지용 div */}
-        <div ref={observerRef} className="h-10"></div>
-        {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
+        {!isLoading && <div ref={observerRef} className="h-10"></div>}
+        {/* 추가 데이터를 불러올 때만 메시지 표시 */}
+        {!isLoading && isFetchingNextPage && <div className="text-center text-sm text-gray-500">불러오는 중...</div>}
       </div>
 
       <CreateGatheringsModal isOpen={isModalOpen} onClose={handleClose} />

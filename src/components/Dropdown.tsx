@@ -59,7 +59,7 @@ export default function Dropdown({
   };
 
   return (
-    <div className="relative w-[111px]" ref={dropdownRef}>
+    <div className="relative w-[100px]" ref={dropdownRef}>
       <div
         className={cn(
           "mb-2 flex w-28 cursor-pointer items-center justify-between rounded-xl border p-2 text-sm font-medium",
