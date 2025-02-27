@@ -28,7 +28,7 @@ export default function MypageContent() {
     }
   }, [selectedTab]);
   return (
-    <div className="flex flex-1 flex-col gap-6 border-t-2 border-gray-900 bg-white px-6 pt-6">
+    <div className="flex flex-1 flex-col gap-6 border-t-2 border-gray-900 bg-white p-6">
       <Tab
         category={
           <CategoryButton categories={CATEGORIES} setValue={setSelectedCategory}>
