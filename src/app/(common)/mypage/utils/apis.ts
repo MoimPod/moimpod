@@ -33,6 +33,8 @@ const fetchMyCreatedGatherings = async (createdBy: number) => {
   const response = await axiosInstance.get<CardData[]>("gatherings", {
     params: {
       limit: 100,
+      sortBy: "dateTime",
+      sortOrder: "desc",
       createdBy,
     },
   });
