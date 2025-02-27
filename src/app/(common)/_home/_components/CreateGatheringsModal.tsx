@@ -34,7 +34,9 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     handleSubmit,
     reset,
     setError,
+    clearErrors,
     setValue,
+    watch,
     formState: { errors, isValid },
     trigger,
   } = useForm<FormDataType>({
@@ -58,6 +60,17 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
   useEffect(() => {
     triggerValidation();
   }, [formData, isOpen]);
+
+  useEffect(() => {
+    const typeValue = watch("type");
+    if (!typeValue) {
+      window.setTimeout(() => {
+        setValue("type", "OFFICE_STRETCHING", { shouldValidate: true }); // 기본값 설정
+        trigger("type"); // 유효성 검사 실행
+      }, 0);
+    }
+  }, [watch, setValue, trigger]);
+
   // 마감 날짜 오류 메시지
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -174,6 +187,15 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
             <LocationSelect
               selectedLocation={formData.selectedLocation}
               setSelectedLocation={(location) => {
+                if (location === "전체 지역") {
+                  setError("location", {
+                    type: "manual",
+                    message: "지역을 선택해주세요.",
+                  });
+                  setValue("location", ""); // 빈 값 전달
+                  trigger("location"); // 유효성 검사
+                  return;
+                }
                 updateFormData("selectedLocation", location || "");
                 setValue("location", location || "", { shouldValidate: true });
                 trigger("location");
@@ -181,6 +203,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
               className="w-full border-none text-gray-400"
             />
           </div>
+          {errors.location && <p className="mt-1 text-sm text-red-500">{errors.location.message}</p>}
         </FormField>
 
         {/* 이미지 업로드 */}
