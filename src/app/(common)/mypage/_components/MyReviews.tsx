@@ -5,7 +5,7 @@ import Score from "@/components/Score";
 import axiosInstance from "@/lib/axiosInstance";
 import Image from "next/image";
 import { Reviews } from "@/app/(common)/mypage/types";
-
+import DEFAULT_IMAGE from "@/images/default_image.png";
 const GatheringType = {
   OFFICE_STRETCHING: "달램핏 오피스 스트레칭",
   MINDFULNESS: "달램핏 마인드풀니스",
@@ -39,7 +39,7 @@ export default function MyReviews() {
           <ListItem
             CardImage={
               <Image
-                src={review.Gathering.image}
+                src={review.Gathering.image || DEFAULT_IMAGE}
                 alt="모임 이미지"
                 width={280}
                 height={156}

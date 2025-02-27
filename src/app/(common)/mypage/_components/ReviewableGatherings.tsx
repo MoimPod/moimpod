@@ -8,6 +8,7 @@ import Button from "@/components/Button";
 import ReviewModal from "@/app/(common)/mypage/_components/ReviewModal";
 import MypageList from "@/app/(common)/mypage/_components/MypageList";
 import { fetchMyGatherings } from "@/app/(common)/mypage/utils/apis";
+import DEFAULT_IMAGE from "@/images/default_image.png";
 
 export default function ReviewableGatherings() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -37,7 +38,7 @@ export default function ReviewableGatherings() {
               <ListItem
                 CardImage={
                   <Image
-                    src={gathering.image}
+                    src={gathering.image || DEFAULT_IMAGE}
                     alt="모임 이미지"
                     width={280}
                     height={156}

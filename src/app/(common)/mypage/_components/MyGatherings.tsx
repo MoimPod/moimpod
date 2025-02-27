@@ -6,7 +6,7 @@ import ReviewModal from "@/app/(common)/mypage/_components/ReviewModal";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import MypageList from "@/app/(common)/mypage/_components/MypageList";
 import { fetchMyGatherings } from "@/app/(common)/mypage/utils/apis";
-
+import DEFAULT_IMAGE from "@/images/default_image.png";
 // 이용 예정 => 모임 참여 신청했고 isCompleted가 false인 경우
 // 이용 완료 => 모임 참여 신청했고 isCompleted가 true인 경우
 // 개설 대기 => participantCount가 5 미만인 경우
@@ -49,7 +49,7 @@ export default function MyGatherings() {
             <ListItem
               CardImage={
                 <Image
-                  src={gathering.image}
+                  src={gathering.image || DEFAULT_IMAGE}
                   alt="모임 이미지"
                   width={280}
                   height={156}

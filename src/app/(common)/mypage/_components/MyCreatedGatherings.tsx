@@ -3,7 +3,7 @@ import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import { fetchMyCreatedGatherings } from "@/app/(common)/mypage/utils/apis";
 import ListItem from "@/components/ListItem";
 import Image from "next/image";
-
+import DEFAULT_IMAGE from "@/images/default_image.png";
 export default function MyCreatedGatherings() {
   const { data: userData } = useGetUserInfo();
 
@@ -20,7 +20,7 @@ export default function MyCreatedGatherings() {
             <ListItem
               CardImage={
                 <Image
-                  src={gathering.image}
+                  src={gathering.image || DEFAULT_IMAGE}
                   alt="모임 이미지"
                   width={280}
                   height={156}
