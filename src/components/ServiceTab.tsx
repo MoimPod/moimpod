@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import CategoryButton from "@/components/CategoryButton";
 import Tab from "@/components/Tab";
 import Dalaemfit from "@/images/dalaemfit.svg";
@@ -39,10 +39,11 @@ export default function ServiceTab({ onCategoryChange }: ServiceTabProps) {
       if (tab === "워케이션") {
         onCategoryChange?.("WORKATION");
       } else {
-        onCategoryChange?.(selectedCategory === "오피스 스트레칭" ? "OFFICE_STRETCHING" : "MINDFULNESS");
+        setSelectedCategory("전체");
+        onCategoryChange?.(undefined);
       }
     },
-    [selectedCategory, onCategoryChange],
+    [onCategoryChange],
   );
 
   return (
