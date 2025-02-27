@@ -11,6 +11,7 @@ const fetchMyGatherings = async (query?: FetchMyGatheringsParams) => {
   const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
     params: {
       limit: 100,
+      ...query,
     },
   });
   return response.data;
