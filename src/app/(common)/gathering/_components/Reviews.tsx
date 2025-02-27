@@ -1,20 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import SortButton from "@/components/SortButton";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import ReviewList from "../_components/ReviewList";
 import Pagination from "../_components/Pagination";
 import { useGetReviews } from "@/hooks/useGetReviews";
 import {
   QUERY_PARAMS,
-  SORT_OPTIONS,
-  SORT_BY,
-  SORT_ORDER,
+  SORT_VALUE,
   DEFAULT_QUERY_VALUES,
   REVIEW_LIMIT,
+  SORT_BY,
+  SORT_ORDER,
+  SORT_OPTIONS,
 } from "../_utils/constants";
-import { getInitialFilter } from "../_utils/queryUtils";
+import { getInitialSort } from "../_utils/queryUtils";
 import type { ReviewQuery } from "../types";
 
 export default function Reviews({ gatheringId, reviewQuery }: { gatheringId: string; reviewQuery: ReviewQuery }) {
@@ -27,53 +29,47 @@ export default function Reviews({ gatheringId, reviewQuery }: { gatheringId: str
 
   const { data } = useGetReviews(gatheringId, query);
 
-  // 현재 URL의 정렬 기준을 기반으로 초기 필터 설정
-  const [filter, setFilter] = useState(getInitialFilter(searchParams));
-
   const handlePageChange = (page: number) => {
     const limit = REVIEW_LIMIT;
     const offset = (page - 1) * limit;
 
-    params.set(QUERY_PARAMS.OFFSET, offset.toString());
-    params.set(QUERY_PARAMS.LIMIT, limit.toString());
+    params.set(QUERY_PARAMS.offset, offset.toString());
+    params.set(QUERY_PARAMS.limit, limit.toString());
 
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
+  const handleSortChange = (selected: string) => {
+    const sort = selected;
 
-    if (value === SORT_OPTIONS.LATEST) {
-      params.set(QUERY_PARAMS.SORT_BY, SORT_BY.CREATED_AT);
-      params.set(QUERY_PARAMS.SORT_ORDER, SORT_ORDER.DESC);
-    } else if (value === SORT_OPTIONS.SCORE_ASC) {
-      params.set(QUERY_PARAMS.SORT_BY, SORT_BY.SCORE);
-      params.set(QUERY_PARAMS.SORT_ORDER, SORT_ORDER.ASC);
-    } else {
-      params.set(QUERY_PARAMS.SORT_BY, SORT_BY.SCORE);
-      params.set(QUERY_PARAMS.SORT_ORDER, SORT_ORDER.DESC);
+    if (sort === SORT_VALUE.latest) {
+      // 최신순
+      params.set(QUERY_PARAMS.sortBy, SORT_BY.createdAt);
+      params.set(QUERY_PARAMS.sortOrder, SORT_ORDER.desc);
+    } else if (sort === SORT_VALUE.highScore) {
+      // 별점 높은순
+      params.set(QUERY_PARAMS.sortBy, SORT_BY.score);
+      params.set(QUERY_PARAMS.sortOrder, SORT_ORDER.desc);
+    } else if (sort === SORT_VALUE.lowScore) {
+      // 별점 낮은순
+      params.set(QUERY_PARAMS.sortBy, SORT_BY.score);
+      params.set(QUERY_PARAMS.sortOrder, SORT_ORDER.asc);
     }
-
-    params.set(QUERY_PARAMS.OFFSET, "0"); // 첫페이지로
-
-    setFilter(value);
 
     router.push(`${pathname}?${params.toString()}`);
   };
 
   // 기본 URL 쿼리 값을 설정하는 useEffect
   useEffect(() => {
-    const defaultParams = new URLSearchParams(params.toString());
-
-    if (!defaultParams.has(QUERY_PARAMS.GATHERING_ID)) {
-      defaultParams.set(QUERY_PARAMS.GATHERING_ID, gatheringId);
+    if (!params.has(QUERY_PARAMS.gatheringId)) {
+      params.set(QUERY_PARAMS.gatheringId, gatheringId);
     }
 
     Object.entries(DEFAULT_QUERY_VALUES).forEach(([key, value]) => {
-      if (!defaultParams.has(key)) defaultParams.set(key, value);
+      if (!params.has(key)) params.set(key, value);
     });
 
-    router.replace(`${pathname}?${defaultParams.toString()}`);
+    router.replace(`${pathname}?${params.toString()}`);
   }, []);
 
   if (data.reviews.length === 0) {
@@ -92,11 +88,11 @@ export default function Reviews({ gatheringId, reviewQuery }: { gatheringId: str
       <div className="flex justify-between">
         <h1 className="text-lg font-semibold">이용자들은 이 프로그램을 이렇게 느꼈어요!</h1>
 
-        <select value={filter} onChange={handleChange}>
-          <option value={SORT_OPTIONS.LATEST}>최신순</option>
-          <option value={SORT_OPTIONS.SCORE_DESC}>리뷰 높은순</option>
-          <option value={SORT_OPTIONS.SCORE_ASC}>리뷰 낮은순</option>
-        </select>
+        <SortButton
+          setSortType={handleSortChange}
+          sortOption={SORT_OPTIONS}
+          defaultSort={getInitialSort(searchParams)}
+        />
       </div>
 
       <ReviewList reviewList={data.reviews} />
