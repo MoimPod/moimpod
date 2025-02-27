@@ -50,7 +50,7 @@ export default function MyGatherings() {
               CardImage={
                 <Image
                   src={gathering.image || DEFAULT_IMAGE}
-                  alt="모임 이미지"
+                  alt={`${gathering.name} 이미지`}
                   width={280}
                   height={156}
                   className="h-[156px] w-full rounded-3xl md:max-w-[280px]"

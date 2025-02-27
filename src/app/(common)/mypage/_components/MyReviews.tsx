@@ -40,7 +40,7 @@ export default function MyReviews() {
             CardImage={
               <Image
                 src={review.Gathering.image || DEFAULT_IMAGE}
-                alt="모임 이미지"
+                alt={`${review.Gathering.name} 이미지`}
                 width={280}
                 height={156}
                 className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
