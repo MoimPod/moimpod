@@ -2,11 +2,12 @@ import ListItem from "@/components/ListItem";
 import Image from "next/image";
 import Button from "@/components/Button";
 import { useState } from "react";
-import ReviewModal from "@/app/(common)/mypage/_components/ReviewModal";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import MypageList from "@/app/(common)/mypage/_components/MypageList";
 import { fetchMyGatherings } from "@/app/(common)/mypage/utils/apis";
 import DEFAULT_IMAGE from "@/images/default_image.png";
+import { ReviewModal } from "@/app/(common)/mypage/_components/ReviewModal";
+
 // 이용 예정 => 모임 참여 신청했고 isCompleted가 false인 경우
 // 이용 완료 => 모임 참여 신청했고 isCompleted가 true인 경우
 // 개설 대기 => participantCount가 5 미만인 경우

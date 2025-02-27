@@ -5,7 +5,7 @@ import ListItem from "@/components/ListItem";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import { useState } from "react";
 import Button from "@/components/Button";
-import ReviewModal from "@/app/(common)/mypage/_components/ReviewModal";
+import ReviewModal from "@/app/(common)/mypage/_components/ReviewModal/ReviewModal";
 import MypageList from "@/app/(common)/mypage/_components/MypageList";
 import { fetchMyGatherings } from "@/app/(common)/mypage/utils/apis";
 import DEFAULT_IMAGE from "@/images/default_image.png";
