@@ -120,37 +120,43 @@ export default function AllReview({ children }: { children: React.ReactNode }) {
 
         <div className="flex flex-col">
           <div className="flex flex-col gap-4">
-            {data?.reviews.map((item, idx) => (
-              <div key={item.id}>
-                <ListItem
-                  CardImage={
-                    <Image
-                      src={item.gathering.image}
-                      alt="모임 이미지"
-                      width={280}
-                      height={156}
-                      className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
-                    />
-                  }
-                >
-                  <div className="mb-2 flex flex-col gap-3">
-                    <Score score={item.score} />
-                    <ListItem.Body>{item.comment}</ListItem.Body>
-                    <ListItem.ServiceInfo>
-                      {GatheringType[item.gathering.type]} 이용 · {item.gathering.location}
-                    </ListItem.ServiceInfo>
-                  </div>
+            {data?.reviews?.length > 0 ? (
+              data.reviews.map((item, idx) => (
+                <div key={item.id}>
+                  <ListItem
+                    CardImage={
+                      <Image
+                        src={item.gathering.image}
+                        alt="모임 이미지"
+                        width={280}
+                        height={156}
+                        className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
+                      />
+                    }
+                  >
+                    <div className="mb-2 flex flex-col gap-3">
+                      <Score score={item.score} />
+                      <ListItem.Body>{item.comment}</ListItem.Body>
+                      <ListItem.ServiceInfo>
+                        {GatheringType[item.gathering.type]} 이용 · {item.gathering.location}
+                      </ListItem.ServiceInfo>
+                    </div>
 
-                  <ListItem.MetaInfo
-                    imageUrl={item.user.image ?? "/images/default_image.png"}
-                    primary={item.user.name}
-                    secondary={item.gathering.dateTime}
-                  />
-                </ListItem>
-                <DashedLine className="mt-4" />
-                {idx === data.reviews.length - 1 ? <div ref={observerRef} /> : null}
+                    <ListItem.MetaInfo
+                      imageUrl={item.user.image ?? "/images/default_image.png"}
+                      primary={item.user.name}
+                      secondary={item.gathering.dateTime}
+                    />
+                  </ListItem>
+                  <DashedLine className="mt-4" />
+                  {idx === data.reviews.length - 1 ? <div ref={observerRef} /> : null}
+                </div>
+              ))
+            ) : (
+              <div className="py-10 text-center">
+                <p className="text-gray-500">리뷰가 없습니다.</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
