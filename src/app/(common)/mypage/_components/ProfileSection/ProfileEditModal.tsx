@@ -8,12 +8,11 @@ import { useForm } from "react-hook-form";
 import { useUpdateUserInfo } from "@/app/(common)/mypage/_hooks/useUpdateUserInfo";
 import Avatar from "@/components/Avatar";
 import { useEffect, useState } from "react";
+import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 
 type ProfileEditModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  imageUrl: string | null;
-  companyName: string;
 };
 
 // 회원 정보 폼 타입
@@ -23,15 +22,16 @@ type FormValues = {
 };
 
 // 프로필을 수정하는 폼
-export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyName }: ProfileEditModalProps) {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(imageUrl);
+export default function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
+  const { data } = useGetUserInfo();
+  const [previewUrl, setPreviewUrl] = useState(data?.image || "");
   const {
     register,
     handleSubmit,
     watch,
     reset,
-    formState: { isValid, isDirty },
-  } = useForm<FormValues>({ mode: "onChange", defaultValues: { companyName } });
+    formState: { isValid, isDirty, errors },
+  } = useForm<FormValues>({ mode: "onChange", defaultValues: { companyName: data?.companyName } });
   const mutation = useUpdateUserInfo();
 
   // 이미지 상태를 추적
@@ -49,17 +49,17 @@ export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyNam
       return () => URL.revokeObjectURL(objectUrl);
     } else {
       // 파일 선택이 없으면 기존 imageUrl 사용
-      setPreviewUrl(imageUrl);
+      setPreviewUrl(data?.image || "");
     }
-  }, [watchedProfileImg, imageUrl]);
+  }, [watchedProfileImg, data?.image]);
 
   // 모달을 여닫을 때 상태를 초기화
   useEffect(() => {
     if (isOpen) {
-      reset({ companyName, profileImg: undefined });
-      setPreviewUrl(imageUrl);
+      reset({ companyName: data?.companyName, profileImg: undefined });
+      setPreviewUrl(data?.image || "");
     }
-  }, [isOpen, companyName, imageUrl, reset]);
+  }, [isOpen, data?.companyName, data?.image, reset]);
 
   // 폼 제출 로직
   const onSubmit = (data: FormValues) => {
@@ -90,7 +90,9 @@ export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyNam
             placeholder="회사, 단체명"
             register={register("companyName", {
               required: "회사명을 입력해주세요.",
+              maxLength: { value: 18, message: "회사명은 18자 이하로 입력해주세요." },
             })}
+            helperText={errors.companyName?.message}
           />
         </div>
         <div className="flex gap-4">

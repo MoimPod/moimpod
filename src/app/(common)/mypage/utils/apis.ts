@@ -1,6 +1,7 @@
 import { MyGathering, Reviews } from "@/app/(common)/mypage/types";
 import axiosInstance from "@/lib/axiosInstance";
 import { CardData } from "@/stores/useGatheringStore";
+import dayjs from "dayjs";
 
 interface FetchMyGatheringsParams {
   completed?: boolean;
@@ -11,9 +12,10 @@ const fetchMyGatherings = async (query?: FetchMyGatheringsParams) => {
   const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
     params: {
       limit: 100,
+      ...query,
     },
   });
-  return response.data;
+  return response.data.sort((a, b) => dayjs(b.dateTime).valueOf() - dayjs(a.dateTime).valueOf());
 };
 
 const fetchMyReviews = async (userId: number) => {
@@ -24,13 +26,15 @@ const fetchMyReviews = async (userId: number) => {
     },
   });
 
-  return response.data.data;
+  return response.data.data.sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf());
 };
 
 const fetchMyCreatedGatherings = async (createdBy: number) => {
   const response = await axiosInstance.get<CardData[]>("gatherings", {
     params: {
       limit: 100,
+      sortBy: "dateTime",
+      sortOrder: "desc",
       createdBy,
     },
   });
