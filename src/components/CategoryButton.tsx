@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, createContext, useContext } from "react";
 import CheckedIcon from "@/images/checkbox_checked.svg";
 import UncheckedIcon from "@/images/checkbox_unchecked.svg";
 import { cn } from "@/utils/classnames";
+import { createContext, useContext, useState } from "react";
 
 const CategoryContext = createContext<{
   selectedCategory: string;
@@ -37,7 +37,7 @@ export default function CategoryButton({
 
   return (
     <CategoryContext.Provider value={{ selectedCategory, setSelectedCategory: handleCategoryChange }}>
-      <div className={cn("flex gap-3", className)}>{children}</div>
+      <div className={cn("flex flex-wrap gap-3", className)}>{children}</div>
     </CategoryContext.Provider>
   );
 }

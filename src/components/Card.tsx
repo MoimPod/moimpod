@@ -1,18 +1,18 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import React from "react";
-import { CardData } from "@/stores/useGatheringStore";
-import { useFavoritesStore } from "@/stores/useFavoritesStore";
-import Image from "next/image";
-import ProgressBar from "./ProgressBar";
-import ChipInfo from "./ChipInfo";
-import Tag from "./Tag";
-import AnimatedParticipantCount from "./AnimateParticipantCount";
-import LikeButton from "./LikeButton";
-import JoinArrow from "@/images/join_now_arrow.svg";
 import ConfirmedStamp from "@/components/ConfirmedStamp";
 import DEFAULT_IMAGE from "@/images/default_image.png";
+import JoinArrow from "@/images/join_now_arrow.svg";
+import { useFavoritesStore } from "@/stores/useFavoritesStore";
+import { CardData } from "@/stores/useGatheringStore";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React from "react";
+import AnimatedParticipantCount from "./AnimateParticipantCount";
+import ChipInfo from "./ChipInfo";
+import LikeButton from "./LikeButton";
+import ProgressBar from "./ProgressBar";
+import Tag from "./Tag";
 
 export default function Card({
   id,
@@ -43,7 +43,7 @@ export default function Card({
 
   return (
     <div>
-      <div className="relative my-5 items-center rounded-3xl bg-white hover:shadow-md md:flex md:h-[156px] lg:flex lg:h-[156px]">
+      <div className="relative my-5 items-center rounded-3xl bg-white hover:shadow-md md:flex lg:flex">
         {/* Inactive Layer: 모집 마감된 경우 반투명 레이어 추가 */}
         {isClosed && (
           <div className="absolute inset-0 flex items-center justify-center rounded-3xl bg-gray-500 bg-opacity-40 font-semibold text-white">
@@ -52,7 +52,7 @@ export default function Card({
         )}
 
         {/* 카드 이미지 */}
-        <div className="">
+        <div className="relative">
           <Tag registrationEnd={registrationEnd} />
           <Image
             src={!image ? DEFAULT_IMAGE : image}
@@ -65,17 +65,20 @@ export default function Card({
 
         {/* 카드 내용 */}
         <div className="flex-1 pb-3 pl-6 pr-6 pt-4">
-          <div className="flex">
-            <div className="mb-2 flex-col space-y-2">
+          <div className="flex flex-row">
+            <div className="mb-2 flex-1 flex-col space-y-2">
               {/* 모임 제목 */}
-              <div className="flex items-center gap-2">
-                <h2 className="text-lg font-bold">{name} |</h2>
+              <div className="flex flex-col items-start gap-1 md:flex-row md:items-center md:gap-2">
+                <h2 className="text-lg font-bold">{name}</h2>
+                <span className="hidden text-lg font-bold md:block">|</span>
                 <p className="text-sm text-gray-500">{location}</p>
               </div>
               {/* 날짜 정보 */}
               <ChipInfo dateTime={dateTime} />
             </div>
-            <LikeButton onClick={handleLikeClick} isLiked={isLiked} isClosed={isClosed} className="ml-auto md:mt-3" />
+            <div className="w-12">
+              <LikeButton onClick={handleLikeClick} isLiked={isLiked} isClosed={isClosed} className="ml-auto md:mt-3" />
+            </div>
           </div>
 
           <div className="mt-5 flex items-center gap-3">
