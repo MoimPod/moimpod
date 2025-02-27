@@ -4,10 +4,9 @@ import CapacityStatus from "@/components/CapacityStatus";
 import { cn } from "@/utils/classnames";
 import Check from "@/images/check.svg";
 import { PropsWithChildren } from "react";
-import formatDateToYYYYMMDD from "@/utils/formatDateToYYYYMMDD";
 import InactiveLayer from "@/components/InactiveLayer";
-import { format } from "date-fns";
-import { ko } from "date-fns/locale";
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
 
 type ListItemProps = {
   CardImage?: React.ReactNode;
@@ -102,8 +101,8 @@ type SubInfoProps = {
   capacity: number;
 };
 ListItem.SubInfo = ({ date, participantCount, capacity }: SubInfoProps) => {
-  const formatDate = format(date, "M월 d일", { locale: ko });
-  const formatTime = format(date, "HH:mm");
+  const formatDate = dayjs(date).format("M월 D일");
+  const formatTime = dayjs(date).format("HH:mm");
   return (
     <div className="flex items-center gap-3 text-sm text-gray-700">
       <div>{`${formatDate} · ${formatTime}`}</div>
@@ -144,7 +143,7 @@ ListItem.MetaInfo = ({ imageUrl, primary, secondary }: MetaInfoProps) => {
           <span className="mr-3 text-xs text-gray-700">|</span>
         </div>
       )}
-      <span className="text-xs text-gray-500">{formatDateToYYYYMMDD(secondary)}</span>
+      <span className="text-xs text-gray-500">{dayjs(secondary).format("YYYY.MM.DD")}</span>
     </div>
   );
 };
