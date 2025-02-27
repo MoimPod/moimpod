@@ -51,7 +51,7 @@ export default async function Page({
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <div className="flex w-full flex-col gap-6">
+    <div className="mb-[84px] flex w-full flex-col gap-6">
       <HydrationBoundary state={dehydratedState}>
         <Gathering gathering={gathering} />
         <ErrorBoundary>

@@ -16,7 +16,13 @@ type FloatingBarProps = {
 };
 
 function Container({ children }: { children: React.ReactNode }) {
-  return <div className="sticky bottom-0 flex w-full border-t-2 bg-white px-4 py-5">{children}</div>;
+  return (
+    <div className="fixed bottom-0 left-0 flex w-full justify-center border-t-2 border-black bg-white px-4 py-5">
+      <div className="w-full max-w-[1200px] px-4 md:px-6 lg:px-[102px]">
+        <div className="flex w-full justify-between">{children}</div>
+      </div>
+    </div>
+  );
 }
 
 const MODAL = {
@@ -54,12 +60,18 @@ export default function FloatingBar({ gatheringId, hostUserId }: FloatingBarProp
     return (
       <>
         <Container>
-          <Button styleType="outline" size="sm" className="md:w-[115px]" onClick={() => setActiveModal(MODAL.cancel)}>
-            취소하기
-          </Button>
-          <Button styleType="solid" size="sm" className="md:w-[115px]" onClick={copyClipboard}>
-            공유하기
-          </Button>
+          <div>
+            <div className="text-base font-semibold">더 건강한 나와 팀을 위한 프로그램 🏃‍️️</div>
+            <div className="text-xs">국내 최고 웰니스 전문가와 프로그램을 통해 지친 몸과 마음을 회복해봐요</div>
+          </div>
+          <div className="flex gap-2">
+            <Button styleType="outline" size="sm" className="md:w-[115px]" onClick={() => setActiveModal(MODAL.cancel)}>
+              취소하기
+            </Button>
+            <Button styleType="solid" size="sm" className="md:w-[115px]" onClick={copyClipboard}>
+              공유하기
+            </Button>
+          </div>
         </Container>
         {activeModal === "cancel" && (
           <Popup
@@ -77,20 +89,26 @@ export default function FloatingBar({ gatheringId, hostUserId }: FloatingBarProp
   return (
     <>
       <Container>
-        {user && isJoined ? (
-          <Button
-            styleType="outline"
-            size="sm"
-            className="md:w-[115px]"
-            onClick={() => mutateLeaveGathering(gatheringId)}
-          >
-            참여 취소하기
-          </Button>
-        ) : (
-          <Button styleType="solid" size="sm" className="md:w-[115px]" onClick={handleJoin}>
-            참여하기
-          </Button>
-        )}
+        <div>
+          <div className="text-base font-semibold">더 건강한 나와 팀을 위한 프로그램 🏃‍️️</div>
+          <div className="text-xs">국내 최고 웰니스 전문가와 프로그램을 통해 지친 몸과 마음을 회복해봐요</div>
+        </div>
+        <div className="flex gap-2">
+          {user && isJoined ? (
+            <Button
+              styleType="outline"
+              size="sm"
+              className="md:w-[115px]"
+              onClick={() => mutateLeaveGathering(gatheringId)}
+            >
+              참여 취소하기
+            </Button>
+          ) : (
+            <Button styleType="solid" size="sm" className="md:w-[115px]" onClick={handleJoin}>
+              참여하기
+            </Button>
+          )}
+        </div>
       </Container>
       {activeModal === MODAL.join && <LoginPopup isOpen={!user && !!activeModal} onClose={closeModal} />}
     </>
