@@ -90,31 +90,26 @@ export default function CardList() {
           <div className="text-lg font-semibold text-gray-900 lg:text-2xl">지금 모임에 참여해보세요</div>
         </div>
       </div>
-      <div className="px-6 pt-6">
-        <div className="flex items-center">
+      <div className="relative mt-6">
+        <div className="flex flex-row gap-2">
           <ServiceTab
             onCategoryChange={(type) => {
               handleFilterChange({ type }); // 필터링 값 업데이트
             }}
           />
-          <div className="ml-auto w-[114px]">
-            <Button styleType="solid" size="sm" className="h-10 px-3 md:h-11" onClick={handleOpen}>
-              모임 만들기
-            </Button>
-            <LoginPopup
-              isOpen={isAuthModalOpen}
-              onClose={() => {
-                setAuthModalOpen(false);
-              }}
-            />
-          </div>
+          <LoginPopup
+            isOpen={isAuthModalOpen}
+            onClose={() => {
+              setAuthModalOpen(false);
+            }}
+          />
         </div>
         <Button styleType="solid" size="sm" className="absolute right-0 top-0 h-10 w-24 md:h-11" onClick={handleOpen}>
           모임 만들기
         </Button>
       </div>
       <hr className="my-3" />
-      <div className="px-6">
+      <div className="">
         <GatheringFilters onChange={handleFilterChange} />
         {data?.pages[0].data.length === 0 ? (
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
