@@ -22,6 +22,7 @@ export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModa
     control,
     handleSubmit,
     formState: { isValid },
+    setValue,
   } = useForm<ReviewFormValues>({
     mode: "onChange",
     defaultValues: {
@@ -36,8 +37,14 @@ export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModa
     onClose();
   };
 
+  const handleClickClose = () => {
+    setValue("score", 0);
+    setValue("comment", "");
+    onClose();
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} className="mx-4 flex w-full max-w-[520px] flex-col gap-6 md:mx-0">
+    <Modal isOpen={isOpen} onClose={handleClickClose} className="mx-4 flex w-full max-w-[520px] flex-col gap-6 md:mx-0">
       <div className="text-lg font-semibold">리뷰 쓰기</div>
       <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
         {/* 평점 입력 영역 */}
@@ -54,7 +61,7 @@ export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModa
                     key={score}
                     type="button"
                     onClick={() => field.onChange(score)}
-                    className={`text-2xl ${field.value >= score ? "fill-red-600" : "fill-gray-200"}`}
+                    className={`text-2xl ${field.value >= score ? "animate-heart-scale-up fill-blue-6" : "fill-gray-200"}`}
                   >
                     <Heart />
                   </button>
@@ -80,7 +87,7 @@ export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModa
           />
         </div>
         <div className="flex gap-4">
-          <Button className="w-full" styleType={"outline"} onClick={onClose}>
+          <Button className="w-full" styleType={"outline"} onClick={handleClickClose}>
             취소
           </Button>
           <Button className="w-full" type="submit" disabled={!isValid}>
