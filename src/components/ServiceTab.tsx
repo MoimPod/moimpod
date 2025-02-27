@@ -33,41 +33,18 @@ export default function ServiceTab({ onCategoryChange }: ServiceTabProps) {
     [selectedTab, onCategoryChange],
   );
 
-  useEffect(() => {
-    if (selectedTab === "워케이션") {
-      onCategoryChange?.("WORKATION");
-    } else {
-      onCategoryChange?.(
-        selectedCategory === "오피스 스트레칭"
-          ? "OFFICE_STRETCHING"
-          : selectedCategory === "마인드풀니스"
-            ? "MINDFULNESS"
-            : undefined,
-      );
-    }
-  }, [selectedTab, onCategoryChange]);
-
-  const handleTabChange = useCallback((tab: string) => {
-    setSelectedTab(tab);
-  }, []);
-
-  // const handleTabChange = useCallback(
-  //   (tab: string) => {
-  //     setSelectedTab(tab);
-  //     if (tab === "워케이션") {
-  //       onCategoryChange?.("WORKATION");
-  //     } else {
-  //       onCategoryChange?.(
-  //         selectedCategory === "오피스 스트레칭"
-  //           ? "OFFICE_STRETCHING"
-  //           : selectedCategory === "마인드풀니스"
-  //             ? "MINDFULNESS"
-  //             : undefined,
-  //       );
-  //     }
-  //   },
-  //   [selectedCategory, onCategoryChange],
-  // );
+  const handleTabChange = useCallback(
+    (tab: string) => {
+      setSelectedTab(tab);
+      if (tab === "워케이션") {
+        onCategoryChange?.("WORKATION");
+      } else {
+        setSelectedCategory("전체");
+        onCategoryChange?.(undefined);
+      }
+    },
+    [onCategoryChange],
+  );
 
   return (
     <>
