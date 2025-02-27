@@ -2,26 +2,14 @@ import MypageList from "@/app/(common)/mypage/_components/MypageList";
 import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import ListItem from "@/components/ListItem";
 import Score from "@/components/Score";
-import axiosInstance from "@/lib/axiosInstance";
 import Image from "next/image";
-import { Reviews } from "@/app/(common)/mypage/types";
 import DEFAULT_IMAGE from "@/images/default_image.png";
+import { fetchMyReviews } from "@/app/(common)/mypage/utils/apis";
 const GatheringType = {
   OFFICE_STRETCHING: "달램핏 오피스 스트레칭",
   MINDFULNESS: "달램핏 마인드풀니스",
   WORKATION: "워케이션",
   DALLAEMFIT: "달램핏",
-};
-
-const fetchMyReviews = async (userId: number) => {
-  const response = await axiosInstance.get<Reviews>("reviews", {
-    params: {
-      limit: 100,
-      userId,
-    },
-  });
-
-  return response.data.data;
 };
 
 export default function MyReviews() {
