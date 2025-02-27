@@ -30,7 +30,7 @@ export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyNam
     handleSubmit,
     watch,
     reset,
-    formState: { isValid, isDirty },
+    formState: { isValid, isDirty, errors },
   } = useForm<FormValues>({ mode: "onChange", defaultValues: { companyName } });
   const mutation = useUpdateUserInfo();
 
@@ -90,7 +90,9 @@ export default function ProfileEditModal({ isOpen, onClose, imageUrl, companyNam
             placeholder="회사, 단체명"
             register={register("companyName", {
               required: "회사명을 입력해주세요.",
+              maxLength: { value: 18, message: "회사명은 18자 이하로 입력해주세요." },
             })}
+            helperText={errors.companyName?.message}
           />
         </div>
         <div className="flex gap-4">
