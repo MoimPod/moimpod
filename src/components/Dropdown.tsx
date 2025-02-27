@@ -59,7 +59,7 @@ export default function Dropdown({
   };
 
   return (
-    <div className="relative w-full" ref={dropdownRef}>
+    <div className="relative w-[111px]" ref={dropdownRef}>
       <div
         className={cn(
           "mb-2 flex w-28 cursor-pointer items-center justify-between rounded-xl border p-2 text-sm font-medium",
@@ -86,7 +86,11 @@ export default function Dropdown({
           (options?.length ? (
             <div className="absolute z-10 w-full rounded-xl border bg-white p-2 text-sm font-medium shadow-md">
               {options.map((option) => (
-                <div key={option} onClick={() => handleSelect(option)} className="rounded-xl p-2 hover:bg-sky-100">
+                <div
+                  key={option}
+                  onClick={() => handleSelect(option)}
+                  className="cursor-pointer rounded-xl p-2 hover:bg-sky-100"
+                >
                   {option}
                 </div>
               ))}
