@@ -6,7 +6,6 @@ import Check from "@/images/check.svg";
 import { PropsWithChildren } from "react";
 import InactiveLayer from "@/components/InactiveLayer";
 import dayjs from "dayjs";
-import "dayjs/locale/ko";
 
 type ListItemProps = {
   CardImage?: React.ReactNode;
