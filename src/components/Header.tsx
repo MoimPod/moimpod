@@ -1,7 +1,7 @@
 "use client";
 
+import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
-import { useUserStore } from "@/stores/useUserStore";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,10 +10,10 @@ import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
 
 export default function Header() {
-  const user = useUserStore();
   const router = useRouter();
   const pathname = usePathname();
   const [token, setToken] = useState<string | undefined>(undefined);
+  const { data } = useGetUserInfo(token);
   const [profileBtn, setProfileBtn] = useState(false);
   const favorites = useFavoritesStore((state) => state.favorites);
   const favoritesCount = favorites.length;
@@ -40,6 +40,7 @@ export default function Header() {
 
   const handleLogout = () => {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/";
+    setToken(undefined);
     if (typeof window !== "undefined" && window.localStorage) {
       localStorage.removeItem("user-storage");
     }
@@ -86,7 +87,7 @@ export default function Header() {
               }}
               className="flex items-center justify-center"
             >
-              <Avatar size={"md"} imageUrl={user.user?.image} />
+              <Avatar size={"md"} imageUrl={data?.image} />
             </button>
             {profileBtn ? (
               <div className="absolute right-0 top-[calc(100%+8px)] h-20 w-[110px] rounded-xl bg-white shadow-md xl:top-[calc(100%+10px)]">
