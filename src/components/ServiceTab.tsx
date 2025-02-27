@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import CategoryButton from "@/components/CategoryButton";
 import Tab from "@/components/Tab";
 import Dalaemfit from "@/images/dalaemfit.svg";
@@ -33,17 +33,41 @@ export default function ServiceTab({ onCategoryChange }: ServiceTabProps) {
     [selectedTab, onCategoryChange],
   );
 
-  const handleTabChange = useCallback(
-    (tab: string) => {
-      setSelectedTab(tab);
-      if (tab === "워케이션") {
-        onCategoryChange?.("WORKATION");
-      } else {
-        onCategoryChange?.(selectedCategory === "오피스 스트레칭" ? "OFFICE_STRETCHING" : "MINDFULNESS");
-      }
-    },
-    [selectedCategory, onCategoryChange],
-  );
+  useEffect(() => {
+    if (selectedTab === "워케이션") {
+      onCategoryChange?.("WORKATION");
+    } else {
+      onCategoryChange?.(
+        selectedCategory === "오피스 스트레칭"
+          ? "OFFICE_STRETCHING"
+          : selectedCategory === "마인드풀니스"
+            ? "MINDFULNESS"
+            : undefined,
+      );
+    }
+  }, [selectedTab, onCategoryChange]);
+
+  const handleTabChange = useCallback((tab: string) => {
+    setSelectedTab(tab);
+  }, []);
+
+  // const handleTabChange = useCallback(
+  //   (tab: string) => {
+  //     setSelectedTab(tab);
+  //     if (tab === "워케이션") {
+  //       onCategoryChange?.("WORKATION");
+  //     } else {
+  //       onCategoryChange?.(
+  //         selectedCategory === "오피스 스트레칭"
+  //           ? "OFFICE_STRETCHING"
+  //           : selectedCategory === "마인드풀니스"
+  //             ? "MINDFULNESS"
+  //             : undefined,
+  //       );
+  //     }
+  //   },
+  //   [selectedCategory, onCategoryChange],
+  // );
 
   return (
     <>
