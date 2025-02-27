@@ -21,8 +21,9 @@ export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModa
   const {
     control,
     handleSubmit,
-    formState: { isValid },
+    formState: { isValid, errors },
     setValue,
+    watch,
   } = useForm<ReviewFormValues>({
     mode: "onChange",
     defaultValues: {
@@ -30,6 +31,7 @@ export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModa
       comment: "",
     },
   });
+  const comment = watch("comment");
   const mutation = usePostReviews();
   const onSubmit = (data: ReviewFormValues) => {
     // gatheringId와 data를 이용해 API 요청
@@ -42,7 +44,6 @@ export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModa
     setValue("comment", "");
     onClose();
   };
-
   return (
     <Modal isOpen={isOpen} onClose={handleClickClose} className="mx-4 flex w-full max-w-[520px] flex-col gap-6 md:mx-0">
       <div className="text-lg font-semibold">리뷰 쓰기</div>
@@ -72,19 +73,28 @@ export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModa
         </div>
         {/* 리뷰 텍스트 입력 영역 */}
         <div className="flex flex-col gap-3">
-          <label className="font-semibold">경험에 대해 남겨주세요.</label>
+          <div className="flex justify-between">
+            <label className="font-semibold">경험에 대해 남겨주세요.</label>
+            <span className="text-gray-300">{comment.length}/250</span>
+          </div>
           <Controller
             name="comment"
             control={control}
-            rules={{ required: "리뷰를 작성해주세요" }}
+            rules={{
+              required: "리뷰를 작성해주세요",
+              maxLength: { value: 250, message: "리뷰는 250자 이하로 작성해주세요" },
+              validate: (value) => value.trim() === value || "앞뒤 공백을 지워주세요",
+            }}
             render={({ field }) => (
               <textarea
                 {...field}
+                maxLength={250}
                 className="h-[120px] resize-none border-none bg-gray-50 px-4 pt-2.5 placeholder:text-gray-400"
                 placeholder="남겨주신 리뷰는 프로그램 운영 및 다른 회원 분들께 큰 도움이 됩니다."
               />
             )}
           />
+          {errors.comment && <p className="mt-1 text-sm font-semibold text-red-600">{errors.comment.message}</p>}
         </div>
         <div className="flex gap-4">
           <Button className="w-full" styleType={"outline"} onClick={handleClickClose}>
