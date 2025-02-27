@@ -11,15 +11,15 @@ type LikeButtonProps = {
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export default function LikeButton({ onClick, isClosed, isLiked, className, ...rest }: LikeButtonProps) {
-  const [isClicked, setIsClicked] = useState(isLiked);
+  const [isClicked, setIsClicked] = useState(false);
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setIsClicked(!isClicked);
+    setIsClicked(!isLiked);
     onClick(e);
   };
   return (
     <button
-      className={`group flex ${isClosed ? "h-9 w-full max-w-[116px] md:size-12" : "size-12"} items-center justify-center rounded-full ${isClicked || isClosed ? "border-0 bg-blue-2" : "border-2 border-gray-200 bg-white"} ${className}`}
+      className={`group flex ${isClosed ? "h-9 w-full max-w-[116px] md:size-12" : "size-12"} items-center justify-center rounded-full ${isLiked || isClosed ? "border-0 bg-blue-2" : "border-2 border-gray-200 bg-white"} ${className}`}
       onClick={handleClick}
       {...rest}
     >
@@ -33,7 +33,7 @@ export default function LikeButton({ onClick, isClosed, isLiked, className, ...r
         <Heart
           fill="#fff"
           stroke="#9CA3AF"
-          className={`transition-all ${isClicked ? "animate-heart-scale-up fill-blue-6 stroke-none" : ""}`}
+          className={`transition-all ${isLiked ? "fill-blue-6 stroke-none" : ""} ${isClicked ? "animate-heart-scale-up" : ""}`}
         />
       )}
     </button>
