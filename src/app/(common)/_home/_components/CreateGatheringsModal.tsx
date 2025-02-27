@@ -187,18 +187,19 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
             <LocationSelect
               selectedLocation={formData.selectedLocation}
               setSelectedLocation={(location) => {
-                if (location === "전체 지역") {
+                if (location === undefined) {
                   setError("location", {
                     type: "manual",
                     message: "지역을 선택해주세요.",
                   });
-                  setValue("location", ""); // 빈 값 전달
-                  trigger("location"); // 유효성 검사
+                  setValue("location", "", { shouldValidate: true }); // 빈 값 전달
+                  window.setTimeout(() => trigger("location"), 0); // 유효성 검사
                   return;
                 }
+                clearErrors("location"); // 올바른 지역 선택 시 에러 제거
                 updateFormData("selectedLocation", location || "");
                 setValue("location", location || "", { shouldValidate: true });
-                trigger("location");
+                window.setTimeout(() => trigger("location"), 0);
               }}
               className="w-full border-none text-gray-400"
             />
@@ -296,7 +297,13 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         {errors.root && <p className="mt-1 text-sm text-red-500">{errors.root.message}</p>}
 
         {/* 제출 버튼 */}
-        <Button styleType="solid" size="lg" className="mt-7 w-full" disabled={!isValid || isPending} type="submit">
+        <Button
+          styleType="solid"
+          size="lg"
+          className="mt-7 w-full"
+          disabled={!isValid || !watch("location") || isPending}
+          type="submit"
+        >
           {isPending ? "저장 중..." : "확인"}
         </Button>
       </form>
