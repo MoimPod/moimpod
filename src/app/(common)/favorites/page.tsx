@@ -56,7 +56,7 @@ export default function Page() {
             <div ref={observerRef} className="h-10"></div>
           </>
         )}
-        {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
+        {isFetchingNextPage && <div className="text-center text-sm text-gray-500">불러오는 중...</div>}
       </div>
     </div>
   );
