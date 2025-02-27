@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import axiosInstance from "@/lib/axiosInstance";
-import type { ReviewQuery, ReviewsResponse } from "../types";
+import type { ReviewQuery, ReviewsResponse } from "@/types";
 
 export const getReviews = async (query?: ReviewQuery): Promise<ReviewsResponse> => {
   try {
@@ -11,7 +11,7 @@ export const getReviews = async (query?: ReviewQuery): Promise<ReviewsResponse> 
   }
 };
 
-export const useGetReviews = (gatheringId: string, query: ReviewQuery) => {
+export const useGetReviews = (gatheringId?: string, query?: ReviewQuery) => {
   const reviewQuery = { gatheringId, ...query };
 
   return useSuspenseQuery({

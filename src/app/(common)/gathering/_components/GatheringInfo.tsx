@@ -49,7 +49,7 @@ export default function GatheringInfo({ gatheringId, gathering }: GatheringProps
           {MIN_COUNT <= participantCount && <ConfirmedStamp />}
         </div>
 
-        <ProgressBar progress={(participantCount / capacity) * 100} />
+        <ProgressBar progress={(profileImages?.length / capacity) * 100} />
         <div className="mt-2 flex justify-between text-xs font-medium text-gray-700">
           <div>최소인원 {MIN_COUNT}명</div>
           <div>최대인원 {capacity}명</div>

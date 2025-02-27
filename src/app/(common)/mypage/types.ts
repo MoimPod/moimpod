@@ -26,3 +26,20 @@ export type User = {
   createdAt: string; // 생성 날짜
   updatedAt: string; // 업데이트 날짜
 };
+
+export type DataItem = {
+  teamId: number;
+  id: number;
+  score: number;
+  comment: string;
+  createdAt: string;
+  Gathering: Pick<MyGathering, "teamId" | "id" | "type" | "name" | "dateTime" | "location" | "image">;
+  User: Pick<User, "teamId" | "id" | "name" | "image">;
+};
+
+export type Reviews = {
+  data: DataItem[];
+  totalItemCount: number;
+  currentPage: number;
+  totalPages: number;
+};

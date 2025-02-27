@@ -40,6 +40,7 @@ export default {
         "blue-8": "#4674b1",
         "blue-9": "#385d8e",
         "blue-10": "#2c4970",
+        "blue-11": "#2563eb",
       },
       animation: {
         "heart-scale-up": "heart-scale-up 0.6s cubic-bezier(.77,1.74,.97,1.65)",
