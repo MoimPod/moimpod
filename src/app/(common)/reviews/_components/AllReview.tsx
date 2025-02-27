@@ -14,7 +14,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import ServiceTab from "@/components/ServiceTab";
 import { format } from "date-fns";
-import { GatheringType } from "@/utils/constants";
+import { GATHERING_TYPE } from "@/utils/constants";
 
 const sortOptions = [
   { label: "최신순", value: "latest" }, // sortBy=createdAt&sortOrder=desc
@@ -138,7 +138,7 @@ export default function AllReview({ children }: { children: React.ReactNode }) {
                       <Score score={item.score} />
                       <ListItem.Body>{item.comment}</ListItem.Body>
                       <ListItem.ServiceInfo>
-                        {GatheringType[item.gathering.type]} 이용 · {item.gathering.location}
+                        {GATHERING_TYPE[item.gathering.type]} 이용 · {item.gathering.location}
                       </ListItem.ServiceInfo>
                     </div>
 
