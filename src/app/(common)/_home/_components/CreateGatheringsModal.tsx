@@ -7,11 +7,11 @@ import Input from "@/components/Input";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import CategoryButton from "@/components/CategoryButton";
 import MeetingForm from "@/app/(common)/_home/_components/MeetingForm";
-import { useForm } from "react-hook-form";
-import { isValid as isValidDate } from "date-fns";
-import { useCreateGathering, FormDataType } from "@/app/(common)/_home/_hooks/useCreateGathering";
-import dayjs from "dayjs";
+import { FormDataType, useCreateGathering } from "@/app/(common)/_home/_hooks/useCreateGathering";
 import defaultImage from "@/images/default_image.png";
+import { isValid as isValidDate } from "date-fns";
+import dayjs from "dayjs";
+import { useForm } from "react-hook-form";
 
 type CreateGatheringsModalProps = {
   isOpen: boolean;
@@ -165,7 +165,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      className="flex w-full flex-col max-sm:fixed max-sm:overflow-auto md:max-w-[520px]"
+      className={`flex max-h-screen w-full flex-col max-sm:fixed max-sm:overflow-auto md:h-auto md:max-w-[520px] [&::-webkit-scrollbar]:hidden`}
     >
       <label className="mb-3 text-lg font-semibold">모임 만들기</label>
       <form onSubmit={handleSubmit(onSubmit)}>

@@ -1,18 +1,18 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
-import ServiceTab from "@/components/ServiceTab";
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
-import Card from "@/components/Card";
-import Button from "@/components/Button";
-import GatheringLogo from "@/images/gathering_logo.svg";
-import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
 import { useCheckAuth } from "@/app/(common)/_home/_hooks/useCheckAuth";
+import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
+import Button from "@/components/Button";
+import Card from "@/components/Card";
 import { LoginPopup } from "@/components/Popup";
-import { useUserStore } from "@/stores/useUserStore";
+import ServiceTab from "@/components/ServiceTab";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import GatheringLogo from "@/images/gathering_logo.svg";
+import { useUserStore } from "@/stores/useUserStore";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export default function CardList() {
   const searchParams = useSearchParams();
@@ -83,35 +83,39 @@ export default function CardList() {
 
   return (
     <div>
-      <div className="mb-5 flex gap-6 pt-8">
+      <div className="mb-5 flex flex-row items-center gap-4 pl-3 pt-10">
         <GatheringLogo />
         <div>
           <div className="mb-2 text-sm font-semibold text-gray-700">함께할 사람이 없나요?</div>
-          <div className="text-2xl font-semibold text-gray-900">지금 모임에 참여해보세요</div>
+          <div className="text-lg font-semibold text-gray-900 lg:text-2xl">지금 모임에 참여해보세요</div>
         </div>
       </div>
-      <div className="px-6 pt-6">
-        <div className="flex items-center">
+      <div className="relative mt-6">
+        <div className="flex flex-row gap-2">
           <ServiceTab
             onCategoryChange={(type) => {
               handleFilterChange({ type }); // 필터링 값 업데이트
             }}
           />
-          <div className="ml-auto w-[114px]">
-            <Button styleType="solid" size="sm" className="h-10 px-3 md:h-11" onClick={handleOpen}>
-              모임 만들기
-            </Button>
-            <LoginPopup
-              isOpen={isAuthModalOpen}
-              onClose={() => {
-                setAuthModalOpen(false);
-              }}
-            />
-          </div>
+          <LoginPopup
+            isOpen={isAuthModalOpen}
+            onClose={() => {
+              setAuthModalOpen(false);
+            }}
+          />
         </div>
+        <Button
+          type="button"
+          styleType="solid"
+          size="sm"
+          className="absolute right-0 top-0 h-10 w-24 md:h-11"
+          onClick={handleOpen}
+        >
+          모임 만들기
+        </Button>
       </div>
       <hr className="my-3" />
-      <div className="px-6">
+      <div className="">
         <GatheringFilters onChange={handleFilterChange} />
         {data?.pages[0].data.length === 0 ? (
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
