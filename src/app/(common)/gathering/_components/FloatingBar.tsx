@@ -9,7 +9,6 @@ import { useJoin } from "../_hooks/useJoin";
 import { useGetParticipants } from "../_hooks/useGetParticipants";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import { useCancelGathering } from "../_hooks/useCancelGathering";
-import Modal from "@/components/Modal";
 
 type FloatingBarProps = {
   gatheringId: string;
