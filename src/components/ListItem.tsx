@@ -134,7 +134,7 @@ ListItem.MetaInfo = ({ imageUrl, primary, secondary }: MetaInfoProps) => {
       {primary && (
         <div className="flex items-center gap-2">
           {imageUrl ? (
-            <Image alt="사용자 이미지" src={imageUrl} width="24" height="24" className="rounded-full" />
+            <Image alt="사용자 이미지" src={imageUrl} width="24" height="24" className="size-6 rounded-full" />
           ) : (
             <Profile width="24" height="24" />
           )}
