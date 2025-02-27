@@ -1,11 +1,10 @@
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 
 import axiosInstance from "@/lib/axiosInstance";
-import type { ReviewQuery, ReviewResponse } from "@/types";
+import type { ReviewQuery, ReviewResponse, ReviewsResponse } from "@/types";
 
-export const getReviews = async (pageParam: number, query?: ReviewQuery) => {
-  const reviewQuery = { ...query, offset: (pageParam - 1) * 10 }; // 한번에 6개씩
-
+export const getReviews = async (pageParam: number, query?: ReviewQuery): Promise<ReviewsResponse> => {
+  const reviewQuery = { ...query, offset: (pageParam - 1) * 10 };
   try {
     const { data } = await axiosInstance.get("/reviews", { params: reviewQuery });
     return data;
@@ -31,6 +30,7 @@ export const useAllReview = (query?: ReviewQuery) => {
             image: review.Gathering.image,
             type: review.Gathering.type,
             location: review.Gathering.location,
+            dateTime: review.Gathering.dateTime,
           },
           user: {
             id: review.User.id,

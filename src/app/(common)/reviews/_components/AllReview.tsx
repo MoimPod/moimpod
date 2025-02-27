@@ -6,30 +6,21 @@ import Score from "@/components/Score";
 import SortButton from "@/components/SortButton";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import DateSelect from "@/components/Filtering/DateSelect";
-import { useAllReview } from "@/app/(common)/reviews/_hooks/useFetchData";
+import { useAllReview } from "../_hooks/useAllReview";
 import { useEffect } from "react";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Image from "next/image";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useQueryParams } from "@/hooks/useQueryParams";
-import ServiceTab from "@/app/(common)/_home/_components/ServiceTab";
+import ServiceTab from "@/components/ServiceTab";
+import { format } from "date-fns";
+import { GatheringType } from "@/utils/constants";
 
 const sortOptions = [
   { label: "최신순", value: "latest" }, // sortBy=createdAt&sortOrder=desc
   { label: "별점 높은순", value: "highScore" }, // sortBy=score&sortOrder=desc
   { label: "참여 인원순", value: "highParticipants" }, // sortBy=participantCount&sortOrder=desc
 ];
-
-export const SORT_OPTIONS = ["최신순", "별점 높은순", "참여 인원순"];
-
-export const SORT_VALUE = ["createdAt", "score", "participants"] as const;
-
-export const LOCATION_OPTIONS = ["전체", "건대입구", "을지로3가", "신림", "홍대입구"];
-
-export const SORT = SORT_OPTIONS.map((option, index) => ({
-  value: SORT_VALUE[index],
-  option,
-}));
 
 export default function AllReview({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -74,14 +65,21 @@ export default function AllReview({ children }: { children: React.ReactNode }) {
   };
 
   const handleDateSelect = (date: Date | null) => {
-    // TODO: 날짜 선택 시 동작
+    if (date) {
+      const dateFormat = format(date, "yyyy-MM-dd");
+      params.set("date", dateFormat);
+    } else {
+      params.delete("date");
+    }
+
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const handleLocationSelect = (location: string | undefined) => {
-    if (!location) {
-      params.delete("location");
-    } else {
+    if (location) {
       params.set("location", location);
+    } else {
+      params.delete("location");
     }
 
     router.push(`${pathname}?${params.toString()}`);
@@ -139,11 +137,15 @@ export default function AllReview({ children }: { children: React.ReactNode }) {
                     <Score score={item.score} />
                     <ListItem.Body>{item.comment}</ListItem.Body>
                     <ListItem.ServiceInfo>
-                      {item.gathering.type} 이용 · {item.gathering.location}
+                      {GatheringType[item.gathering.type]} 이용 · {item.gathering.location}
                     </ListItem.ServiceInfo>
                   </div>
 
-                  <ListItem.MetaInfo imageUrl={item.user.image} primary={item.user.name} secondary={item.createdAt} />
+                  <ListItem.MetaInfo
+                    imageUrl={item.user.image ?? "/images/default_image.png"}
+                    primary={item.user.name}
+                    secondary={item.gathering.dateTime}
+                  />
                 </ListItem>
                 <DashedLine className="mt-4" />
                 {idx === data.reviews.length - 1 ? <div ref={observerRef} /> : null}

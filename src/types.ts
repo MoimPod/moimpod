@@ -9,8 +9,9 @@ export type UserType = {
 export type GatheringType = {
   teamId: string;
   id: number;
-  type: string;
+  type: "OFFICE_STRETCHING" | "MINDFULNESS" | "WORKATION";
   name: string;
+  title: string;
   dateTime: string;
   registrationEnd: string;
   location: string;
@@ -40,7 +41,7 @@ export type ReviewResponse = {
   score: number;
   comment: string;
   createdAt: string;
-  Gathering?: GatheringType;
+  Gathering: GatheringType;
   User: UserType;
 };
 
