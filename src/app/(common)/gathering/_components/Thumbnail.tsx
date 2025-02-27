@@ -10,7 +10,7 @@ export default function Thumbnail({ imageUrl, registrationEnd }: ThumbnailProps)
   return (
     <div className="relative h-auto w-full overflow-hidden rounded-3xl border-2 border-gray-200 md:h-60 lg:h-[270px]">
       <Image
-        src={imageUrl}
+        src={imageUrl ?? "/images/default_image.png"}
         alt={"모임 이미지"}
         object-fit="cover"
         priority={true}
