@@ -52,7 +52,7 @@ export default function Card({
         )}
 
         {/* 카드 이미지 */}
-        <div className="">
+        <div className="relative">
           <Tag registrationEnd={registrationEnd} />
           <Image
             src={!image ? DEFAULT_IMAGE : image}

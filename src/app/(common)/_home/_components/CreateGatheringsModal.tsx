@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Modal from "@/components/Modal";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -50,11 +50,14 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     deadlineDateTime: null as Date | null,
   });
 
-  // 모든 필드의 유효성 검사 실행
-  useEffect(() => {
+  // useCallback을 사용해 trigger 고정
+  const triggerValidation = useCallback(() => {
     trigger();
-  }, [Object.values(formData)]);
+  }, [trigger]);
 
+  useEffect(() => {
+    triggerValidation();
+  }, [formData, isOpen]);
   // 마감 날짜 오류 메시지
   const [errorMessage, setErrorMessage] = useState("");
 
