@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
-import ServiceTab from "@/app/(common)/_home/_components/ServiceTab";
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
-import Card from "@/components/Card";
-import Button from "@/components/Button";
-import GatheringLogo from "@/images/gathering_logo.svg";
-import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
+import ServiceTab from "@/app/(common)/_home/_components/ServiceTab";
 import { useCheckAuth } from "@/app/(common)/_home/_hooks/useCheckAuth";
+import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
+import Button from "@/components/Button";
+import Card from "@/components/Card";
 import { LoginPopup } from "@/components/Popup";
-import { useUserStore } from "@/stores/useUserStore";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import GatheringLogo from "@/images/gathering_logo.svg";
+import { useUserStore } from "@/stores/useUserStore";
+import { useEffect, useState } from "react";
 
 export default function CardList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,20 +47,17 @@ export default function CardList() {
 
   return (
     <div>
-      <div className="mb-5 flex gap-6 pt-8">
+      <div className="mb-5 flex flex-row items-center gap-4 pl-3 pt-10">
         <GatheringLogo />
         <div>
           <div className="mb-2 text-sm font-semibold text-gray-700">함께할 사람이 없나요?</div>
-          <div className="text-2xl font-semibold text-gray-900">지금 모임에 참여해보세요</div>
+          <div className="text-lg font-semibold text-gray-900 lg:text-2xl">지금 모임에 참여해보세요</div>
         </div>
       </div>
-      <div className="px-6 pt-6">
-        <div className="flex items-center">
+      <div className="relative mt-6">
+        <div className="flex flex-col">
           <ServiceTab />
-          <div className="ml-auto w-[114px]">
-            <Button styleType="solid" size="sm" className="h-10 w-24 md:h-11" onClick={handleOpen}>
-              모임 만들기
-            </Button>
+          <div className="w-[114px]">
             <LoginPopup
               isOpen={isAuthModalOpen}
               onClose={() => {
@@ -69,9 +66,12 @@ export default function CardList() {
             />
           </div>
         </div>
+        <Button styleType="solid" size="sm" className="absolute right-0 top-0 h-10 w-24 md:h-11" onClick={handleOpen}>
+          모임 만들기
+        </Button>
       </div>
       <hr className="my-3" />
-      <div className="px-6">
+      <div className="">
         <GatheringFilters onChange={setFilters} />
 
         {data?.pages[0].data.length === 0 || filteredCards?.length === 0 ? (

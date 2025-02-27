@@ -21,11 +21,11 @@ export default function ChipInfo({ dateTime }: ChipInfoProps) {
 
   return (
     <div className="flex gap-2">
-      <div className="flex h-6 w-[58px] items-center justify-center rounded bg-gray-900">
+      <div className="flex h-6 items-center justify-center rounded bg-gray-900 px-2">
         {/* 날짜 */}
         <div className="text-center text-sm font-medium text-white">{formatDate(dateTime)}</div>
       </div>
-      <div className="flex h-6 w-[58px] items-center justify-center rounded bg-gray-900">
+      <div className="flex h-6 items-center justify-center rounded bg-gray-900 px-2">
         {/* 시간 */}
         <div className="text-center text-sm font-medium text-primary-color">{formatTime(dateTime)}</div>
       </div>
