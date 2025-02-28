@@ -45,7 +45,7 @@ export default function Card({
 
   return (
     <div>
-      <div className="relative my-5 items-center rounded-3xl bg-white hover:shadow-md md:flex lg:flex">
+      <div className="relative my-5 items-center overflow-hidden rounded-3xl bg-white hover:shadow-md md:flex lg:flex">
         {/* Inactive Layer: 모집 마감된 경우 반투명 레이어 추가 */}
         {isClosed && <InactiveLayer message="마감된 챌린지예요" onClick={() => toggleFavorite(id.toString())} />}
 
