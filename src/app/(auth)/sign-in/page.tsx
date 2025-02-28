@@ -52,7 +52,7 @@ export default function SignIn() {
     const result = await postSignIn({ email, password });
     if (result.token) {
       // 토큰 저장
-      document.cookie = `token=${result.token};`;
+      document.cookie = `token=${result.token}; path=/;`;
       // TanStack Query를 사용하여 유저 정보 불러오기 (제네릭을 통해 User 타입 지정)
       queryClient
         .fetchQuery<User>({
