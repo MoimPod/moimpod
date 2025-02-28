@@ -24,7 +24,9 @@ export default function ListItem({
   className,
 }: PropsWithChildren<ListItemProps>) {
   return (
-    <div className={`relative flex w-full flex-col items-stretch gap-4 border-gray-300 md:max-w-none md:flex-row`}>
+    <div
+      className={`relative ${canceledAt && handleCancel && "overflow-hidden rounded-xl md:rounded-3xl"} flex w-full flex-col items-stretch gap-4 border-gray-300 md:max-w-none md:flex-row`}
+    >
       {canceledAt && handleCancel && (
         <InactiveLayer isCompleted={isCompleted} onClick={handleCancel} message="모집 취소된 모임이에요" />
       )}

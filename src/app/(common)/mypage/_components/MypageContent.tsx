@@ -4,9 +4,9 @@ import MyCreatedGatherings from "@/app/(common)/mypage/_components/MyCreatedGath
 import MyGatherings from "@/app/(common)/mypage/_components/MyGatherings";
 import MyReviews from "@/app/(common)/mypage/_components/MyReviews";
 import ReviewableGatherings from "@/app/(common)/mypage/_components/ReviewableGatherings";
+import useMypageTab from "@/app/(common)/mypage/_hooks/useMypageTab";
 import CategoryButton from "@/components/CategoryButton";
 import Tab from "@/components/Tab";
-import { useEffect, useState } from "react";
 
 const TAB_ITEMS = ["나의 모임", "나의 리뷰", "내가 만든 모임"];
 const CATEGORIES = ["작성 가능한 리뷰", "작성한 리뷰"];
@@ -17,16 +17,7 @@ const CATEGORIES = ["작성 가능한 리뷰", "작성한 리뷰"];
 // 내가 만든 모임 -> 모임 목록 조회 (모임 생성자(id) 로 필터링)
 
 export default function MypageContent() {
-  const [selectedTab, setSelectedTab] = useState(TAB_ITEMS[0]);
-  // '나의 리뷰' 탭일 때만 카테고리를 보여줌
-  const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
-
-  useEffect(() => {
-    // '나의 리뷰'가 아닌 탭으로 이동할 경우 카테고리를 기본값으로 초기화
-    if (selectedTab !== "나의 리뷰") {
-      setSelectedCategory(CATEGORIES[0]);
-    }
-  }, [selectedTab]);
+  const { selectedTab, setSelectedTab, selectedCategory, setSelectedCategory } = useMypageTab();
   return (
     <div className="flex flex-1 flex-col gap-6 border-t-2 border-gray-900 bg-white p-6">
       <Tab
