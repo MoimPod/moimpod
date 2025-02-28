@@ -6,16 +6,16 @@ export default function ChipInfo({ dateTime }: ChipInfoProps) {
   // 날짜를 "MM-DD" 형식으로 변환하는 함수
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    const month = String(date.getUTCMonth() + 1);
-    const day = String(date.getUTCDate());
+    const month = String(date.getMonth() + 1);
+    const day = String(date.getDate());
     return `${month}월 ${day}일`;
   };
 
   // 시간를 "HH:MM" 형식으로 변환하는 함수
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
-    const hours = String(date.getUTCHours()).padStart(2, "0");
-    const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
     return `${hours}:${minutes}`;
   };
 
