@@ -6,7 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Avatar from "./Avatar";
 
 export default function Header() {
@@ -18,6 +18,7 @@ export default function Header() {
   const favorites = useFavoritesStore((state) => state.favorites);
   const favoritesCount = favorites.length;
   const queryClient = useQueryClient();
+  const profileRef = useRef<HTMLDivElement>(null);
 
   function getCookie(name: string): string | undefined {
     if (typeof document === "undefined") return undefined;
@@ -26,6 +27,18 @@ export default function Header() {
     if (parts.length === 2) return parts.pop()?.split(";").shift();
     return undefined;
   }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setProfileBtn(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const tokenFromCookie = getCookie("token");
@@ -82,7 +95,7 @@ export default function Header() {
           </Link>
         </nav>
         {token ? (
-          <div className="relative">
+          <div className="relative" ref={profileRef}>
             <button
               onClick={() => {
                 setProfileBtn((prev) => !prev);
