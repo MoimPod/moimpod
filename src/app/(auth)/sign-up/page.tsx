@@ -260,6 +260,7 @@ export default function SignUp() {
                       setIsModal(false);
                       router.push("/sign-in");
                     }}
+                    className="w-full"
                   >
                     확인
                   </Button>

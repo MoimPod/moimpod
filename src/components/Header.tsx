@@ -1,12 +1,13 @@
 "use client";
 
 import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
+import axiosInstance from "@/lib/axiosInstance";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Avatar from "./Avatar";
 
 export default function Header() {
@@ -18,6 +19,7 @@ export default function Header() {
   const favorites = useFavoritesStore((state) => state.favorites);
   const favoritesCount = favorites.length;
   const queryClient = useQueryClient();
+  const profileRef = useRef<HTMLDivElement>(null);
 
   function getCookie(name: string): string | undefined {
     if (typeof document === "undefined") return undefined;
@@ -26,6 +28,18 @@ export default function Header() {
     if (parts.length === 2) return parts.pop()?.split(";").shift();
     return undefined;
   }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setProfileBtn(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const tokenFromCookie = getCookie("token");
@@ -39,18 +53,30 @@ export default function Header() {
   const getLinkClass = (path: string) => (pathname === path ? "header-link active" : "header-link");
 
   const handleLogout = () => {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/";
+    const paths = ["/", "/gathering", "/mypage", "/favorites", "/reviews"];
+    paths.forEach((path) => {
+      document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=${path}`;
+    });
     setToken(undefined);
     if (typeof window !== "undefined" && window.localStorage) {
       localStorage.removeItem("user-storage");
     }
     setProfileBtn(false);
-    queryClient.removeQueries({ queryKey: ["mypage"] });
     queryClient.removeQueries({ queryKey: ["user"] });
+    signout();
     if (pathname === "/") {
       window.location.reload();
     } else {
       router.push("/");
+    }
+  };
+
+  const signout = async () => {
+    try {
+      const response = await axiosInstance.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/signout`);
+      return response.data;
+    } catch (error) {
+      return error;
     }
   };
 
@@ -80,7 +106,7 @@ export default function Header() {
           </Link>
         </nav>
         {token ? (
-          <div className="relative">
+          <div className="relative" ref={profileRef}>
             <button
               onClick={() => {
                 setProfileBtn((prev) => !prev);
