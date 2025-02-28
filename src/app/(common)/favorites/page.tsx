@@ -6,12 +6,24 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Card from "@/components/Card";
 import ServiceTab from "@/components/ServiceTab";
 import FavoritesLogo from "@/images/favorites_logo.svg";
-import { useEffect } from "react";
+import { useEffect, useCallback, useMemo } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function Page() {
   const { favorites } = useFavoritesStore();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParamsString = searchParams.toString();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings();
+  const filters = useMemo(
+    () => ({
+      type: searchParams.get("type") || undefined,
+    }),
+    [searchParamsString],
+  );
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings(filters);
 
   // data가 존재하는지 확인하고, pages 내부의 데이터를 모두 합친 후 필터링
   const allCards = data?.pages?.flatMap((page) => page.data) || [];
@@ -25,6 +37,27 @@ export default function Page() {
       fetchNextPage();
     }
   }, [favoriteCards, hasNextPage, fetchNextPage]);
+
+  // 필터를 업데이트 : searchParamsString을 사용하여 불필요한 재생성 방지
+  const handleFilterChange = useCallback(
+    (newFilter: Partial<typeof filters>) => {
+      const params = new URLSearchParams(searchParamsString);
+
+      Object.entries(newFilter).forEach(([key, value]) => {
+        if (value) {
+          params.set(key, value);
+        } else {
+          params.delete(key);
+        }
+      });
+      const newParamsString = params.toString();
+
+      if (newParamsString !== searchParamsString) {
+        router.push(`${pathname}?${newParamsString}`);
+      }
+    },
+    [searchParamsString, router, pathname],
+  );
 
   // 무한 스크롤 hook
   const { observerRef } = useInfiniteScroll({ fetchNextPage, hasNextPage, isFetchingNextPage });
@@ -40,7 +73,11 @@ export default function Page() {
       </div>
       <div className="px-6 pt-6">
         <div className="flex items-center">
-          <ServiceTab />
+          <ServiceTab
+            onCategoryChange={(type) => {
+              handleFilterChange({ type }); // 필터링 값 업데이트
+            }}
+          />
         </div>
       </div>
       <div>
