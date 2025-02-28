@@ -20,39 +20,44 @@ export default function Page() {
     () => ({
       type: searchParams.get("type") || undefined,
     }),
-    [searchParamsString],
+    [searchParams.get("type")],
   );
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useFetchGatherings(filters);
 
-  // data가 존재하는지 확인하고, pages 내부의 데이터를 모두 합친 후 필터링
   const allCards = data?.pages?.flatMap((page) => page.data) || [];
-
   // 찜한 목록에 해당하는 카드만 필터링
   const favoriteCards = allCards.filter((card) => favorites.includes(card.id.toString()));
 
-  // favoriteCards가 없으면 자동으로 추가 데이터 요청
+  // favoriteCards가 없으면 자동으로 추가 데이터 요청 (불필요한 API 요청 방지)
   useEffect(() => {
-    if (favoriteCards.length === 0 && hasNextPage) {
+    if (!isLoading && favoriteCards.length === 0 && hasNextPage) {
       fetchNextPage();
     }
-  }, [favoriteCards, hasNextPage, fetchNextPage]);
+  }, [favoriteCards, hasNextPage, isLoading, fetchNextPage]);
 
-  // 필터를 업데이트 : searchParamsString을 사용하여 불필요한 재생성 방지
+  // 필터 업데이트
   const handleFilterChange = useCallback(
     (newFilter: Partial<typeof filters>) => {
       const params = new URLSearchParams(searchParamsString);
+      let hasChanged = false;
 
       Object.entries(newFilter).forEach(([key, value]) => {
         if (value) {
-          params.set(key, value);
+          if (params.get(key) !== value) {
+            params.set(key, value);
+            hasChanged = true;
+          }
         } else {
-          params.delete(key);
+          if (params.has(key)) {
+            params.delete(key);
+            hasChanged = true;
+          }
         }
       });
       const newParamsString = params.toString();
 
-      if (newParamsString !== searchParamsString) {
+      if (hasChanged) {
         router.push(`${pathname}?${newParamsString}`);
       }
     },
