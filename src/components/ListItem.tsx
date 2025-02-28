@@ -6,8 +6,6 @@ import Check from "@/images/check.svg";
 import { PropsWithChildren } from "react";
 import InactiveLayer from "@/components/InactiveLayer";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-dayjs.extend(utc);
 
 type ListItemProps = {
   CardImage?: React.ReactNode;
@@ -26,7 +24,9 @@ export default function ListItem({
   className,
 }: PropsWithChildren<ListItemProps>) {
   return (
-    <div className={`relative flex w-full flex-col items-stretch gap-4 border-gray-300 md:max-w-none md:flex-row`}>
+    <div
+      className={`relative ${canceledAt && handleCancel && "overflow-hidden rounded-xl md:rounded-3xl"} flex w-full flex-col items-stretch gap-4 border-gray-300 md:max-w-none md:flex-row`}
+    >
       {canceledAt && handleCancel && (
         <InactiveLayer isCompleted={isCompleted} onClick={handleCancel} message="모집 취소된 모임이에요" />
       )}
@@ -102,8 +102,8 @@ type SubInfoProps = {
   capacity: number;
 };
 ListItem.SubInfo = ({ date, participantCount, capacity }: SubInfoProps) => {
-  const formatDate = dayjs.utc(date).format("M월 D일");
-  const formatTime = dayjs.utc(date).format("HH:mm");
+  const formatDate = dayjs(date).format("M월 D일");
+  const formatTime = dayjs(date).format("HH:mm");
   return (
     <div className="flex items-center gap-3 text-sm text-gray-700">
       <div>{`${formatDate} · ${formatTime}`}</div>

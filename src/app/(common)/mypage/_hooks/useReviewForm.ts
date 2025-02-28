@@ -19,7 +19,7 @@ export const useReviewForm = ({ gatheringId, onClose }: UseReviewFormProps) => {
     watch,
     reset,
   } = useForm<ReviewFormValues>({
-    mode: "onChange",
+    mode: "onBlur",
     defaultValues: {
       score: 0,
       comment: "",
