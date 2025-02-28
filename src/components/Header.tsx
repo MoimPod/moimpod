@@ -39,7 +39,10 @@ export default function Header() {
   const getLinkClass = (path: string) => (pathname === path ? "header-link active" : "header-link");
 
   const handleLogout = () => {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/";
+    const paths = ["/", "/gathering", "/mypage", "/favorites", "/reviews"];
+    paths.forEach((path) => {
+      document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=${path}`;
+    });
     setToken(undefined);
     if (typeof window !== "undefined" && window.localStorage) {
       localStorage.removeItem("user-storage");
