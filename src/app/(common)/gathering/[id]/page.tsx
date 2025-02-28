@@ -32,7 +32,7 @@ export default async function Page({
     queryClient.prefetchQuery({
       queryKey: ["participants", gatheringId],
       queryFn: async () => {
-        const { data } = await axiosInstance.get(`/gatherings/${gatheringId}/participants`);
+        const { data } = await axiosInstance.get(`/gatherings/${gatheringId}/participants?limit=100`);
         return data;
       },
     }),
