@@ -3,6 +3,7 @@
 import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -62,10 +63,20 @@ export default function Header() {
     }
     setProfileBtn(false);
     queryClient.removeQueries({ queryKey: ["user"] });
+    signout();
     if (pathname === "/") {
       window.location.reload();
     } else {
       router.push("/");
+    }
+  };
+
+  const signout = async () => {
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/signout`, "3");
+      return response.data;
+    } catch (error) {
+      return error;
     }
   };
 

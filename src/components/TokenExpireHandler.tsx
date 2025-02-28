@@ -2,6 +2,7 @@
 
 import axiosInstance from "@/lib/axiosInstance";
 import { useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LoginPopup } from "./Popup";
@@ -31,6 +32,15 @@ export default function TokenExpireHandler() {
     }
   }
 
+  const signout = async () => {
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/signout`, "3");
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  };
+
   useEffect(() => {
     const interceptor = axiosInstance.interceptors.response.use(
       (response) => response,
@@ -38,6 +48,7 @@ export default function TokenExpireHandler() {
         if (typeof window !== "undefined" && error.response?.status === 401) {
           deleteCookie("token");
           deleteLocalStorage();
+          signout();
           setIsModalOpen(true);
         }
         return Promise.reject(error);
