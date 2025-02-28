@@ -53,13 +53,13 @@ export default async function Page({
   return (
     <div className="mb-[84px] flex w-full flex-col gap-6">
       <HydrationBoundary state={dehydratedState}>
-        <Gathering gathering={gathering} />
+        <Gathering gatheringId={gatheringId} gathering={gathering} />
         <ErrorBoundary>
           <Reviews gatheringId={gatheringId} reviewQuery={reviewParams} />
         </ErrorBoundary>
       </HydrationBoundary>
 
-      <FloatingBar gatheringId={gatheringId} hostUserId={gathering.createdBy} />
+      <FloatingBar gatheringId={gatheringId} gathering={gathering} hostUserId={gathering.createdBy} />
     </div>
   );
 }

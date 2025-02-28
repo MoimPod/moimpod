@@ -9,9 +9,12 @@ import { useJoin } from "../_hooks/useJoin";
 import { useGetParticipants } from "../_hooks/useGetParticipants";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import { useCancelGathering } from "../_hooks/useCancelGathering";
+import type { GatheringType } from "../types";
+import dayjs from "dayjs";
 
 type FloatingBarProps = {
   gatheringId: string;
+  gathering: GatheringType;
   hostUserId: number;
 };
 
@@ -21,15 +24,17 @@ const MODAL = {
   share: "share",
 };
 
-export default function FloatingBar({ gatheringId, hostUserId }: FloatingBarProps) {
+export default function FloatingBar({ gatheringId, gathering, hostUserId }: FloatingBarProps) {
   const [activeModal, setActiveModal] = useState<string | null>(null);
+
+  const { registrationEnd } = gathering;
 
   const { user } = useUserStore();
 
   const { data: participantList } = useGetParticipants(gatheringId);
-  const { mutate: mutateJoin, isPending } = useJoin(gatheringId);
-  const { mutate: mutateLeaveGathering } = useLeaveGathering(["participants", gatheringId]);
-  const { mutate: mutateCancelGathering } = useCancelGathering();
+  const { mutate: mutateJoin, isPending: isPendingJoin } = useJoin(gatheringId);
+  const { mutate: mutateLeaveGathering, isPending: isPendingLeave } = useLeaveGathering(["participants", gatheringId]);
+  const { mutate: mutateCancelGathering, isPending: isPendingCancel } = useCancelGathering();
 
   const participantIdList = participantList?.map((participant) => participant.userId);
 
@@ -61,7 +66,13 @@ export default function FloatingBar({ gatheringId, hostUserId }: FloatingBarProp
             <div className="text-xs">국내 최고 웰니스 전문가와 프로그램을 통해 지친 몸과 마음을 회복해봐요</div>
           </div>
           <div className="flex gap-2">
-            <Button styleType="outline" size="sm" className={buttonStyles} onClick={() => setActiveModal(MODAL.cancel)}>
+            <Button
+              styleType="outline"
+              size="sm"
+              className={buttonStyles}
+              onClick={() => setActiveModal(MODAL.cancel)}
+              loading={isPendingCancel}
+            >
               취소하기
             </Button>
             <Button styleType="solid" size="sm" className={buttonStyles} onClick={() => setActiveModal(MODAL.share)}>
@@ -104,11 +115,20 @@ export default function FloatingBar({ gatheringId, hostUserId }: FloatingBarProp
               size="sm"
               className={buttonStyles}
               onClick={() => mutateLeaveGathering(gatheringId)}
+              loading={isPendingLeave}
+              disabled={dayjs(registrationEnd).isBefore(dayjs())}
             >
               참여 취소하기
             </Button>
           ) : (
-            <Button styleType="solid" size="sm" className={buttonStyles} onClick={handleJoin}>
+            <Button
+              styleType="solid"
+              size="sm"
+              className={buttonStyles}
+              onClick={handleJoin}
+              loading={isPendingJoin}
+              disabled={isPendingJoin || dayjs(registrationEnd).isBefore(dayjs())}
+            >
               참여하기
             </Button>
           )}
