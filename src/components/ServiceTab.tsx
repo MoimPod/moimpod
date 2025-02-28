@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import CategoryButton from "@/components/CategoryButton";
 import Tab from "@/components/Tab";
 import Dalaemfit from "@/images/dalaemfit.svg";
 import Workation from "@/images/workation.svg";
 
 const SERVICE_TABS = [
-  { name: "달램핏", icon: Dalaemfit },
-  { name: "워케이션", icon: Workation },
+  { name: "달램핏", type: "DALLAEMFIT", icon: Dalaemfit },
+  { name: "워케이션", type: "WORKATION", icon: Workation },
 ];
 
 const CATEGORIES = [
@@ -18,45 +19,56 @@ const CATEGORIES = [
 ];
 
 type ServiceTabProps = {
-  onCategoryChange?: (type: string | undefined) => void;
+  onCategoryChange: (type: string | undefined) => void;
 };
 
 export default function ServiceTab({ onCategoryChange }: ServiceTabProps) {
-  const [selectedTab, setSelectedTab] = useState<"달램핏" | "워케이션">("달램핏");
-  const [selectedCategory, setSelectedCategory] = useState<string>("전체");
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  // 카테고리 선택 시 필터 적용
-  const handleCategoryChange = useCallback(
-    (category: string) => {
-      setSelectedCategory(category);
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
 
-      if (selectedTab === "달램핏") {
-        // "전체" 선택 시 달램핏(오피스 스트레칭 + 마인드풀니스)로 설정
-        const selectedType = category === "전체" ? "DALLAEMFIT" : CATEGORIES.find((c) => c.name === category)?.type;
-        onCategoryChange?.(selectedType);
-      }
-    },
-    [selectedTab, onCategoryChange],
-  );
+    // type이 없는 경우 기본값 설정
+    if (!params.get("type")) {
+      params.set("type", "DALLAEMFIT");
+      router.replace(`?${params.toString()}`, { scroll: false });
+    }
+  }, [searchParams, router]);
 
-  // 탭 선택 시 필터 적용
-  const handleTabChange = useCallback(
-    (tab: "달램핏" | "워케이션") => {
-      setSelectedTab(tab);
-      if (tab === "워케이션") {
-        onCategoryChange?.("WORKATION");
-      } else {
-        const selectedType =
-          selectedCategory === "전체" ? "DALLAEMFIT" : CATEGORIES.find((c) => c.name === selectedCategory)?.type;
-        onCategoryChange?.(selectedType);
-      }
-    },
-    [selectedCategory, onCategoryChange],
-  );
+  // 탭 변경 핸들러
+  const handleTabChange = (tabName: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const tabType = SERVICE_TABS.find((t) => t.name === tabName)?.type;
+
+    if (!tabType) return;
+
+    if (tabType === "WORKATION") {
+      params.set("type", "WORKATION");
+      onCategoryChange("WORKATION");
+    } else {
+      params.set("type", "DALLAEMFIT");
+      onCategoryChange("DALLAEMFIT");
+    }
+
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
+
+  // 카테고리 변경 핸들러
+  const handleCategoryChange = (categoryName: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const categoryType = CATEGORIES.find((c) => c.name === categoryName)?.type;
+
+    if (!categoryType) return;
+
+    params.set("type", categoryType);
+    onCategoryChange(categoryType);
+
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
 
   return (
     <>
-      {/* 탭 UI (달램핏 / 워케이션) */}
       <Tab
         category={
           <CategoryButton categories={CATEGORIES.map((c) => c.name)} setValue={handleCategoryChange}>
@@ -69,7 +81,7 @@ export default function ServiceTab({ onCategoryChange }: ServiceTabProps) {
       >
         {SERVICE_TABS.map((tabItem, idx) => (
           <Tab.Item key={tabItem.name} index={idx}>
-            <button onClick={() => handleTabChange(tabItem.name as "달램핏" | "워케이션")}>{tabItem.name}</button>
+            <button onClick={() => handleTabChange(tabItem.name)}>{tabItem.name}</button>
             <tabItem.icon />
           </Tab.Item>
         ))}
