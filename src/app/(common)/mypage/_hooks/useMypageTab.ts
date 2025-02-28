@@ -1,4 +1,3 @@
-import { s } from "framer-motion/client";
 import { useState, useEffect } from "react";
 
 const TAB_ITEMS = ["나의 모임", "나의 리뷰", "내가 만든 모임"];
