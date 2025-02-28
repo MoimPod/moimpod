@@ -104,7 +104,13 @@ export default function CardList() {
             }}
           />
         </div>
-        <Button styleType="solid" size="sm" className="absolute right-0 top-0 h-10 w-24 md:h-11" onClick={handleOpen}>
+        <Button
+          type="button"
+          styleType="solid"
+          size="sm"
+          className="absolute right-0 top-0 h-10 w-24 md:h-11"
+          onClick={handleOpen}
+        >
           모임 만들기
         </Button>
       </div>
