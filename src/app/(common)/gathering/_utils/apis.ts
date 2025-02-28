@@ -12,6 +12,6 @@ export const fetchReviews = async (query?: ReviewQuery): Promise<ReviewsResponse
 };
 
 export const getParticipants = async (gatheringId: string): Promise<GatheringParticipantType[]> => {
-  const { data } = await axiosInstance(`/gatherings/${gatheringId}/participants`);
+  const { data } = await axiosInstance.get(`/gatherings/${gatheringId}/participants?limit=100`);
   return data;
 };

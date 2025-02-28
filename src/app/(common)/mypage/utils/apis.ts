@@ -8,14 +8,15 @@ interface FetchMyGatheringsParams {
   reviewed?: boolean;
 }
 
-const fetchMyGatherings = async (query?: FetchMyGatheringsParams) => {
+const fetchMyGatherings = async (query?: FetchMyGatheringsParams, isReviewable?: boolean) => {
   const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
     params: {
       limit: 100,
       ...query,
     },
   });
-  return response.data.sort((a, b) => dayjs(b.dateTime).valueOf() - dayjs(a.dateTime).valueOf());
+  const data = isReviewable ? response.data.filter((gathering) => !gathering.canceledAt) : response.data;
+  return data.sort((a, b) => dayjs(b.dateTime).valueOf() - dayjs(a.dateTime).valueOf());
 };
 
 const fetchMyReviews = async (userId: number) => {
