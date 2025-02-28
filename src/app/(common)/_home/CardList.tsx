@@ -121,12 +121,7 @@ export default function CardList() {
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>모임 정보를 불러오는 중...</p>
           </div>
-        ) : data?.pages[0].data.length === 0 ? ( // 첫 페이지 로딩 후 데이터 없을 때
-          <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
-            <p>아직 모임이 없어요</p>
-            <p className="mt-2">지금 바로 모임을 만들어보세요</p>
-          </div>
-        ) : filteredCards.length === 0 ? ( // 첫 페이지 로딩 후 데이터 없을 때
+        ) : data?.pages[0].data.length === 0 || filteredCards.length === 0 ? ( // 첫 페이지 로딩 후 데이터 없을 때
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>아직 모임이 없어요</p>
             <p className="mt-2">지금 바로 모임을 만들어보세요</p>
