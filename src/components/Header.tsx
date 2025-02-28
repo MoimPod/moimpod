@@ -1,9 +1,9 @@
 "use client";
 
 import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
+import axiosInstance from "@/lib/axiosInstance";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -73,7 +73,7 @@ export default function Header() {
 
   const signout = async () => {
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/signout`, "3");
+      const response = await axiosInstance.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/signout`);
       return response.data;
     } catch (error) {
       return error;
