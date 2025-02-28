@@ -54,13 +54,13 @@ export default function SortButton({ setSortType, sortOption, defaultSort }: Sor
 
       {/* 드롭다운 메뉴 */}
       {isSortDropdownOpen && (
-        <div className="absolute z-20 w-[110px] rounded-xl border bg-white p-2 text-sm font-medium shadow-md max-md:right-0">
+        <ul className="absolute z-20 w-[110px] rounded-xl border bg-white p-2 text-sm font-medium shadow-md max-md:right-0">
           {sortOption.map(({ label, value }) => (
-            <div key={value} onClick={() => handleSort(value)} className="rounded-xl p-2 hover:bg-sky-100">
+            <li key={value} onClick={() => handleSort(value)} className="rounded-xl p-2 hover:bg-sky-100">
               {label}
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );
