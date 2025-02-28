@@ -10,7 +10,7 @@ type GatheringProps = {
 export default function Gathering({ gathering, profileImages }: GatheringProps) {
   return (
     <div className="flex flex-col items-center gap-4 pt-6 md:flex-row lg:pt-10">
-      <Thumbnail imageUrl={gathering.image} registrationEnd={gathering.registrationEnd} />
+      <Thumbnail name={gathering.name} imageUrl={gathering.image} registrationEnd={gathering.registrationEnd} />
       <GatheringInfo gatheringId={`${gathering.id}`} gathering={gathering} profileImages={profileImages} />
     </div>
   );

@@ -3,6 +3,7 @@ import ReviewsAverage from "@/app/(common)/reviews/_components/ReviewsAverage";
 import { Suspense } from "react";
 import AllReview from "../reviews/_components/AllReview";
 import GatheringLogo from "@/images/gathering_logo.svg";
+import Spinner from "@/components/Spinner";
 
 export default function Page() {
   return (
@@ -15,11 +16,19 @@ export default function Page() {
         </div>
       </div>
 
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading />}>
         <AllReview>
           <ReviewsAverage />
         </AllReview>
       </Suspense>
+    </div>
+  );
+}
+
+function Loading() {
+  return (
+    <div className="flex h-1/3 items-center justify-center">
+      <Spinner />
     </div>
   );
 }
