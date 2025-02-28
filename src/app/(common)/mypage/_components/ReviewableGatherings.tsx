@@ -29,7 +29,7 @@ export default function ReviewableGatherings() {
       <MypageList
         queryOption={{
           queryKey: ["user", "reviews", "reviewable"],
-          queryFn: () => fetchMyGatherings({ completed: true, reviewed: false }),
+          queryFn: () => fetchMyGatherings({ completed: true, reviewed: false }, true),
         }}
         emptyMessage={"아직 작성 가능한 리뷰가 없어요"}
         render={(gathering) =>
