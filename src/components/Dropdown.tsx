@@ -84,7 +84,7 @@ export default function Dropdown({
       {isOpen &&
         (children ??
           (options?.length ? (
-            <div className="absolute z-10 w-full rounded-xl border bg-white p-2 text-sm font-medium shadow-md">
+            <div className="absolute z-20 w-full rounded-xl border bg-white p-2 text-sm font-medium shadow-md">
               {options.map((option) => (
                 <div
                   key={option}
