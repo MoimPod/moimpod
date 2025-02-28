@@ -53,7 +53,7 @@ export default function Card({
         <div className="relative">
           <Tag registrationEnd={registrationEnd} />
           <Image
-            src={!image ? DEFAULT_IMAGE : image}
+            src={image || DEFAULT_IMAGE}
             alt={`${name} 모임 이미지 - ${location}`}
             width={280}
             height={156}
