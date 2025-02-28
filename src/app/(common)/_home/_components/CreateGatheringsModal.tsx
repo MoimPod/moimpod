@@ -1,17 +1,18 @@
 "use client";
 
+import { useEffect, useState, useCallback } from "react";
+import Modal from "@/components/Modal";
+import Button from "@/components/Button";
+import Input from "@/components/Input";
+import LocationSelect from "@/components/Filtering/LocationSelect";
+import CategoryButton from "@/components/CategoryButton";
 import MeetingForm from "@/app/(common)/_home/_components/MeetingForm";
 import { FormDataType, useCreateGathering } from "@/app/(common)/_home/_hooks/useCreateGathering";
-import Button from "@/components/Button";
-import CategoryButton from "@/components/CategoryButton";
-import LocationSelect from "@/components/Filtering/LocationSelect";
-import Input from "@/components/Input";
-import Modal from "@/components/Modal";
 import defaultImage from "@/images/default_image.png";
 import { isValid as isValidDate } from "date-fns";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 type CreateGatheringsModalProps = {
   isOpen: boolean;
@@ -34,11 +35,16 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     handleSubmit,
     reset,
     setError,
+    clearErrors,
     setValue,
+    watch,
     formState: { errors, isValid },
+    trigger,
   } = useForm<FormDataType>({
     mode: "onChange",
   });
+
+  const router = useRouter();
 
   // 모임 관련 데이터
   const [formData, setFormData] = useState({
@@ -49,15 +55,35 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     deadlineDateTime: null as Date | null,
   });
 
+  // useCallback을 사용해 trigger 고정
+  const triggerValidation = useCallback(() => {
+    trigger();
+  }, [trigger]);
+
+  useEffect(() => {
+    triggerValidation();
+  }, [formData, isOpen]);
+
+  useEffect(() => {
+    const typeValue = watch("type");
+    if (!typeValue) {
+      window.setTimeout(() => {
+        setValue("type", "OFFICE_STRETCHING", { shouldValidate: true }); // 기본값 설정
+        trigger("type"); // 유효성 검사 실행
+      }, 0);
+    }
+  }, [watch, setValue, trigger]);
+
   // 마감 날짜 오류 메시지
   const [errorMessage, setErrorMessage] = useState("");
 
   // formData 업데이트 함수
   const updateFormData = (key: string, value: string | File | Date | null) => {
-    setFormData((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+    setFormData((prev) => {
+      const updatedFormData = { ...prev, [key]: value };
+      trigger(); // 값 변경 후 유효성 검사 실행
+      return updatedFormData;
+    });
   };
 
   // 날짜 선택 시 setValue로 react-hook-form에 반영
@@ -78,8 +104,9 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     const file = e.target.files?.[0];
     if (file) {
       updateFormData("imageName", file.name);
-      setValue("image", file);
+      setValue("image", file, { shouldValidate: true });
       updateFormData("image", file);
+      trigger("image");
     }
   };
 
@@ -124,8 +151,9 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     }
 
     createGathering(requestData, {
-      onSuccess: () => {
+      onSuccess: (response) => {
         onClose();
+        router.push(`/gathering/${response.id}`); // 생성된 모임 상세 페이지로 이동
       },
       onError: (err) => {
         console.error("API 요청 실패:", err);
@@ -163,12 +191,24 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
             <LocationSelect
               selectedLocation={formData.selectedLocation}
               setSelectedLocation={(location) => {
+                if (!location) {
+                  setError("location", {
+                    type: "manual",
+                    message: "지역을 선택해주세요.",
+                  });
+                  setValue("location", "", { shouldValidate: true }); // 빈 값 전달
+                  window.setTimeout(() => trigger("location"), 0); // 유효성 검사
+                  return;
+                }
+                clearErrors("location"); // 올바른 지역 선택 시 에러 제거
                 updateFormData("selectedLocation", location || "");
-                setValue("location", location || "");
+                setValue("location", location || "", { shouldValidate: true });
+                window.setTimeout(() => trigger("location"), 0);
               }}
               className="w-full border-none text-gray-400"
             />
           </div>
+          {errors.location && <p className="mt-1 text-sm text-red-500">{errors.location.message}</p>}
         </FormField>
 
         {/* 이미지 업로드 */}
@@ -261,7 +301,13 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
         {errors.root && <p className="mt-1 text-sm text-red-500">{errors.root.message}</p>}
 
         {/* 제출 버튼 */}
-        <Button styleType="solid" size="lg" className="mt-7 w-full" disabled={!isValid || isPending} type="submit">
+        <Button
+          styleType="solid"
+          size="lg"
+          className="mt-7 w-full"
+          disabled={!isValid || !watch("location") || isPending}
+          type="submit"
+        >
           {isPending ? "저장 중..." : "확인"}
         </Button>
       </form>
