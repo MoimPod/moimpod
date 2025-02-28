@@ -93,10 +93,12 @@ export default function CardList() {
       <div className="relative mt-6">
         <div className="flex flex-row gap-2">
           <ServiceTab
+            searchParams={searchParams}
             onCategoryChange={(type) => {
-              handleFilterChange({ type }); // 필터링 값 업데이트
+              handleFilterChange({ type });
             }}
           />
+
           <LoginPopup
             isOpen={isAuthModalOpen}
             onClose={() => {
