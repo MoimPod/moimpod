@@ -22,20 +22,21 @@ function FavoritesPage() {
   const pathname = usePathname();
   const { favorites } = useFavoritesStore();
 
-  const type = searchParams.get("type") || undefined;
+  const type = searchParams.get("type") || "DALLAEMFIT";
+
+  useEffect(() => {
+    if (!searchParams.get("type")) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("type", "DALLAEMFIT");
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }
+  }, [searchParams, router, pathname]);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useFetchGatherings({ type });
 
   // 모든 카드 가져오기 & 찜한 카드 필터링
   const allCards = data?.pages?.flatMap((page) => page.data) || [];
   const favoriteCards = allCards.filter((card) => favorites.includes(card.id.toString()));
-
-  // 찜한 모임이 없을 경우, 자동으로 추가 데이터 요청
-  useEffect(() => {
-    if (!isLoading && favoriteCards.length === 0 && hasNextPage) {
-      fetchNextPage();
-    }
-  }, [favoriteCards, hasNextPage, isLoading, fetchNextPage]);
 
   // 필터 업데이트 함수
   const handleFilterChange = useCallback(

@@ -27,13 +27,13 @@ export default function ServiceTab({ searchParams, onCategoryChange }: ServiceTa
   const router = useRouter();
 
   const [selectedTab, setSelectedTab] = useState<"DALLAEMFIT" | "WORKATION">(
-    () => (searchParams.get("type") || "DALLAEMFIT") as "DALLAEMFIT" | "DALLAEMFIT",
+    () => (searchParams.get("type") || "DALLAEMFIT") as "DALLAEMFIT" | "WORKATION",
   );
   const [selectedCategory, setSelectedCategory] = useState<string>("전체");
 
   // searchParams 변경 감지해서 반영
   useEffect(() => {
-    const currentType = searchParams.get("type");
+    const currentType = searchParams.get("type") || "DALLAEMFIT";
 
     if (currentType !== selectedTab) {
       setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
