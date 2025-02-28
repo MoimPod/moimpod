@@ -27,7 +27,6 @@ export default function TokenExpireHandler() {
 
   function deleteLocalStorage() {
     if (typeof window !== "undefined" && window.localStorage) {
-      queryClient.removeQueries({ queryKey: ["mypage"] });
       queryClient.removeQueries({ queryKey: ["user"] });
     }
   }

@@ -48,7 +48,6 @@ export default function Header() {
       localStorage.removeItem("user-storage");
     }
     setProfileBtn(false);
-    queryClient.removeQueries({ queryKey: ["mypage"] });
     queryClient.removeQueries({ queryKey: ["user"] });
     if (pathname === "/") {
       window.location.reload();
