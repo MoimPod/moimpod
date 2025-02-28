@@ -4,11 +4,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import CategoryButton from "@/components/CategoryButton";
 import Tab from "@/components/Tab";
-import Dalaemfit from "@/images/dalaemfit.svg";
+import Dallaemfit from "@/images/dallaemfit.svg";
 import Workation from "@/images/workation.svg";
 
 const SERVICE_TABS = [
-  { name: "달램핏", type: "DALLAEMFIT", icon: Dalaemfit },
+  { name: "달램핏", type: "DALLAEMFIT", icon: Dallaemfit },
   { name: "워케이션", type: "WORKATION", icon: Workation },
 ];
 
