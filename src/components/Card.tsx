@@ -13,6 +13,8 @@ import ChipInfo from "./ChipInfo";
 import LikeButton from "./LikeButton";
 import ProgressBar from "./ProgressBar";
 import Tag from "./Tag";
+import InactiveLayer from "./InactiveLayer";
+import dayjs from "dayjs";
 
 export default function Card({
   id,
@@ -28,8 +30,8 @@ export default function Card({
   const { toggleFavorite, favorites } = useFavoritesStore();
 
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
-  const isClosed = Boolean(registrationEnd && new Date(registrationEnd) < new Date()); //모집이 마감되었는지
-
+  const endDate = dayjs(registrationEnd.replace("Z", "")); // UTC 시간
+  const isClosed = Boolean(endDate && dayjs(endDate).isBefore(dayjs()));
   const isLiked = favorites.includes(id.toString());
 
   const handleCardClick = () => {
@@ -43,19 +45,15 @@ export default function Card({
 
   return (
     <div>
-      <div className="relative my-5 items-center rounded-3xl bg-white hover:shadow-md md:flex lg:flex">
+      <div className="relative my-5 items-center overflow-hidden rounded-3xl bg-white hover:shadow-md md:flex lg:flex">
         {/* Inactive Layer: 모집 마감된 경우 반투명 레이어 추가 */}
-        {isClosed && (
-          <div className="absolute inset-0 flex items-center justify-center rounded-3xl bg-gray-500 bg-opacity-40 font-semibold text-white">
-            모집 마감
-          </div>
-        )}
+        {isClosed && <InactiveLayer message="마감된 챌린지예요" onClick={() => toggleFavorite(id.toString())} />}
 
         {/* 카드 이미지 */}
         <div className="relative">
           <Tag registrationEnd={registrationEnd} />
           <Image
-            src={!image ? DEFAULT_IMAGE : image}
+            src={image || DEFAULT_IMAGE}
             alt={`${name} 모임 이미지 - ${location}`}
             width={280}
             height={156}
@@ -76,6 +74,7 @@ export default function Card({
               {/* 날짜 정보 */}
               <ChipInfo dateTime={dateTime} />
             </div>
+
             <div className="w-12">
               <LikeButton onClick={handleLikeClick} isLiked={isLiked} isClosed={isClosed} className="ml-auto md:mt-3" />
             </div>

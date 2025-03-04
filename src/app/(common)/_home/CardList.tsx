@@ -25,14 +25,14 @@ export default function CardList() {
       location: searchParams.get("location") || undefined,
       date: searchParams.get("date") || undefined,
       sortBy: searchParams.get("sortBy") || undefined,
-      type: searchParams.get("type") || undefined,
+      type: searchParams.get("type") || "DALLAEMFIT",
     }),
     [searchParamsString],
   );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings(filters);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useFetchGatherings(filters);
 
   // 로그인 체크 훅
   const { checkAuth, isAuthModalOpen, setAuthModalOpen } = useCheckAuth();
@@ -93,10 +93,12 @@ export default function CardList() {
       <div className="relative mt-6">
         <div className="flex flex-row gap-2">
           <ServiceTab
+            searchParams={searchParams}
             onCategoryChange={(type) => {
-              handleFilterChange({ type }); // 필터링 값 업데이트
+              handleFilterChange({ type });
             }}
           />
+
           <LoginPopup
             isOpen={isAuthModalOpen}
             onClose={() => {
@@ -117,7 +119,11 @@ export default function CardList() {
       <hr className="my-3" />
       <div className="">
         <GatheringFilters onChange={handleFilterChange} />
-        {data?.pages[0].data.length === 0 ? (
+        {isLoading ? ( // 첫 페이지 로딩 중일 때
+          <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
+            <p>모임 정보를 불러오는 중...</p>
+          </div>
+        ) : data?.pages[0].data.length === 0 || filteredCards.length === 0 ? ( // 첫 페이지 로딩 후 데이터 없을 때
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>아직 모임이 없어요</p>
             <p className="mt-2">지금 바로 모임을 만들어보세요</p>
@@ -130,8 +136,9 @@ export default function CardList() {
           </>
         )}
         {/* 무한 스크롤 감지용 div */}
-        <div ref={observerRef} className="h-10"></div>
-        {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
+        {!isLoading && <div ref={observerRef} className="h-10"></div>}
+        {/* 추가 데이터를 불러올 때만 메시지 표시 */}
+        {!isLoading && isFetchingNextPage && <div className="text-center text-sm text-gray-500">불러오는 중...</div>}
       </div>
 
       <CreateGatheringsModal isOpen={isModalOpen} onClose={handleClose} />

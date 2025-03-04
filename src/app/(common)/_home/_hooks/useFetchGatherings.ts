@@ -12,12 +12,17 @@ type FetchParams = {
 
 // 데이터를 가져오는 함수
 export const useFetchGatherings = (filters?: FetchParams) => {
+  const defaultFilters: FetchParams = {
+    type: "DALLAEMFIT", // 기본값 설정
+  };
+
   return useInfiniteQuery({
-    queryKey: ["gatherings", filters],
+    queryKey: ["gatherings", { ...defaultFilters, ...filters }],
     queryFn: async ({ pageParam = 0 }: { pageParam: number }) => {
       try {
-        const response = await axiosInstance.get<GatheringType[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
-          params: { ...filters, limit: 10, offset: pageParam },
+        const response = await axiosInstance.get<CardData[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
+          params: { ...defaultFilters, ...filters, limit: 10, offset: pageParam },
+
         });
         return {
           data: response.data,
