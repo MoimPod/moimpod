@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { CardData } from "@/stores/useGatheringStore";
+import { GatheringType } from "@/app/(common)/gathering/types";
 import axiosInstance from "@/lib/axiosInstance";
 
 type FetchParams = {
@@ -16,7 +16,7 @@ export const useFetchGatherings = (filters?: FetchParams) => {
     queryKey: ["gatherings", filters],
     queryFn: async ({ pageParam = 0 }: { pageParam: number }) => {
       try {
-        const response = await axiosInstance.get<CardData[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
+        const response = await axiosInstance.get<GatheringType[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
           params: { ...filters, limit: 10, offset: pageParam },
         });
         return {
