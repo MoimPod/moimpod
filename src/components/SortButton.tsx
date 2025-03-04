@@ -42,7 +42,7 @@ export default function SortButton({ setSortType, sortOption, defaultSort }: Sor
       {/* 정렬 버튼 */}
       <button
         onClick={() => setSortDropdownOpen(!isSortDropdownOpen)}
-        className="mb-2 flex cursor-pointer items-center rounded-xl border bg-gray-50 p-2 text-sm font-medium"
+        className="mb-2 flex w-full cursor-pointer items-center rounded-xl border bg-gray-50 p-2 text-sm font-medium md:w-[115px]"
       >
         <div className="mr-1">
           <SortIcon />
@@ -54,13 +54,13 @@ export default function SortButton({ setSortType, sortOption, defaultSort }: Sor
 
       {/* 드롭다운 메뉴 */}
       {isSortDropdownOpen && (
-        <div className="absolute z-10 w-[110px] rounded-lg border bg-white p-2 text-sm font-medium shadow-md max-md:right-0">
+        <ul className="absolute z-20 w-[110px] rounded-xl border bg-white p-2 text-sm font-medium shadow-md max-md:right-0">
           {sortOption.map(({ label, value }) => (
-            <div key={value} onClick={() => handleSort(value)} className="rounded-lg p-2 hover:bg-sky-100">
+            <li key={value} onClick={() => handleSort(value)} className="rounded-xl p-2 hover:bg-sky-100">
               {label}
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );
