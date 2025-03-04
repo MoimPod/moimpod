@@ -4,7 +4,7 @@ import ConfirmedStamp from "@/components/ConfirmedStamp";
 import DEFAULT_IMAGE from "@/images/default_image.png";
 import JoinArrow from "@/images/join_now_arrow.svg";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
-import { CardData } from "@/stores/useGatheringStore";
+import { GatheringType } from "@/app/(common)/gathering/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -25,7 +25,7 @@ export default function Card({
   participantCount,
   capacity,
   image,
-}: CardData) {
+}: GatheringType) {
   const router = useRouter();
   const { toggleFavorite, favorites } = useFavoritesStore();
 

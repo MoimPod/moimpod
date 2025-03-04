@@ -136,9 +136,15 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     requestData.append("name", data.name);
     requestData.append("location", data.location);
     requestData.append("type", data.type);
-    requestData.append("dateTime", data.dateTime);
-    requestData.append("registrationEnd", data.registrationEnd);
+
+    // -9시간 변환 후 서버로 전송
+    const adjustedMeetingDate = dayjs(data.dateTime).subtract(9, "hour").format("YYYY-MM-DDTHH:mm:ss");
+    const adjustedDeadlineDate = dayjs(data.registrationEnd).subtract(9, "hour").format("YYYY-MM-DDTHH:mm:ss");
+
+    requestData.append("dateTime", adjustedMeetingDate);
+    requestData.append("registrationEnd", adjustedDeadlineDate);
     requestData.append("capacity", String(data.capacity));
+
     if (data.image) {
       requestData.append("image", data.image);
     } else {
@@ -178,7 +184,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           <Input
             placeholder="모임 이름을 작성해주세요."
             register={register("name", {
-              required: "모임 이름을 입력해주세요.",
+              required: "",
               maxLength: { value: 20, message: "모임 이름은 최대 20자까지 입력 가능합니다." },
             })}
           />
@@ -289,7 +295,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
           <Input
             placeholder="최소 5인 이상 입력해주세요."
             register={register("capacity", {
-              required: "정원을 입력해주세요.",
+              required: "",
               min: { value: 5, message: "모임 정원은 최소 5명 이상이어야 합니다." },
               max: { value: 30, message: "모임 정원은 최대 30명까지만 가능합니다." },
               pattern: { value: /^[0-9]+$/, message: "숫자만 입력해주세요." },
