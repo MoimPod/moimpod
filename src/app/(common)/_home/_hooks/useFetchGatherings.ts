@@ -26,7 +26,7 @@ export const fetchGatherings = async ({
   try {
     const mergedFilters = { ...defaultFilters, ...filters };
 
-    const response = await axiosInstance.get<GatheringType[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
+    const response = await axiosInstance.get<GatheringType[]>("gatherings", {
       params: { ...mergedFilters, limit: 10, offset: pageParam },
     });
 
