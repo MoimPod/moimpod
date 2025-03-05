@@ -1,6 +1,7 @@
-import { MyGathering, Reviews } from "@/app/(common)/mypage/types";
+import { MyGathering } from "@/app/(common)/mypage/types";
 import axiosInstance from "@/lib/axiosInstance";
 import { CardData } from "@/stores/useGatheringStore";
+import { GatheringType, ReviewsResponse } from "@/types";
 import dayjs from "dayjs";
 
 interface FetchMyGatheringsParams {
@@ -20,7 +21,7 @@ const fetchMyGatherings = async (query?: FetchMyGatheringsParams, isReviewable?:
 };
 
 const fetchMyReviews = async (userId: number) => {
-  const response = await axiosInstance.get<Reviews>("reviews", {
+  const response = await axiosInstance.get<ReviewsResponse>("reviews", {
     params: {
       limit: 100,
       userId,
@@ -31,7 +32,7 @@ const fetchMyReviews = async (userId: number) => {
 };
 
 const fetchMyCreatedGatherings = async (createdBy: number) => {
-  const response = await axiosInstance.get<CardData[]>("gatherings", {
+  const response = await axiosInstance.get<GatheringType[]>("gatherings", {
     params: {
       limit: 100,
       sortBy: "dateTime",

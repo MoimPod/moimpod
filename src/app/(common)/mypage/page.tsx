@@ -1,10 +1,9 @@
 import MypageContent from "@/app/(common)/mypage/_components/MypageContent";
 import { ProfileSection } from "@/app/(common)/mypage/_components/ProfileSection";
-import { MyGathering, Reviews } from "@/app/(common)/mypage/types";
+import { MyGathering } from "@/app/(common)/mypage/types";
 import axiosInstance from "@/lib/axiosInstance";
 import getQueryClient from "@/lib/getQueryClient";
-import { CardData } from "@/stores/useGatheringStore";
-import { UserType } from "@/types";
+import { GatheringType, ReviewsResponse, UserType } from "@/types";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 
 import dayjs from "dayjs";
@@ -53,7 +52,7 @@ export default async function Page() {
       queryKey: ["user", "reviews", "written"],
       queryFn: async () => {
         const user = queryClient.getQueryData<UserType>(["user"]);
-        const response = await axiosInstance.get<Reviews>("reviews", {
+        const response = await axiosInstance.get<ReviewsResponse>("reviews", {
           params: {
             limit: 100,
             userId: user?.id,
@@ -67,7 +66,7 @@ export default async function Page() {
       queryKey: ["user", "gatherings", "created"],
       queryFn: async () => {
         const user = queryClient.getQueryData<UserType>(["user"]);
-        const response = await axiosInstance.get<CardData[]>(`gatherings`, {
+        const response = await axiosInstance.get<GatheringType[]>(`gatherings`, {
           params: {
             limit: 100,
             sortBy: "dateTime",
