@@ -4,7 +4,6 @@ import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 // 프로필 이미지, 이름, 회사, 이메일 등 사용자 정보를 표시
 export default function ProfileInfo() {
   const { data } = useGetUserInfo();
-
   return (
     <div className="flex w-full flex-col gap-2 pl-24 pt-3">
       {data ? (
