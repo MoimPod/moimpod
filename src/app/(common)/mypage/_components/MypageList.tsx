@@ -1,15 +1,15 @@
-import { DataItem, MyGathering } from "@/app/(common)/mypage/types";
+import { MyGathering } from "@/app/(common)/mypage/types";
 import Spinner from "@/components/Spinner";
-import { CardData } from "@/stores/useGatheringStore";
+import { GatheringType, ReviewResponse } from "@/types";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 
-type GatheringListProps<T extends MyGathering | DataItem | CardData> = {
+type GatheringListProps<T extends MyGathering | ReviewResponse | GatheringType> = {
   render: (item: T) => React.ReactNode;
   emptyMessage: string;
   queryOption: UseQueryOptions<T[], Error>;
 };
 
-export default function MypageList<T extends MyGathering | DataItem | CardData>({
+export default function MypageList<T extends MyGathering | ReviewResponse | GatheringType>({
   render,
   emptyMessage,
   queryOption,
