@@ -30,7 +30,7 @@ export default function ProfileEditModal({ isOpen, onClose }: ProfileEditModalPr
     handleSubmit,
     watch,
     reset,
-    formState: { isValid, isDirty, errors },
+    formState: { isValid, errors },
   } = useForm<FormValues>({ mode: "onChange", defaultValues: { companyName: data?.companyName } });
   const mutation = useUpdateUserInfo();
 
@@ -73,6 +73,12 @@ export default function ProfileEditModal({ isOpen, onClose }: ProfileEditModalPr
     onClose();
   };
 
+  const isProfileUnchanged = (!watchedProfileImg || watchedProfileImg.length === 0) && previewUrl === data?.image;
+  const isCompanyNameUnchanged = watch("companyName") === data?.companyName;
+
+  // 버튼 비활성화 조건
+  const isDisabled = !isValid || (isProfileUnchanged && isCompanyNameUnchanged);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="mx-4 flex w-full max-w-[520px] flex-col gap-6 md:mx-0">
       <div className="text-lg font-semibold">프로필 수정하기</div>
@@ -91,6 +97,7 @@ export default function ProfileEditModal({ isOpen, onClose }: ProfileEditModalPr
             register={register("companyName", {
               required: "회사명을 입력해주세요.",
               maxLength: { value: 18, message: "회사명은 18자 이하로 입력해주세요." },
+              validate: (value) => value.trim() === value || "앞뒤 공백을 지워주세요",
             })}
             helperText={errors.companyName?.message}
           />
@@ -99,7 +106,7 @@ export default function ProfileEditModal({ isOpen, onClose }: ProfileEditModalPr
           <Button onClick={onClose} styleType="outline" className="w-full">
             취소
           </Button>
-          <Button type="submit" disabled={!isDirty || !isValid} className="w-full">
+          <Button type="submit" disabled={isDisabled} className="w-full">
             수정하기
           </Button>
         </div>
