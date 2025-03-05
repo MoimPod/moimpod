@@ -1,4 +1,4 @@
-import { MyGathering, Reviews } from "@/app/(common)/mypage/types";
+import { MyGathering } from "@/app/(common)/mypage/types";
 import axiosInstance from "@/lib/axiosInstance";
 import { CardData } from "@/stores/useGatheringStore";
 import { GatheringType, ReviewsResponse } from "@/types";
