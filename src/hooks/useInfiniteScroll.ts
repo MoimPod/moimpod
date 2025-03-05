@@ -8,7 +8,10 @@ type UseInfiniteScrollProps = {
 
 export const useInfiniteScroll = ({ fetchNextPage, hasNextPage, isFetchingNextPage }: UseInfiniteScrollProps) => {
   // 무한 스크롤을 감지할 ref
-  const observerRef = useRef<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  // IntersectionObserver 인스턴스를 저장할 ref
+  const observerInstanceRef = useRef<IntersectionObserver | null>(null);
 
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
@@ -20,24 +23,31 @@ export const useInfiniteScroll = ({ fetchNextPage, hasNextPage, isFetchingNextPa
     [fetchNextPage, hasNextPage, isFetchingNextPage],
   );
 
+  // 콜백 ref를 사용해 DOM 요소가 할당될 때 observer를 설정
+  const observerRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (observerInstanceRef.current && ref.current) {
+        observerInstanceRef.current.unobserve(ref.current);
+      }
+      ref.current = node;
+
+      if (node && window.IntersectionObserver) {
+        const observer = new IntersectionObserver(handleObserver, { threshold: 1.0 });
+        observer.observe(node);
+        observerInstanceRef.current = observer;
+      }
+    },
+    [handleObserver],
+  );
+
   useEffect(() => {
-    if (!window.IntersectionObserver) {
-      console.warn("IntersectionObserver is not supported in this browser");
-      return;
-    }
-
-    try {
-      const observer = new IntersectionObserver(handleObserver, { threshold: 1.0 });
-
-      if (observerRef.current) observer.observe(observerRef.current);
-
-      return () => {
-        if (observerRef.current) observer.unobserve(observerRef.current);
-      };
-    } catch (error) {
-      console.error("Failed to initialize IntersectionObserver:", error);
-    }
-  }, [handleObserver]);
+    // 컴포넌트 언마운트 시 observer 정리
+    return () => {
+      if (observerInstanceRef.current && ref.current) {
+        observerInstanceRef.current.unobserve(ref.current);
+      }
+    };
+  }, []);
 
   return { observerRef, isFetchingNextPage };
 };
