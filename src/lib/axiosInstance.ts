@@ -1,8 +1,12 @@
+import { getServerToken } from "@/lib/getServerToken";
 import axios from "axios";
 
 // 쿠키에서 특정 값 가져오는 함수
 function getCookie(name: string) {
-  if (typeof window === "undefined") return null; // 서버 환경이면 null 반환
+  if (typeof window === "undefined") {
+    const token = getServerToken();
+    return token;
+  } // 서버 환경이면 null 반환
   const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
   return match ? match[2] : null;
 }
