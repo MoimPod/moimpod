@@ -6,6 +6,7 @@ import getQueryClient from "@/lib/getQueryClient";
 import { CardData } from "@/stores/useGatheringStore";
 import { UserType } from "@/types";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
+
 import dayjs from "dayjs";
 import { cookies } from "next/headers";
 
@@ -17,7 +18,7 @@ export default async function Page() {
   await queryClient.prefetchQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const response = await axiosInstance.get<UserType>(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/user`, {});
+      const response = await axiosInstance.get<UserType>("auths/user", {});
       return response.data;
     },
   });
@@ -25,14 +26,11 @@ export default async function Page() {
     queryClient.prefetchQuery({
       queryKey: ["user", "gatherings"],
       queryFn: async () => {
-        const response = await axiosInstance.get<MyGathering[]>(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings/joined`,
-          {
-            params: {
-              limit: 100,
-            },
+        const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
+          params: {
+            limit: 100,
           },
-        );
+        });
         return response.data.sort((a, b) => dayjs(b.dateTime).valueOf() - dayjs(a.dateTime).valueOf());
       },
     }),
@@ -40,16 +38,13 @@ export default async function Page() {
     queryClient.prefetchQuery({
       queryKey: ["user", "reviews", "reviewable"],
       queryFn: async () => {
-        const response = await axiosInstance.get<MyGathering[]>(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings/joined`,
-          {
-            params: {
-              limit: 100,
-              completed: true,
-              reviewed: false,
-            },
+        const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
+          params: {
+            limit: 100,
+            completed: true,
+            reviewed: false,
           },
-        );
+        });
         const data = response.data.filter((gathering) => !gathering.canceledAt);
         return data.sort((a, b) => dayjs(b.dateTime).valueOf() - dayjs(a.dateTime).valueOf());
       },
@@ -58,7 +53,7 @@ export default async function Page() {
       queryKey: ["user", "reviews", "written"],
       queryFn: async () => {
         const user = queryClient.getQueryData<UserType>(["user"]);
-        const response = await axiosInstance.get<Reviews>(`${process.env.NEXT_PUBLIC_API_BASE_URL}reviews`, {
+        const response = await axiosInstance.get<Reviews>("reviews", {
           params: {
             limit: 100,
             userId: user?.id,
@@ -72,7 +67,7 @@ export default async function Page() {
       queryKey: ["user", "gatherings", "created"],
       queryFn: async () => {
         const user = queryClient.getQueryData<UserType>(["user"]);
-        const response = await axiosInstance.get<CardData[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
+        const response = await axiosInstance.get<CardData[]>(`gatherings`, {
           params: {
             limit: 100,
             sortBy: "dateTime",
