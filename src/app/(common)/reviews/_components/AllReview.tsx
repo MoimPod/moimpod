@@ -100,7 +100,7 @@ export default function AllReview({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="mt-9">
-      <ServiceTab onCategoryChange={handleTypeChange} />
+      <ServiceTab onCategoryChange={handleTypeChange} searchParams={searchParams} />
       <hr className="border-1 mb-6 mt-4" />
       {children}
       <div className="mt-6 border-t-2 border-black bg-white p-6">
