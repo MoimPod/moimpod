@@ -2,6 +2,7 @@ import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import getQueryClient from "@/lib/getQueryClient";
 import { fetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
 import CardList from "./_home/CardList";
+import { Suspense } from "react";
 
 export default async function Home() {
   const queryClient = getQueryClient();
@@ -16,9 +17,11 @@ export default async function Home() {
 
   return (
     <div className="w-full">
-      <HydrationBoundary state={dehydratedState}>
-        <CardList />
-      </HydrationBoundary>
+      <Suspense>
+        <HydrationBoundary state={dehydratedState}>
+          <CardList />
+        </HydrationBoundary>
+      </Suspense>
     </div>
   );
 }
