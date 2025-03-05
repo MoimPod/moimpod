@@ -1,5 +1,6 @@
 "use client";
 
+import { getUser } from "@/app/api/getUser";
 import axiosInstance from "@/lib/axiosInstance";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -28,7 +29,7 @@ export default function TokenExpireHandler() {
   function deleteLocalStorage() {
     if (typeof window !== "undefined" && window.localStorage) {
       localStorage.removeItem("user-storage");
-      queryClient.removeQueries({ queryKey: ["user"] });
+      queryClient.removeQueries({ queryKey: ["user"], queryFn: getUser });
     }
   }
 

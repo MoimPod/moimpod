@@ -1,6 +1,7 @@
 "use client";
 
 import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
+import { getUser } from "@/app/api/getUser";
 import axiosInstance from "@/lib/axiosInstance";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useQueryClient } from "@tanstack/react-query";
@@ -62,7 +63,7 @@ export default function Header() {
       localStorage.removeItem("user-storage");
     }
     setProfileBtn(false);
-    queryClient.removeQueries({ queryKey: ["user"] });
+    queryClient.removeQueries({ queryKey: ["user"], queryFn: getUser });
     signout();
     if (pathname === "/") {
       window.location.reload();
