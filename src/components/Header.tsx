@@ -97,9 +97,13 @@ export default function Header() {
           </Link>
           <Link href={"/favorites"} className={`${getLinkClass("/favorites")} gap-1`}>
             찜한 모임{" "}
-            <b className="rounded-full bg-black px-2 text-xs font-semibold text-white">
-              {favoritesCount > 0 && `${favoritesCount}`}
-            </b>
+            {favoritesCount !== 0 ? (
+              <b className="rounded-full bg-black px-2 text-xs font-semibold text-white">
+                {favoritesCount > 0 && `${favoritesCount}`}
+              </b>
+            ) : (
+              ""
+            )}
           </Link>
           <Link href={"/reviews"} className={getLinkClass("/reviews")}>
             모든 리뷰
