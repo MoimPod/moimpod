@@ -81,6 +81,7 @@ export default function SignUp() {
         setError("email", { type: "manual", message: "중복된 이메일입니다." });
       }
     }
+    setLoginProgress(false);
   };
 
   const postSignUp = async (data: FormValues) => {
