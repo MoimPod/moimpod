@@ -1,9 +1,9 @@
 "use client";
 
 import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
-import { getUser } from "@/app/api/getUser";
 import axiosInstance from "@/lib/axiosInstance";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
+import { useUserStore } from "@/stores/useUserStore";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
@@ -63,7 +63,8 @@ export default function Header() {
       localStorage.removeItem("user-storage");
     }
     setProfileBtn(false);
-    queryClient.removeQueries({ queryKey: ["user"], queryFn: getUser });
+    queryClient.removeQueries({ queryKey: ["user"] });
+    useUserStore.getState().clearUser();
     signout();
     if (pathname === "/") {
       window.location.reload();
