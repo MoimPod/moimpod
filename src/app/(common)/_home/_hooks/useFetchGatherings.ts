@@ -20,9 +20,8 @@ export const useFetchGatherings = (filters?: FetchParams) => {
     queryKey: ["gatherings", { ...defaultFilters, ...filters }],
     queryFn: async ({ pageParam = 0 }: { pageParam: number }) => {
       try {
-        const response = await axiosInstance.get<CardData[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
+        const response = await axiosInstance.get<GatheringType[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings`, {
           params: { ...defaultFilters, ...filters, limit: 10, offset: pageParam },
-
         });
         return {
           data: response.data,

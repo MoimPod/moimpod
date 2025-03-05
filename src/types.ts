@@ -7,7 +7,7 @@ export type UserType = {
 };
 
 export type GatheringType = {
-  teamId: string;
+  teamId?: string;
   id: number;
   type: "OFFICE_STRETCHING" | "MINDFULNESS" | "WORKATION";
   name: string;

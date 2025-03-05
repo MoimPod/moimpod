@@ -2,11 +2,11 @@
 
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Card from "@/components/Card";
-import { CardData } from "@/stores/useGatheringStore";
+import { GatheringType } from "@/app/(common)/gathering/types";
 
 type FavoriteListProps = {
   isLoading: boolean;
-  favoriteCards: CardData[];
+  favoriteCards: GatheringType[];
   isFetchingNextPage: boolean;
   fetchNextPage: () => void;
   hasNextPage: boolean;
