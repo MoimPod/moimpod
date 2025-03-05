@@ -71,24 +71,21 @@ export default function SignUp() {
     }
     if (InvalidError) return;
     setLoginProgress(true);
-    const result = await postSignUp({ name, email, companyName, password });
-    if (result.message === "사용자 생성 성공") {
-      setIsModal(true);
-    } else {
-      if (result.message === "Database error") {
+    try {
+      const result = await postSignUp({ name, email, companyName, password });
+      if (result.message === "사용자 생성 성공") {
+        setIsModal(true);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 400) {
         setError("email", { type: "manual", message: "중복된 이메일입니다." });
       }
-      setLoginProgress(false);
     }
   };
 
   const postSignUp = async (data: FormValues) => {
-    try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/signup`, data);
-      return response.data;
-    } catch (error) {
-      console.error("회원가입에 실패 하였습니다.", error);
-    }
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/signup`, data);
+    return response.data;
   };
 
   useEffect(() => {
