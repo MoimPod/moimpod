@@ -21,12 +21,12 @@ export default function ScrollToTop() {
 
   return (
     <button
-      className={`fixed bottom-3 right-3 flex size-8 transform items-center justify-center rounded-full bg-blue-6 transition-all duration-300 ease-in-out md:size-12 ${
+      className={`group fixed bottom-3 right-3 flex size-9 transform items-center justify-center rounded-full bg-blue-6 transition-all duration-300 ease-in-out md:size-12 ${
         isVisible ? "scale-100 opacity-100" : "scale-0 opacity-0"
       }`}
       onClick={scrollToTop}
     >
-      <ScrollArrow className="rotate-180" />
+      <ScrollArrow className="rotate-180 group-hover:animate-arrow-up" />
     </button>
   );
 }
