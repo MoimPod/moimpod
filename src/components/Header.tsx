@@ -3,6 +3,7 @@
 import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import axiosInstance from "@/lib/axiosInstance";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
+import { useUserStore } from "@/stores/useUserStore";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
@@ -63,6 +64,7 @@ export default function Header() {
     }
     setProfileBtn(false);
     queryClient.removeQueries({ queryKey: ["user"] });
+    useUserStore.getState().clearUser();
     signout();
     if (pathname === "/") {
       window.location.reload();
