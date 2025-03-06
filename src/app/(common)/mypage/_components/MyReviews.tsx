@@ -25,7 +25,7 @@ export default function MyReviews() {
         }}
         emptyMessage={"아직 작성 가능한 리뷰가 없어요"}
         render={(review) => (
-          <Link href={`/gathering/${review.Gathering.id}`}>
+          <Link href={`/gathering/${review.Gathering.id}`} key={review.id}>
             <ListItem
               CardImage={
                 <Image
@@ -36,7 +36,6 @@ export default function MyReviews() {
                   className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
                 />
               }
-              key={review.id}
               className="w-full justify-between"
             >
               <div className="flex h-full w-full flex-col gap-2 border-b-2 border-dashed pb-6">
