@@ -1,23 +1,26 @@
 "use client";
 
+import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
+import axiosInstance from "@/lib/axiosInstance";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useUserStore } from "@/stores/useUserStore";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Avatar from "./Avatar";
 
 export default function Header() {
-  const user = useUserStore();
   const router = useRouter();
   const pathname = usePathname();
   const [token, setToken] = useState<string | undefined>(undefined);
+  const { data } = useGetUserInfo(token);
   const [profileBtn, setProfileBtn] = useState(false);
   const favorites = useFavoritesStore((state) => state.favorites);
   const favoritesCount = favorites.length;
   const queryClient = useQueryClient();
+  const profileRef = useRef<HTMLDivElement>(null);
 
   function getCookie(name: string): string | undefined {
     if (typeof document === "undefined") return undefined;
@@ -26,6 +29,18 @@ export default function Header() {
     if (parts.length === 2) return parts.pop()?.split(";").shift();
     return undefined;
   }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setProfileBtn(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const tokenFromCookie = getCookie("token");
@@ -39,17 +54,31 @@ export default function Header() {
   const getLinkClass = (path: string) => (pathname === path ? "header-link active" : "header-link");
 
   const handleLogout = () => {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/";
+    const paths = ["/", "/gathering", "/mypage", "/favorites", "/reviews"];
+    paths.forEach((path) => {
+      document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=${path}`;
+    });
+    setToken(undefined);
     if (typeof window !== "undefined" && window.localStorage) {
       localStorage.removeItem("user-storage");
     }
     setProfileBtn(false);
-    queryClient.removeQueries({ queryKey: ["mypage"] });
     queryClient.removeQueries({ queryKey: ["user"] });
+    useUserStore.getState().clearUser();
+    signout();
     if (pathname === "/") {
       window.location.reload();
     } else {
       router.push("/");
+    }
+  };
+
+  const signout = async () => {
+    try {
+      const response = await axiosInstance.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/signout`);
+      return response.data;
+    } catch (error) {
+      return error;
     }
   };
 
@@ -70,23 +99,27 @@ export default function Header() {
           </Link>
           <Link href={"/favorites"} className={`${getLinkClass("/favorites")} gap-1`}>
             찜한 모임{" "}
-            <b className="rounded-full bg-black px-2 text-xs font-semibold text-white">
-              {favoritesCount > 0 && `${favoritesCount}`}
-            </b>
+            {favoritesCount !== 0 ? (
+              <b className="rounded-full bg-black px-2 text-xs font-semibold text-white">
+                {favoritesCount > 0 && `${favoritesCount}`}
+              </b>
+            ) : (
+              ""
+            )}
           </Link>
           <Link href={"/reviews"} className={getLinkClass("/reviews")}>
             모든 리뷰
           </Link>
         </nav>
         {token ? (
-          <div className="relative">
+          <div className="relative" ref={profileRef}>
             <button
               onClick={() => {
                 setProfileBtn((prev) => !prev);
               }}
               className="flex items-center justify-center"
             >
-              <Avatar size={"md"} imageUrl={user.user?.image} />
+              <Avatar size={"md"} imageUrl={data?.image} />
             </button>
             {profileBtn ? (
               <div className="absolute right-0 top-[calc(100%+8px)] h-20 w-[110px] rounded-xl bg-white shadow-md xl:top-[calc(100%+10px)]">

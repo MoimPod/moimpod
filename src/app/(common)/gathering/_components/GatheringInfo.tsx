@@ -29,7 +29,7 @@ export default function GatheringInfo({ gatheringId, gathering }: GatheringProps
 
   return (
     <div className="w-full rounded-3xl border-2 border-gray-200 bg-white md:h-60 lg:h-[270px]">
-      <div className="flex justify-between p-6 lg:pb-11">
+      <div className="mx-6 flex justify-between py-6 lg:pb-11">
         <div>
           <h2 className="text-lg font-semibold">{name}</h2>
           <div className="mb-3">{location}</div>
@@ -40,16 +40,16 @@ export default function GatheringInfo({ gatheringId, gathering }: GatheringProps
 
       <DashedLine />
 
-      <div className="p-6">
+      <div className="mx-6 my-3 lg:m-6">
         <div className="mb-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex h-[29px] items-center gap-4">
             <div className="text-sm font-semibold text-gray-900">모집정원 {profileImages.length}명</div>
             <GatheredProfiles profileImages={profileImages} />
           </div>
           {MIN_COUNT <= participantCount && <ConfirmedStamp />}
         </div>
 
-        <ProgressBar progress={(participantCount / capacity) * 100} />
+        <ProgressBar progress={(profileImages?.length / capacity) * 100} />
         <div className="mt-2 flex justify-between text-xs font-medium text-gray-700">
           <div>최소인원 {MIN_COUNT}명</div>
           <div>최대인원 {capacity}명</div>

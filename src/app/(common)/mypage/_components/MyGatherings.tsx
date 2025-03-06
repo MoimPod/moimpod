@@ -2,11 +2,12 @@ import ListItem from "@/components/ListItem";
 import Image from "next/image";
 import Button from "@/components/Button";
 import { useState } from "react";
-import ReviewModal from "@/app/(common)/mypage/_components/ReviewModal";
-import Spinner from "@/components/Spinner";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import { useGetMyGatherings } from "@/app/(common)/mypage/_hooks/useGetMyGatherings";
+import MypageList from "@/app/(common)/mypage/_components/MypageList";
+import { fetchMyGatherings } from "@/app/(common)/mypage/utils/apis";
+import DEFAULT_IMAGE from "@/images/default_image.png";
+import { ReviewModal } from "@/app/(common)/mypage/_components/ReviewModal";
+import Link from "next/link";
 
 // 이용 예정 => 모임 참여 신청했고 isCompleted가 false인 경우
 // 이용 완료 => 모임 참여 신청했고 isCompleted가 true인 경우
@@ -25,11 +26,8 @@ import { useGetMyGatherings } from "@/app/(common)/mypage/_hooks/useGetMyGatheri
 // 리뷰
 // isCompleted가 true, isReviewed가 false => 리뷰 작성하기
 // isCompleted가 true, isReviewed가 true => 리뷰 작성 x
+
 export default function MyGatherings() {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyGatherings([
-    "user",
-    "gatherings",
-  ]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedGathering, setSelectedGathering] = useState<number | null>(null);
   const handleOpen = (gatheringId: number) => {
@@ -43,38 +41,19 @@ export default function MyGatherings() {
 
   const mutation = useLeaveGathering(["user", "gatherings"]);
 
-  // 무한 스크롤을 감지할 ref
-  const { observerRef } = useInfiniteScroll({
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  });
-
-  const allGatherings = data?.pages.flatMap((page) => page.data) || [];
-
-  if (isLoading)
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  if (error)
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <p>목록 조회 중 에러가 발생했습니다.</p>
-      </div>
-    );
   return (
     <>
-      {allGatherings.length ? (
-        <>
-          {allGatherings.map((gathering) => (
-            <div className="relative py-6" key={gathering.id}>
+      <MypageList
+        queryOption={{ queryFn: () => fetchMyGatherings(), queryKey: ["user", "gatherings", "joined"] }}
+        emptyMessage={"신청한 모임이 아직 없어요"}
+        render={(gathering) => (
+          <div className="relative py-6" key={gathering.id}>
+            <Link href={`/gathering/${gathering.id}`}>
               <ListItem
                 CardImage={
                   <Image
-                    src={gathering.image}
-                    alt="모임 이미지"
+                    src={gathering.image || DEFAULT_IMAGE}
+                    alt={`${gathering.name} 이미지`}
                     width={280}
                     height={156}
                     className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
@@ -103,7 +82,15 @@ export default function MyGatherings() {
                 ) : (
                   <Button
                     onClick={
-                      gathering.isCompleted ? () => handleOpen(gathering.id) : () => mutation.mutate(gathering.id)
+                      gathering.isCompleted
+                        ? (e) => {
+                            e.preventDefault();
+                            handleOpen(gathering.id);
+                          }
+                        : (e) => {
+                            e.preventDefault();
+                            mutation.mutate(gathering.id);
+                          }
                     }
                     className={"mt-[18px] w-full max-w-[120px]"}
                     size={"sm"}
@@ -115,18 +102,11 @@ export default function MyGatherings() {
                   </Button>
                 )}
               </ListItem>
-            </div>
-          ))}
-
-          <div ref={observerRef} className="h-10" />
-          {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
-          <ReviewModal isOpen={isModalOpen} onClose={handleClose} gatheringId={selectedGathering as number} />
-        </>
-      ) : (
-        <div className="flex flex-1 items-center justify-center">
-          <p>신청한 모임이 아직 없어요</p>
-        </div>
-      )}
+            </Link>
+          </div>
+        )}
+      />
+      {selectedGathering && <ReviewModal isOpen={isModalOpen} onClose={handleClose} gatheringId={selectedGathering} />}
     </>
   );
 }

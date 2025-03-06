@@ -1,9 +1,34 @@
 import ReviewsAverage from "@/app/(common)/reviews/_components/ReviewsAverage";
 
+import { Suspense } from "react";
+import AllReview from "../reviews/_components/AllReview";
+import GatheringLogo from "@/images/gathering_logo.svg";
+import Spinner from "@/components/Spinner";
+
 export default function Page() {
   return (
     <div className="w-full">
-      <ReviewsAverage />
+      <div className="mb-5 flex gap-6 pt-8">
+        <GatheringLogo />
+        <div>
+          <div className="mb-2 text-2xl font-semibold text-gray-900">모든 리뷰</div>
+          <div className="text-sm font-medium text-gray-700">같이달램을 이용한 분들은 이렇게 느꼈어요 🫶</div>
+        </div>
+      </div>
+
+      <Suspense fallback={<Loading />}>
+        <AllReview>
+          <ReviewsAverage />
+        </AllReview>
+      </Suspense>
+    </div>
+  );
+}
+
+function Loading() {
+  return (
+    <div className="flex h-1/3 items-center justify-center">
+      <Spinner />
     </div>
   );
 }

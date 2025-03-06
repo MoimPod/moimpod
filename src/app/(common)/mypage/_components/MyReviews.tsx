@@ -1,56 +1,41 @@
-import { useGetMyReviews } from "@/app/(common)/mypage/_hooks/useGetMyReviews";
+import MypageList from "@/app/(common)/mypage/_components/MypageList";
 import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import ListItem from "@/components/ListItem";
 import Score from "@/components/Score";
-import Spinner from "@/components/Spinner";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Image from "next/image";
-
+import DEFAULT_IMAGE from "@/images/default_image.png";
+import { fetchMyReviews } from "@/app/(common)/mypage/utils/apis";
+import Link from "next/link";
 const GatheringType = {
   OFFICE_STRETCHING: "달램핏 오피스 스트레칭",
   MINDFULNESS: "달램핏 마인드풀니스",
   WORKATION: "워케이션",
+  DALLAEMFIT: "달램핏",
 };
+
 export default function MyReviews() {
   const { data: userData } = useGetUserInfo();
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useGetMyReviews(userData?.id ?? 0);
 
-  const { observerRef } = useInfiniteScroll({
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  });
-
-  const allReviews = data?.pages.flatMap((page) => page.data.data) ?? [];
-
-  if (isLoading)
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  if (error)
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <p>목록 조회 중 에러가 발생했습니다.</p>
-      </div>
-    );
   return (
     <>
-      {allReviews.length ? (
-        <>
-          {allReviews.map((review) => (
+      <MypageList
+        queryOption={{
+          queryKey: ["user", "reviews", "written"],
+          queryFn: () => fetchMyReviews(userData?.id || 0),
+        }}
+        emptyMessage={"아직 작성 가능한 리뷰가 없어요"}
+        render={(review) => (
+          <Link href={`/gathering/${review.Gathering.id}`} key={review.id}>
             <ListItem
               CardImage={
                 <Image
-                  src={review.Gathering.image}
-                  alt="모임 이미지"
+                  src={review.Gathering.image || DEFAULT_IMAGE}
+                  alt={`${review.Gathering.name} 이미지`}
                   width={280}
                   height={156}
                   className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
                 />
               }
-              key={review.id}
               className="w-full justify-between"
             >
               <div className="flex h-full w-full flex-col gap-2 border-b-2 border-dashed pb-6">
@@ -64,15 +49,9 @@ export default function MyReviews() {
                 <ListItem.MetaInfo secondary={review.createdAt} />
               </div>
             </ListItem>
-          ))}
-          <div ref={observerRef} className="h-10" />
-          {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
-        </>
-      ) : (
-        <div className="flex flex-1 items-center justify-center">
-          <p>아직 작성한 리뷰가 없어요</p>
-        </div>
-      )}
+          </Link>
+        )}
+      />
     </>
   );
 }

@@ -47,7 +47,7 @@ export default function DateSelect({ onDateChange }: DateSelectProps) {
       >
         {/* 날짜 선택 */}
         {isDateDropdownOpen && (
-          <div className="absolute z-10 rounded-xl border bg-white px-10 pb-6 shadow-md">
+          <div className="absolute z-20 rounded-xl border bg-white px-10 pb-6 shadow-md">
             <CustomDatepicker selectedDate={tempSelectedDate} onDateChange={setTempSelectedDate} />
             {/* 버튼 */}
             <div className="mt-3 flex justify-center gap-2">

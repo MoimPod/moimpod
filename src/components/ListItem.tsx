@@ -4,10 +4,8 @@ import CapacityStatus from "@/components/CapacityStatus";
 import { cn } from "@/utils/classnames";
 import Check from "@/images/check.svg";
 import { PropsWithChildren } from "react";
-import formatDateToYYYYMMDD from "@/utils/formatDateToYYYYMMDD";
 import InactiveLayer from "@/components/InactiveLayer";
-import { format } from "date-fns";
-import { ko } from "date-fns/locale";
+import dayjs from "dayjs";
 
 type ListItemProps = {
   CardImage?: React.ReactNode;
@@ -26,7 +24,9 @@ export default function ListItem({
   className,
 }: PropsWithChildren<ListItemProps>) {
   return (
-    <div className={`relative flex w-full flex-col items-stretch gap-4 border-gray-300 md:max-w-none md:flex-row`}>
+    <div
+      className={`relative ${canceledAt && handleCancel && "overflow-hidden rounded-xl md:rounded-3xl"} flex w-full flex-col items-stretch gap-4 border-gray-300 md:max-w-none md:flex-row`}
+    >
       {canceledAt && handleCancel && (
         <InactiveLayer isCompleted={isCompleted} onClick={handleCancel} message="모집 취소된 모임이에요" />
       )}
@@ -102,8 +102,8 @@ type SubInfoProps = {
   capacity: number;
 };
 ListItem.SubInfo = ({ date, participantCount, capacity }: SubInfoProps) => {
-  const formatDate = format(date, "M월 d일", { locale: ko });
-  const formatTime = format(date, "HH:mm");
+  const formatDate = dayjs(date).format("M월 D일");
+  const formatTime = dayjs(date).format("HH:mm");
   return (
     <div className="flex items-center gap-3 text-sm text-gray-700">
       <div>{`${formatDate} · ${formatTime}`}</div>
@@ -136,7 +136,7 @@ ListItem.MetaInfo = ({ imageUrl, primary, secondary }: MetaInfoProps) => {
       {primary && (
         <div className="flex items-center gap-2">
           {imageUrl ? (
-            <Image alt="사용자 이미지" src={imageUrl} width="24" height="24" className="rounded-full" />
+            <Image alt="사용자 이미지" src={imageUrl} width="24" height="24" className="size-6 rounded-full" />
           ) : (
             <Profile width="24" height="24" />
           )}
@@ -144,7 +144,7 @@ ListItem.MetaInfo = ({ imageUrl, primary, secondary }: MetaInfoProps) => {
           <span className="mr-3 text-xs text-gray-700">|</span>
         </div>
       )}
-      <span className="text-xs text-gray-500">{formatDateToYYYYMMDD(secondary)}</span>
+      <span className="text-xs text-gray-500">{dayjs(secondary).format("YYYY.MM.DD")}</span>
     </div>
   );
 };

@@ -1,18 +1,19 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo, useRef } from "react";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
-import ServiceTab from "@/components/ServiceTab";
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
-import Card from "@/components/Card";
-import Button from "@/components/Button";
-import GatheringLogo from "@/images/gathering_logo.svg";
-import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
 import { useCheckAuth } from "@/app/(common)/_home/_hooks/useCheckAuth";
+import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
+import Button from "@/components/Button";
+import Card from "@/components/Card";
 import { LoginPopup } from "@/components/Popup";
-import { useUserStore } from "@/stores/useUserStore";
+import ServiceTab from "@/components/ServiceTab";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import GatheringLogo from "@/images/gathering_logo.svg";
+import { useUserStore } from "@/stores/useUserStore";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import dayjs from "dayjs";
 
 export default function CardList() {
   const searchParams = useSearchParams();
@@ -25,14 +26,14 @@ export default function CardList() {
       location: searchParams.get("location") || undefined,
       date: searchParams.get("date") || undefined,
       sortBy: searchParams.get("sortBy") || undefined,
-      type: searchParams.get("type") || undefined,
+      type: searchParams.get("type") || "DALLAEMFIT",
     }),
     [searchParamsString],
   );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchGatherings(filters);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useFetchGatherings(filters);
 
   // 로그인 체크 훅
   const { checkAuth, isAuthModalOpen, setAuthModalOpen } = useCheckAuth();
@@ -79,69 +80,51 @@ export default function CardList() {
   const filteredCards =
     data?.pages
       .flatMap((page) => page.data)
-      .filter((card) => !card.registrationEnd || new Date(card.registrationEnd) >= new Date()) || [];
-
-  // 스크롤 페이드 효과를 위한 상태값
-  const [scrollTop, setScrollTop] = useState(0);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  // 스크롤 이벤트 핸들러
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollContainerRef.current) {
-        setScrollTop(scrollContainerRef.current.scrollTop);
-      }
-    };
-    const container = scrollContainerRef.current;
-    if (container) {
-      container.addEventListener("scroll", handleScroll);
-    }
-    return () => {
-      if (container) {
-        container.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
+      .filter((card) => !dayjs(card.registrationEnd) || dayjs(card.registrationEnd).isAfter(dayjs())) || [];
 
   return (
-    <div className="relative h-screen">
-      <div className="mb-5 flex gap-6 pt-8">
+    <div>
+      <div className="mb-5 flex flex-row items-center gap-4 pl-3 pt-10">
         <GatheringLogo />
         <div>
           <div className="mb-2 text-sm font-semibold text-gray-700">함께할 사람이 없나요?</div>
-          <div className="text-2xl font-semibold text-gray-900">지금 모임에 참여해보세요</div>
+          <div className="text-lg font-semibold text-gray-900 lg:text-2xl">지금 모임에 참여해보세요</div>
         </div>
       </div>
-      <div className="px-6 pt-6">
-        <div className="flex items-center">
+      <div className="relative mt-6">
+        <div className="flex flex-row gap-2">
           <ServiceTab
+            searchParams={searchParams}
             onCategoryChange={(type) => {
-              handleFilterChange({ type }); // 필터링 값 업데이트
+              handleFilterChange({ type });
             }}
           />
-          <div className="ml-auto w-[114px]">
-            <Button styleType="solid" size="sm" className="h-10 px-3 md:h-11" onClick={handleOpen}>
-              모임 만들기
-            </Button>
-            <LoginPopup
-              isOpen={isAuthModalOpen}
-              onClose={() => {
-                setAuthModalOpen(false);
-              }}
-            />
-          </div>
+
+          <LoginPopup
+            isOpen={isAuthModalOpen}
+            onClose={() => {
+              setAuthModalOpen(false);
+            }}
+          />
         </div>
+        <Button
+          type="button"
+          styleType="solid"
+          size="sm"
+          className="absolute right-0 top-0 h-10 w-24 md:h-11"
+          onClick={handleOpen}
+        >
+          모임 만들기
+        </Button>
       </div>
       <hr className="my-3" />
-      <GatheringFilters onChange={handleFilterChange} />
-      {/* 상단 페이드 아웃 효과 */}
-      <div
-        className="pointer-events-none absolute left-0 z-10 h-12 w-full bg-gradient-to-t from-transparent to-gray-50"
-        style={{ opacity: scrollTop > 10 ? 1 : 0 }}
-      />
-
-      <div ref={scrollContainerRef} className="relative max-h-[80vh] overflow-y-auto px-6">
-        {data?.pages[0].data.length === 0 ? (
+      <div className="">
+        <GatheringFilters onChange={handleFilterChange} />
+        {isLoading ? ( // 첫 페이지 로딩 중일 때
+          <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
+            <p>모임 정보를 불러오는 중...</p>
+          </div>
+        ) : data?.pages[0].data.length === 0 || filteredCards.length === 0 ? ( // 첫 페이지 로딩 후 데이터 없을 때
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>아직 모임이 없어요</p>
             <p className="mt-2">지금 바로 모임을 만들어보세요</p>
@@ -154,10 +137,9 @@ export default function CardList() {
           </>
         )}
         {/* 무한 스크롤 감지용 div */}
-        <div ref={observerRef} className="h-10"></div>
-        {isFetchingNextPage && <div className="text-center text-sm text-gray-500">더 불러오는 중...</div>}
-        {/* 하단 페이드 인 효과 */}
-        <div className="pointer-events-none absolute bottom-0 left-0 z-10 h-12 w-full bg-gradient-to-t from-white to-transparent" />
+        {!isLoading && <div ref={observerRef} className="h-10"></div>}
+        {/* 추가 데이터를 불러올 때만 메시지 표시 */}
+        {!isLoading && isFetchingNextPage && <div className="text-center text-sm text-gray-500">불러오는 중...</div>}
       </div>
 
       <CreateGatheringsModal isOpen={isModalOpen} onClose={handleClose} />

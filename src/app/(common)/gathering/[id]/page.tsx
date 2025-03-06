@@ -32,7 +32,7 @@ export default async function Page({
     queryClient.prefetchQuery({
       queryKey: ["participants", gatheringId],
       queryFn: async () => {
-        const { data } = await axiosInstance.get(`/gatherings/${gatheringId}/participants`);
+        const { data } = await axiosInstance.get(`/gatherings/${gatheringId}/participants?limit=100`);
         return data;
       },
     }),
@@ -51,15 +51,15 @@ export default async function Page({
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <div className="flex w-full flex-col gap-6">
+    <div className="mb-[84px] flex w-full flex-col gap-6">
       <HydrationBoundary state={dehydratedState}>
-        <Gathering gathering={gathering} />
+        <Gathering gatheringId={gatheringId} gathering={gathering} />
         <ErrorBoundary>
           <Reviews gatheringId={gatheringId} reviewQuery={reviewParams} />
         </ErrorBoundary>
       </HydrationBoundary>
 
-      <FloatingBar gatheringId={gatheringId} hostUserId={gathering.createdBy} />
+      <FloatingBar gatheringId={gatheringId} gathering={gathering} hostUserId={gathering.createdBy} />
     </div>
   );
 }

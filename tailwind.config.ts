@@ -40,12 +40,14 @@ export default {
         "blue-8": "#4674b1",
         "blue-9": "#385d8e",
         "blue-10": "#2c4970",
+        "blue-11": "#2563eb",
       },
       animation: {
         "heart-scale-up": "heart-scale-up 0.6s cubic-bezier(.77,1.74,.97,1.65)",
         "hand-wave": "hand-wave 1s ease-in-out",
         fadein: "fadein 0.5s ease-in",
         fadeout: "fadeout 0.5s ease-in-out",
+        "arrow-up": "arrow-up 2.3s infinite ease-in-out",
       },
       keyframes: {
         "heart-scale-up": {
@@ -79,6 +81,10 @@ export default {
         fadeOut: {
           "0%": { opacity: "1", transform: "translateY(0)" },
           "100%": { opacity: "0", transform: "translateY(-20px)" },
+        },
+        "arrow-up": {
+          "0%, 50%, 100%": { transform: "translateY(0) rotate(180deg)" },
+          "25%, 75%": { transform: "translateY(-30%) rotate(180deg)" },
         },
       },
     },
