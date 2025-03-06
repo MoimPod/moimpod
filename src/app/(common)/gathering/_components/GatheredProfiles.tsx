@@ -13,7 +13,7 @@ export default function GatheredProfiles({ profileImages }: GatheredProfilesProp
   }
 
   return (
-    <div className="group relative cursor-default">
+    <div className="group relative cursor-default" aria-label="모암 참여자 프로필 이미지 목록">
       <div className="flex transition-transform duration-200 ease-out hover:scale-105">
         {profileImages.slice(0, 4).map((imageUrl, index) => (
           <div key={index} className={`relative ${index !== 0 ? "-ml-3" : ""}`}>
@@ -26,7 +26,11 @@ export default function GatheredProfiles({ profileImages }: GatheredProfilesProp
           </div>
         )}
       </div>
-      <div className="pointer-events-none absolute left-1/2 z-50 mt-1 -translate-x-1/2 transform rounded-md border border-gray-100 bg-white/80 p-2 opacity-0 shadow-sm backdrop-blur-md transition-opacity duration-200 group-hover:opacity-100">
+      <div
+        className="pointer-events-none absolute left-1/2 z-50 mt-1 -translate-x-1/2 transform rounded-md border border-gray-100 bg-white/80 p-2 opacity-0 shadow-sm backdrop-blur-md transition-opacity duration-200 group-hover:opacity-100"
+        role="tooltip"
+        aria-hidden={true}
+      >
         <div className="flex flex-col gap-2">
           {rows.map((row, rowIndex) => (
             <div
