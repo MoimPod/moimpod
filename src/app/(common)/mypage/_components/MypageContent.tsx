@@ -6,7 +6,10 @@ import MyReviews from "@/app/(common)/mypage/_components/MyReviews";
 import ReviewableGatherings from "@/app/(common)/mypage/_components/ReviewableGatherings";
 import useMypageTab from "@/app/(common)/mypage/_hooks/useMypageTab";
 import CategoryButton from "@/components/CategoryButton";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import Spinner from "@/components/Spinner";
 import Tab from "@/components/Tab";
+import { Suspense } from "react";
 
 const TAB_ITEMS = ["나의 모임", "나의 리뷰", "내가 만든 모임"];
 const CATEGORIES = ["작성 가능한 리뷰", "작성한 리뷰"];
@@ -45,10 +48,20 @@ export default function MypageContent() {
       <div
         className={`flex flex-1 flex-col ${selectedCategory !== "작성한 리뷰" ? "divide-y-2 divide-dashed" : "gap-6"}`}
       >
-        {selectedTab === "나의 모임" && <MyGatherings />}
-        {selectedTab === "나의 리뷰" && selectedCategory === "작성 가능한 리뷰" && <ReviewableGatherings />}
-        {selectedTab === "나의 리뷰" && selectedCategory === "작성한 리뷰" && <MyReviews />}
-        {selectedTab === "내가 만든 모임" && <MyCreatedGatherings />}
+        <ErrorBoundary>
+          <Suspense
+            fallback={
+              <div className="flex flex-1 items-center justify-center">
+                <Spinner />
+              </div>
+            }
+          >
+            {selectedTab === "나의 모임" && <MyGatherings />}
+            {selectedTab === "나의 리뷰" && selectedCategory === "작성 가능한 리뷰" && <ReviewableGatherings />}
+            {selectedTab === "나의 리뷰" && selectedCategory === "작성한 리뷰" && <MyReviews />}
+            {selectedTab === "내가 만든 모임" && <MyCreatedGatherings />}
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </div>
   );
