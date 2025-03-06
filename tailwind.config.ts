@@ -45,6 +45,7 @@ export default {
       animation: {
         "heart-scale-up": "heart-scale-up 0.6s cubic-bezier(.77,1.74,.97,1.65)",
         "hand-wave": "hand-wave 1s ease-in-out",
+        "arrow-up": "arrow-up 2.3s infinite ease-in-out",
       },
       keyframes: {
         "heart-scale-up": {
@@ -70,6 +71,10 @@ export default {
           "100%": {
             transform: "rotate(0deg)",
           },
+        },
+        "arrow-up": {
+          "0%, 50%, 100%": { transform: "translateY(0) rotate(180deg)" },
+          "25%, 75%": { transform: "translateY(-30%) rotate(180deg)" },
         },
       },
     },
