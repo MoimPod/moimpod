@@ -14,20 +14,25 @@ export default async function Page() {
   const token = cookieStore.get("token")?.value;
   const queryClient = getQueryClient();
   axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
   await queryClient.prefetchQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const response = await axiosInstance.get<UserType>("auths/user");
+      if (!token) return null;
+      const response = await axiosInstance.get<UserType>("auths/user", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       return response.data;
     },
   });
+
   await queryClient.prefetchQuery({
     queryKey: ["user", "gatherings", "joined"],
     queryFn: async () => {
+      if (!token) return [];
       const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
-        params: {
-          limit: 100,
-        },
+        params: { limit: 100 },
+        headers: { Authorization: `Bearer ${token}` },
       });
       return response.data.sort((a, b) => dayjs(b.dateTime).valueOf() - dayjs(a.dateTime).valueOf());
     },
