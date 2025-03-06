@@ -44,7 +44,7 @@ export default function MyGatherings() {
   return (
     <>
       <MypageList
-        queryOption={{ queryFn: () => fetchMyGatherings(), queryKey: ["user", "gatherings"] }}
+        queryOption={{ queryFn: () => fetchMyGatherings(), queryKey: ["user", "gatherings", "joined"] }}
         emptyMessage={"신청한 모임이 아직 없어요"}
         render={(gathering) => (
           <div className="relative py-6" key={gathering.id}>

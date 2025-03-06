@@ -22,7 +22,7 @@ export default async function Page() {
     },
   });
   await queryClient.prefetchQuery({
-    queryKey: ["user", "gatherings"],
+    queryKey: ["user", "gatherings", "joined"],
     queryFn: async () => {
       const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
         params: {
