@@ -41,12 +41,13 @@ export const fetchGatherings = async ({
 };
 
 // 클라이언트에서 무한스크롤을 위한 데이터 패칭
-export const useFetchGatherings = (filters?: FetchParams) => {
+export const useFetchGatherings = (filters?: FetchParams, initialData?: any) => {
   return useInfiniteQuery({
     queryKey: ["gatherings", filters],
     queryFn: ({ pageParam = 0 }) => fetchGatherings({ pageParam, filters }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextOffset, // 다음 페이지 존재 여부 반환
     staleTime: 60000,
+    initialData,
   });
 };

@@ -4,6 +4,7 @@ import MyCreatedGatherings from "@/app/(common)/mypage/_components/MyCreatedGath
 import MyGatherings from "@/app/(common)/mypage/_components/MyGatherings";
 import MyReviews from "@/app/(common)/mypage/_components/MyReviews";
 import ReviewableGatherings from "@/app/(common)/mypage/_components/ReviewableGatherings";
+import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import useMypageTab from "@/app/(common)/mypage/_hooks/useMypageTab";
 import { MyGathering } from "@/app/(common)/mypage/types";
 import CategoryButton from "@/components/CategoryButton";
@@ -27,6 +28,8 @@ const CATEGORIES = ["작성 가능한 리뷰", "작성한 리뷰"];
 export default function MypageContent() {
   const queryClient = useQueryClient();
   const { selectedTab, setSelectedTab, selectedCategory, setSelectedCategory } = useMypageTab();
+  const { data } = useGetUserInfo("");
+  const id = data?.id;
   useQuery({
     queryKey: ["user", "reviews", "reviewable"],
     queryFn: async () => {
@@ -54,6 +57,7 @@ export default function MypageContent() {
 
       return response.data.data.sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf());
     },
+    enabled: Boolean(id),
   });
   useQuery({
     queryKey: ["user", "gatherings", "created"],
@@ -70,6 +74,7 @@ export default function MypageContent() {
 
       return response.data;
     },
+    enabled: Boolean(id),
   });
   return (
     <div className="flex flex-1 flex-col gap-6 border-t-2 border-gray-900 bg-white p-6">

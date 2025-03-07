@@ -1,4 +1,7 @@
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 type ChipInfoProps = {
   dateTime: string;
@@ -6,9 +9,9 @@ type ChipInfoProps = {
 
 export default function ChipInfo({ dateTime }: ChipInfoProps) {
   // 날짜 포맷: "MM-DD" 형식
-  const formattedDate = dayjs(dateTime).format("M월 D일");
+  const formattedDate = dayjs.utc(dateTime).format("M월 D일");
   // 시간 포맷: "HH:MM" 형식
-  const formattedTime = dayjs(dateTime).format("HH:mm");
+  const formattedTime = dayjs.utc(dateTime).format("HH:mm");
 
   return (
     <div className="flex gap-2">

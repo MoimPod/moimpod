@@ -6,7 +6,9 @@ import Check from "@/images/check.svg";
 import { PropsWithChildren } from "react";
 import InactiveLayer from "@/components/InactiveLayer";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 
+dayjs.extend(utc);
 type ListItemProps = {
   CardImage?: React.ReactNode;
   canceledAt?: string | null;
@@ -102,8 +104,8 @@ type SubInfoProps = {
   capacity: number;
 };
 ListItem.SubInfo = ({ date, participantCount, capacity }: SubInfoProps) => {
-  const formatDate = dayjs(date).format("M월 D일");
-  const formatTime = dayjs(date).format("HH:mm");
+  const formatDate = dayjs(date).utc().format("M월 D일");
+  const formatTime = dayjs(date).utc().format("HH:mm");
   return (
     <div className="flex items-center gap-3 text-sm text-gray-700">
       <div>{`${formatDate} · ${formatTime}`}</div>
@@ -144,7 +146,7 @@ ListItem.MetaInfo = ({ imageUrl, primary, secondary }: MetaInfoProps) => {
           <span className="mr-3 text-xs text-gray-700">|</span>
         </div>
       )}
-      <span className="text-xs text-gray-500">{dayjs(secondary).format("YYYY.MM.DD")}</span>
+      <span className="text-xs text-gray-500">{dayjs(secondary).utc().format("YYYY.MM.DD")}</span>
     </div>
   );
 };
