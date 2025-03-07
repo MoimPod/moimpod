@@ -19,6 +19,8 @@ type FormValues = {
   passwordCheck?: string;
 };
 
+type UseFormSetError<T> = (name: keyof T, error: { type: string; message?: string }) => void;
+
 export default function SignUp() {
   // 회원가입 성공시 modal
   const [isModal, setIsModal] = useState(false);
@@ -36,52 +38,68 @@ export default function SignUp() {
     formState: { errors, isValid },
   } = useForm<FormValues>({ mode: "onChange" });
 
+  // 유효성 검사 함수
+  const validateSignUpForm = (data: FormValues) => {
+    const errors: Partial<Record<keyof FormValues, string>> = {};
+
+    if (!data.name) {
+      errors.name = "이름을 입력해주세요";
+    }
+    if (!data.email) {
+      errors.email = "이메일을 입력해주세요.";
+    }
+    if (!data.companyName) {
+      errors.companyName = "회사명을 정확하게 입력해주세요";
+    }
+    if (data.password.length < 8) {
+      errors.password = "비밀번호를 입력해주세요.";
+    }
+    if (data.passwordCheck !== data.password) {
+      errors.passwordCheck = "비밀번호가 일치하지 않습니다.";
+    }
+
+    return errors;
+  };
+
+  const handleSignUpSuccess = (result: { message: string }, setIsModal: (isModal: boolean) => void) => {
+    if (result.message === "사용자 생성 성공") {
+      setIsModal(true);
+    }
+  };
+
+  const handleSignUpError = (error: unknown, setError: UseFormSetError<FormValues>) => {
+    if (axios.isAxiosError(error) && error.response?.status === 400) {
+      setError("email", { type: "manual", message: "중복된 이메일입니다." });
+    }
+  };
+
+  // 회원가입 처리 함수
   const handleSignUp = async (data: FormValues) => {
-    const { name, email, companyName, password, passwordCheck } = data;
-    let InvalidError = false;
-    if (name === "") {
-      setError("name", { type: "manual", message: "이름을 입력해주세요" });
-      InvalidError = true;
-    } else {
-      clearErrors("name");
+    // 기존 에러 모두 클리어
+    clearErrors();
+    // 유효성 검사 실행
+    const validationErrors = validateSignUpForm(data);
+    if (Object.keys(validationErrors).length > 0) {
+      Object.entries(validationErrors).forEach(([field, message]) => {
+        setError(field as keyof FormValues, { type: "manual", message });
+      });
+      return;
     }
-    if (email === "") {
-      setError("email", { type: "manual", message: "이메일을 입력해주세요." });
-      InvalidError = true;
-    } else {
-      clearErrors("email");
-    }
-    if (companyName === "") {
-      setError("companyName", { type: "manual", message: "회사명을 정확하게 입력해주세요" });
-      InvalidError = true;
-    } else {
-      clearErrors("companyName");
-    }
-    if (password.length < 8) {
-      setError("password", { type: "manual", message: "비밀번호를 입력해주세요." });
-      InvalidError = true;
-    } else {
-      clearErrors("password");
-    }
-    if (passwordCheck !== password) {
-      setError("passwordCheck", { type: "manual", message: "비밀번호가 일치하지 않습니다." });
-      InvalidError = true;
-    } else {
-      clearErrors("passwordCheck");
-    }
-    if (InvalidError) return;
     setLoginProgress(true);
     try {
-      const result = await postSignUp({ name, email, companyName, password });
-      if (result.message === "사용자 생성 성공") {
-        setIsModal(true);
-      }
+      const result = await postSignUp({
+        name: data.name,
+        email: data.email,
+        companyName: data.companyName,
+        password: data.password,
+      });
+      // 성공 처리: 회원가입 성공 메시지에 따라 모달 노출
+      handleSignUpSuccess(result, setIsModal);
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 400) {
-        setError("email", { type: "manual", message: "중복된 이메일입니다." });
-      }
+      handleSignUpError(error, setError);
+    } finally {
+      setLoginProgress(false);
     }
-    setLoginProgress(false);
   };
 
   const postSignUp = async (data: FormValues) => {
@@ -143,7 +161,7 @@ export default function SignUp() {
                 id={"email"}
                 type={"email"}
                 placeholder="이메일을 입력해주세요."
-                register={register("email", { required: "중복된 이메일입니다." })}
+                register={register("email", { required: "이메일을 입력해주세요." })}
                 helperText={errors.email?.message}
               />
             </div>
