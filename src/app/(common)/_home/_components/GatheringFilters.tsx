@@ -45,7 +45,6 @@ export default function GatheringFilters({ onChange }: GatheringFiltersProps) {
               router.push(`${pathname}?${params.toString()}`);
               onChange({ location: location || undefined });
             }}
-            className="w-full"
           />
           <DateSelect
             onDateChange={(date) => {

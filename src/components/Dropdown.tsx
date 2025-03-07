@@ -59,10 +59,10 @@ export default function Dropdown({
   };
 
   return (
-    <div className="relative w-[100px]" ref={dropdownRef}>
+    <div className={cn("relative", className ?? "w-28")} ref={dropdownRef}>
       <div
         className={cn(
-          "mb-2 flex w-28 cursor-pointer items-center justify-between rounded-xl border p-2 text-sm font-medium",
+          "mb-2 flex w-full cursor-pointer items-center justify-between rounded-xl border p-2 text-sm font-medium",
           className,
           isOpen ? "bg-gray-900 text-white" : "bg-gray-50",
           selected ? "text-gray-800" : "",
@@ -89,7 +89,7 @@ export default function Dropdown({
                 <div
                   key={option}
                   onClick={() => handleSelect(option)}
-                  className="cursor-pointer rounded-xl p-2 hover:bg-sky-100"
+                  className="cursor-pointer rounded-xl p-2 text-black hover:bg-sky-100"
                 >
                   {option}
                 </div>
