@@ -54,14 +54,14 @@ function FavoritesPage() {
 
   return (
     <div className="w-full">
-      <div className="mb-5 flex gap-6 pt-8">
+      <div className="mb-5 flex flex-row items-center gap-4 pl-3 pt-10">
         <FavoritesLogo />
         <div>
-          <div className="mb-2 text-2xl font-semibold text-gray-900">찜한 모임</div>
+          <div className="mb-2 text-2xl font-semibold text-gray-900 lg:text-2xl">찜한 모임</div>
           <div className="text-sm font-semibold text-gray-700">마감되기 전에 지금 바로 참여해보세요 👀</div>
         </div>
       </div>
-      <div className="px-6 pt-6">
+      <div className="mt-6 flex flex-row gap-2">
         <ServiceTab searchParams={searchParams} onCategoryChange={handleFilterChange} />
       </div>
       <FavoriteList
