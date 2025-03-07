@@ -11,8 +11,11 @@ import { FormDataType, useCreateGathering } from "@/app/(common)/_home/_hooks/us
 import defaultImage from "@/images/default_image.png";
 import { isValid as isValidDate } from "date-fns";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+
+dayjs.extend(utc);
 
 type CreateGatheringsModalProps = {
   isOpen: boolean;
