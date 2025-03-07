@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import ScrollArrow from "@/images/dropdown_down_arrow_white.svg";
+import { usePathname } from "next/navigation";
 
 export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,7 +16,7 @@ export default function ScrollToTop() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
+  if (pathname.includes("/gathering")) return null;
   const scrollToTop = () => {
     window.scroll({ top: 0, behavior: "smooth" });
   };
