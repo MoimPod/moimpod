@@ -13,8 +13,8 @@ type TagProps = {
 };
 
 export default function Tag({ registrationEnd }: TagProps) {
-  const now = dayjs(); // 현재 로컬 시간(KST)
-  const endDate = dayjs(registrationEnd);
+  const now = dayjs.utc(); // 현재 로컬 시간(KST)
+  const endDate = dayjs.utc(registrationEnd);
 
   let displayText = "";
 
