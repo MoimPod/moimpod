@@ -138,11 +138,16 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     requestData.append("type", data.type);
 
     // -9시간 변환 후 서버로 전송
-    const adjustedMeetingDate = dayjs(data.dateTime).subtract(9, "hour").format("YYYY-MM-DDTHH:mm:ss");
-    const adjustedDeadlineDate = dayjs(data.registrationEnd).subtract(9, "hour").format("YYYY-MM-DDTHH:mm:ss");
+    //const adjustedMeetingDate = dayjs(data.dateTime).subtract(9, "hour").format("YYYY-MM-DDTHH:mm:ss");
+    //const adjustedDeadlineDate = dayjs(data.registrationEnd).subtract(9, "hour").format("YYYY-MM-DDTHH:mm:ss");
 
-    requestData.append("dateTime", adjustedMeetingDate);
-    requestData.append("registrationEnd", adjustedDeadlineDate);
+    // utc 시간으로 전송
+    const adjustedMeetingDate = dayjs(data.dateTime).utc().format("YYYY-MM-DDTHH:mm:ss[Z]");
+    const adjustedDeadlineDate = dayjs(data.registrationEnd).utc().format("YYYY-MM-DDTHH:mm:ss[Z]");
+
+    console.log("모임 시간 제출: ", data.dateTime);
+    requestData.append("dateTime", data.dateTime);
+    requestData.append("registrationEnd", data.registrationEnd);
     requestData.append("capacity", String(data.capacity));
 
     if (data.image) {
