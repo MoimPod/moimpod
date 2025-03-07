@@ -15,6 +15,8 @@ import ProgressBar from "./ProgressBar";
 import Tag from "./Tag";
 import InactiveLayer from "./InactiveLayer";
 import dayjs from "dayjs";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 export default function Card({
   id,
@@ -43,8 +45,19 @@ export default function Card({
     toggleFavorite(id.toString()); // 찜한 모임 토글
   };
 
+  const { ref, inView } = useInView({
+    triggerOnce: false, // 스크롤이 다시 올라오면 다시 애니메이션 실행
+    threshold: 0.1, // 10% 정도 보이면 감지
+  });
+
   return (
-    <div>
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 60 }}
+      animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : -60 }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
+      className="relative my-5"
+    >
       <div className="relative my-5 items-center overflow-hidden rounded-3xl bg-white hover:shadow-md md:flex lg:flex">
         {/* Inactive Layer: 모집 마감된 경우 반투명 레이어 추가 */}
         {isClosed && <InactiveLayer message="마감된 챌린지예요" onClick={() => toggleFavorite(id.toString())} />}
@@ -106,6 +119,6 @@ export default function Card({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
