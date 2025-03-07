@@ -83,7 +83,7 @@ export default function CardList() {
       .filter((card) => !dayjs(card.registrationEnd) || dayjs(card.registrationEnd).isAfter(dayjs())) || [];
 
   return (
-    <div>
+    <div className="relative flex flex-col">
       <div className="mb-5 flex flex-row items-center gap-4 pl-3 pt-10">
         <GatheringLogo />
         <div>
@@ -118,8 +118,9 @@ export default function CardList() {
         </Button>
       </div>
       <hr className="my-3" />
-      <div className="">
+      <div>
         <GatheringFilters onChange={handleFilterChange} />
+
         {isLoading ? ( // 첫 페이지 로딩 중일 때
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>모임 정보를 불러오는 중...</p>
