@@ -61,7 +61,7 @@ function FavoritesPage() {
           <div className="text-sm font-semibold text-gray-700">마감되기 전에 지금 바로 참여해보세요 👀</div>
         </div>
       </div>
-      <div className="mt-6 flex flex-row gap-2">
+      <div className="mt-6 flex flex-row">
         <ServiceTab searchParams={searchParams} onCategoryChange={handleFilterChange} />
       </div>
       <FavoriteList

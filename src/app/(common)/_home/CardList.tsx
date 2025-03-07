@@ -92,7 +92,7 @@ export default function CardList() {
         </div>
       </div>
       <div className="relative mt-6">
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row">
           <ServiceTab
             searchParams={searchParams}
             onCategoryChange={(type) => {
