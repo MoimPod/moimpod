@@ -1,12 +1,11 @@
 import { MyGathering } from "@/app/(common)/mypage/types";
-import Spinner from "@/components/Spinner";
 import { GatheringType, ReviewResponse } from "@/types";
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import { useSuspenseQuery, UseSuspenseQueryOptions } from "@tanstack/react-query";
 
 type GatheringListProps<T extends MyGathering | ReviewResponse | GatheringType> = {
   render: (item: T) => React.ReactNode;
   emptyMessage: string;
-  queryOption: UseQueryOptions<T[], Error>;
+  queryOption: UseSuspenseQueryOptions<T[], Error>;
 };
 
 export default function MypageList<T extends MyGathering | ReviewResponse | GatheringType>({
@@ -14,15 +13,7 @@ export default function MypageList<T extends MyGathering | ReviewResponse | Gath
   emptyMessage,
   queryOption,
 }: GatheringListProps<T>) {
-  const { data, isLoading, error } = useQuery({ ...queryOption });
-
-  if (isLoading) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
+  const { data, error } = useSuspenseQuery({ ...queryOption });
 
   if (error) {
     return (
@@ -33,7 +24,7 @@ export default function MypageList<T extends MyGathering | ReviewResponse | Gath
   }
   return (
     <>
-      {data?.length ? (
+      {data.length ? (
         <>{data.map((gathering) => render(gathering))}</>
       ) : (
         <div className="flex flex-1 items-center justify-center">

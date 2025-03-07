@@ -30,7 +30,7 @@ export default function Card({
   const { toggleFavorite, favorites } = useFavoritesStore();
 
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
-  const endDate = dayjs(registrationEnd.replace("Z", "")); // UTC 시간
+  const endDate = dayjs(registrationEnd);
   const isClosed = Boolean(endDate && dayjs(endDate).isBefore(dayjs()));
   const isLiked = favorites.includes(id.toString());
 

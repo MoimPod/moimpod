@@ -13,6 +13,7 @@ import GatheringLogo from "@/images/gathering_logo.svg";
 import { useUserStore } from "@/stores/useUserStore";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import dayjs from "dayjs";
 
 export default function CardList() {
   const searchParams = useSearchParams();
@@ -79,7 +80,7 @@ export default function CardList() {
   const filteredCards =
     data?.pages
       .flatMap((page) => page.data)
-      .filter((card) => !card.registrationEnd || new Date(card.registrationEnd) >= new Date()) || [];
+      .filter((card) => !dayjs(card.registrationEnd) || dayjs(card.registrationEnd).isAfter(dayjs())) || [];
 
   return (
     <div>
