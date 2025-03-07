@@ -146,7 +146,7 @@ ListItem.MetaInfo = ({ imageUrl, primary, secondary }: MetaInfoProps) => {
           <span className="mr-3 text-xs text-gray-700">|</span>
         </div>
       )}
-      <span className="text-xs text-gray-500">{dayjs(secondary).format("YYYY.MM.DD")}</span>
+      <span className="text-xs text-gray-500">{dayjs(secondary).utc().format("YYYY.MM.DD")}</span>
     </div>
   );
 };
