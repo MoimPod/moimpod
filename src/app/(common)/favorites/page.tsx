@@ -37,6 +37,11 @@ function FavoritesPage() {
   // 모든 카드 가져오기 & 찜한 카드 필터링
   const allCards = data?.pages?.flatMap((page) => page.data) || [];
   const favoriteCards = allCards.filter((card) => favorites.includes(card.id.toString()));
+  useEffect(() => {
+    if (!isLoading && favoriteCards.length < favorites.length && hasNextPage) {
+      fetchNextPage(); // 찜한 모임이 부족하여 추가 데이터 요청 실행
+    }
+  }, [favoriteCards, favorites, hasNextPage, isLoading]);
 
   // 필터 업데이트 함수
   const handleFilterChange = useCallback(

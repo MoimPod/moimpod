@@ -4,6 +4,8 @@ import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGather
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
 import { useCheckAuth } from "@/app/(common)/_home/_hooks/useCheckAuth";
 import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
+import { fetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
+import { InfiniteData } from "@tanstack/react-query";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
 import { LoginPopup } from "@/components/Popup";
@@ -15,11 +17,14 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import dayjs from "dayjs";
 
-export default function CardList() {
+export default function CardList({
+  initialData,
+}: {
+  initialData?: InfiniteData<Awaited<ReturnType<typeof fetchGatherings>>>;
+}) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParamsString = searchParams.toString();
 
   const filters = useMemo(
     () => ({
@@ -28,12 +33,12 @@ export default function CardList() {
       sortBy: searchParams.get("sortBy") || undefined,
       type: searchParams.get("type") || "DALLAEMFIT",
     }),
-    [searchParamsString],
+    [searchParams],
   );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useFetchGatherings(filters);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useFetchGatherings(filters, initialData);
 
   // 로그인 체크 훅
   const { checkAuth, isAuthModalOpen, setAuthModalOpen } = useCheckAuth();
@@ -55,7 +60,7 @@ export default function CardList() {
   // 필터를 업데이트 : searchParamsString을 사용하여 불필요한 재생성 방지
   const handleFilterChange = useCallback(
     (newFilter: Partial<typeof filters>) => {
-      const params = new URLSearchParams(searchParamsString);
+      const params = new URLSearchParams(searchParams.toString());
 
       Object.entries(newFilter).forEach(([key, value]) => {
         if (value) {
@@ -64,13 +69,10 @@ export default function CardList() {
           params.delete(key);
         }
       });
-      const newParamsString = params.toString();
 
-      if (newParamsString !== searchParamsString) {
-        router.push(`${pathname}?${newParamsString}`);
-      }
+      router.push(`${pathname}?${params.toString()}`);
     },
-    [searchParamsString, router, pathname],
+    [searchParams, router, pathname],
   );
 
   // 무한 스크롤 훅 사용
