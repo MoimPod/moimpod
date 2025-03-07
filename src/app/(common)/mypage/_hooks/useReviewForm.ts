@@ -12,13 +12,7 @@ export type UseReviewFormProps = {
 };
 
 export const useReviewForm = ({ gatheringId, onClose }: UseReviewFormProps) => {
-  const {
-    control,
-    handleSubmit,
-    formState: { isValid, errors },
-    watch,
-    reset,
-  } = useForm<ReviewFormValues>({
+  const reviewForm = useForm<ReviewFormValues>({
     mode: "onBlur",
     defaultValues: {
       score: 0,
@@ -26,24 +20,29 @@ export const useReviewForm = ({ gatheringId, onClose }: UseReviewFormProps) => {
     },
   });
 
-  const comment = watch("comment");
+  const comment = reviewForm.watch("comment");
   const mutation = usePostReviews();
 
   const onSubmit = (data: ReviewFormValues) => {
-    mutation.mutate({ ...data, gatheringId });
-    onClose();
+    mutation.mutate(
+      { ...data, gatheringId },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+        onError: () => {},
+      },
+    );
   };
 
   const handleClose = () => {
-    reset();
+    reviewForm.reset();
     onClose();
   };
 
   return {
-    control,
-    handleSubmit,
-    isValid,
-    errors,
+    reviewForm,
+    mutation,
     comment,
     onSubmit,
     handleClose,

@@ -13,7 +13,17 @@ interface ReviewModalProps {
 }
 
 export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModalProps) {
-  const { control, handleSubmit, isValid, errors, comment, onSubmit, handleClose } = useReviewForm({
+  const {
+    reviewForm: {
+      control,
+      handleSubmit,
+      formState: { isValid, errors },
+    },
+    comment,
+    mutation,
+    onSubmit,
+    handleClose,
+  } = useReviewForm({
     gatheringId,
     onClose,
   });
@@ -24,7 +34,7 @@ export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModa
       <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
         <RatingInput control={control} />
         <CommentInput control={control} errors={errors} commentLength={comment.length} />
-        <FormActions onCancel={handleClose} isSubmitDisabled={!isValid} />
+        <FormActions onCancel={handleClose} isSubmitDisabled={!isValid} isPending={mutation.isPending} />
       </form>
     </Modal>
   );
