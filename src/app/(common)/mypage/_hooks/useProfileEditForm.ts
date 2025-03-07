@@ -50,9 +50,11 @@ export function useProfileEditForm(isOpen: boolean, onClose: () => void) {
     if (data.profileImg && data.profileImg.length > 0) {
       formData.append("image", data.profileImg[0]);
     }
-
-    mutation.mutate(formData);
-    onClose();
+    mutation.mutate(formData, {
+      onSuccess: () => {
+        onClose();
+      },
+    });
   };
 
   const isProfileUnchanged = (!watchedProfileImg || watchedProfileImg.length === 0) && previewUrl === data?.image;
@@ -65,6 +67,7 @@ export function useProfileEditForm(isOpen: boolean, onClose: () => void) {
     previewUrl,
     errors,
     isValid,
+    isPending: mutation.isPending,
     isDisabled: !isValid || (isProfileUnchanged && isCompanyNameUnchanged),
   };
 }

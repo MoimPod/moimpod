@@ -14,7 +14,10 @@ type ProfileEditModalProps = {
 
 // 프로필을 수정하는 폼
 export default function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
-  const { register, handleSubmit, onSubmit, previewUrl, errors, isDisabled } = useProfileEditForm(isOpen, onClose);
+  const { register, isPending, handleSubmit, onSubmit, previewUrl, errors, isDisabled } = useProfileEditForm(
+    isOpen,
+    onClose,
+  );
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="mx-4 flex w-full max-w-[520px] flex-col gap-6 md:mx-0">
       <div className="text-lg font-semibold">프로필 수정하기</div>
@@ -42,7 +45,7 @@ export default function ProfileEditModal({ isOpen, onClose }: ProfileEditModalPr
           <Button onClick={onClose} styleType="outline" className="w-full">
             취소
           </Button>
-          <Button type="submit" disabled={isDisabled} className="w-full">
+          <Button type="submit" disabled={isDisabled} className="w-full" loading={isPending}>
             수정하기
           </Button>
         </div>
