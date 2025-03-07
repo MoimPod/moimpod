@@ -83,7 +83,7 @@ export default function CardList() {
       .filter((card) => !dayjs(card.registrationEnd) || dayjs(card.registrationEnd).isAfter(dayjs())) || [];
 
   return (
-    <div className="relative flex flex-col">
+    <div>
       <div className="mb-5 flex flex-row items-center gap-4 pl-3 pt-10">
         <GatheringLogo />
         <div>

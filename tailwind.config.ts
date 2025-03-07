@@ -45,8 +45,6 @@ export default {
       animation: {
         "heart-scale-up": "heart-scale-up 0.6s cubic-bezier(.77,1.74,.97,1.65)",
         "hand-wave": "hand-wave 1s ease-in-out",
-        fadein: "fadein 0.5s ease-in",
-        fadeout: "fadeout 0.5s ease-in-out",
         "arrow-up": "arrow-up 2.3s infinite ease-in-out",
       },
       keyframes: {
@@ -73,14 +71,6 @@ export default {
           "100%": {
             transform: "rotate(0deg)",
           },
-        },
-        fadeIn: {
-          "0%": { opacity: "0", transform: "translateY(20px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        fadeOut: {
-          "0%": { opacity: "1", transform: "translateY(0)" },
-          "100%": { opacity: "0", transform: "translateY(-20px)" },
         },
         "arrow-up": {
           "0%, 50%, 100%": { transform: "translateY(0) rotate(180deg)" },
