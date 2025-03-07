@@ -11,17 +11,16 @@ export type FormValues = {
 export function useProfileEditForm(isOpen: boolean, onClose: () => void) {
   const { data } = useGetUserInfo();
   const [previewUrl, setPreviewUrl] = useState(data?.image || "");
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { isValid, errors },
-  } = useForm<FormValues>({ mode: "onChange", defaultValues: { companyName: data?.companyName } });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const profileForm = useForm<FormValues>({ mode: "onChange", defaultValues: { companyName: data?.companyName } });
+
   const mutation = useUpdateUserInfo();
 
-  const watchedProfileImg = watch("profileImg");
+  const watchedProfileImg = profileForm.watch("profileImg");
 
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
   // 이미지 미리보기 설정
   useEffect(() => {
     if (watchedProfileImg && watchedProfileImg.length > 0) {
@@ -37,10 +36,10 @@ export function useProfileEditForm(isOpen: boolean, onClose: () => void) {
   // 모달이 열릴 때 폼 초기화
   useEffect(() => {
     if (isOpen) {
-      reset({ companyName: data?.companyName, profileImg: undefined });
+      profileForm.reset({ companyName: data?.companyName, profileImg: undefined });
       setPreviewUrl(data?.image || "");
     }
-  }, [isOpen, data?.companyName, data?.image, reset]);
+  }, [isOpen, data?.companyName, data?.image]);
 
   // 폼 제출 로직
   const onSubmit = (data: FormValues) => {
@@ -50,21 +49,26 @@ export function useProfileEditForm(isOpen: boolean, onClose: () => void) {
     if (data.profileImg && data.profileImg.length > 0) {
       formData.append("image", data.profileImg[0]);
     }
-
-    mutation.mutate(formData);
-    onClose();
+    mutation.mutate(formData, {
+      onSuccess: () => {
+        onClose();
+      },
+      onError: () => {
+        setIsModalOpen(true);
+      },
+    });
   };
 
   const isProfileUnchanged = (!watchedProfileImg || watchedProfileImg.length === 0) && previewUrl === data?.image;
-  const isCompanyNameUnchanged = watch("companyName") === data?.companyName;
+  const isCompanyNameUnchanged = profileForm.watch("companyName") === data?.companyName;
 
   return {
-    register,
-    handleSubmit,
+    profileForm,
     onSubmit,
     previewUrl,
-    errors,
-    isValid,
-    isDisabled: !isValid || (isProfileUnchanged && isCompanyNameUnchanged),
+    isModalOpen,
+    mutation,
+    handleModalClose,
+    isDisabled: !profileForm.formState.isValid || (isProfileUnchanged && isCompanyNameUnchanged),
   };
 }
