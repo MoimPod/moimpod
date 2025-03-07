@@ -15,7 +15,9 @@ const updateUserInfo = async (formData: FormData) => {
     if (isAxiosError(error)) {
       // 응답 자체는 온 경우
       if (error.response) {
-        // 401은 전역 핸들링이 있기 때문에 작성 x
+        if (error.response?.status === 401) {
+          throw new Error("인증 실패! 재로그인 해주세요.");
+        }
         if (error.response?.status === 404) {
           throw new Error("사용자를 찾을 수 없습니다.");
         }
