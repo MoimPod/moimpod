@@ -5,10 +5,15 @@ import MyGatherings from "@/app/(common)/mypage/_components/MyGatherings";
 import MyReviews from "@/app/(common)/mypage/_components/MyReviews";
 import ReviewableGatherings from "@/app/(common)/mypage/_components/ReviewableGatherings";
 import useMypageTab from "@/app/(common)/mypage/_hooks/useMypageTab";
+import { MyGathering } from "@/app/(common)/mypage/types";
 import CategoryButton from "@/components/CategoryButton";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import Spinner from "@/components/Spinner";
 import Tab from "@/components/Tab";
+import axiosInstance from "@/lib/axiosInstance";
+import { UserType, ReviewsResponse, GatheringType } from "@/types";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import dayjs from "dayjs";
 import { Suspense } from "react";
 
 const TAB_ITEMS = ["나의 모임", "나의 리뷰", "내가 만든 모임"];
@@ -20,8 +25,52 @@ const CATEGORIES = ["작성 가능한 리뷰", "작성한 리뷰"];
 // 내가 만든 모임 -> 모임 목록 조회 (모임 생성자(id) 로 필터링)
 
 export default function MypageContent() {
+  const queryClient = useQueryClient();
   const { selectedTab, setSelectedTab, selectedCategory, setSelectedCategory } = useMypageTab();
+  useQuery({
+    queryKey: ["user", "reviews", "reviewable"],
+    queryFn: async () => {
+      const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
+        params: {
+          limit: 100,
+          completed: true,
+          reviewed: false,
+        },
+      });
+      const data = response.data.filter((gathering) => !gathering.canceledAt);
+      return data.sort((a, b) => dayjs(b.dateTime).valueOf() - dayjs(a.dateTime).valueOf());
+    },
+  });
+  useQuery({
+    queryKey: ["user", "reviews", "written"],
+    queryFn: async () => {
+      const user = queryClient.getQueryData<UserType>(["user"]);
+      const response = await axiosInstance.get<ReviewsResponse>("reviews", {
+        params: {
+          limit: 100,
+          userId: user?.id,
+        },
+      });
 
+      return response.data.data.sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf());
+    },
+  });
+  useQuery({
+    queryKey: ["user", "gatherings", "created"],
+    queryFn: async () => {
+      const user = queryClient.getQueryData<UserType>(["user"]);
+      const response = await axiosInstance.get<GatheringType[]>(`gatherings`, {
+        params: {
+          limit: 100,
+          sortBy: "dateTime",
+          sortOrder: "desc",
+          createdBy: user?.id,
+        },
+      });
+
+      return response.data;
+    },
+  });
   return (
     <div className="flex flex-1 flex-col gap-6 border-t-2 border-gray-900 bg-white p-6">
       <Tab
