@@ -4,8 +4,9 @@ type CancelConfirmModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  isPending: boolean;
 };
-export default function CancelConfirmModal({ isOpen, onClose, onConfirm }: CancelConfirmModalProps) {
+export default function CancelConfirmModal({ isOpen, onClose, onConfirm, isPending }: CancelConfirmModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="w-full max-w-[340px]">
@@ -16,7 +17,7 @@ export default function CancelConfirmModal({ isOpen, onClose, onConfirm }: Cance
           <Button styleType="outline" onClick={onClose} size="sm" className="w-full">
             닫기
           </Button>
-          <Button onClick={onConfirm} size="sm" className="w-full">
+          <Button disabled={isPending} onClick={onConfirm} size="sm" className="w-full" loading={isPending}>
             확인
           </Button>
         </div>
