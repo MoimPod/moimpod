@@ -1,7 +1,7 @@
 import ListItem from "@/components/ListItem";
 import Image from "next/image";
 import Button from "@/components/Button";
-import { MouseEvent, useState } from "react";
+import { useState } from "react";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import MypageList from "@/app/(common)/mypage/_components/MypageList";
 import { fetchMyGatherings } from "@/app/(common)/mypage/utils/apis";
@@ -9,6 +9,7 @@ import DEFAULT_IMAGE from "@/images/default_image.png";
 import { ReviewModal } from "@/app/(common)/mypage/_components/ReviewModal";
 import Link from "next/link";
 import CancelConfirmModal from "@/app/(common)/mypage/_components/CancelConfirmModal";
+import useMypageModal from "@/app/(common)/mypage/_hooks/useMypageModal";
 
 // 이용 예정 => 모임 참여 신청했고 isCompleted가 false인 경우
 // 이용 완료 => 모임 참여 신청했고 isCompleted가 true인 경우
@@ -29,20 +30,12 @@ import CancelConfirmModal from "@/app/(common)/mypage/_components/CancelConfirmM
 // isCompleted가 true, isReviewed가 true => 리뷰 작성 x
 
 export default function MyGatherings() {
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedGathering, setSelectedGathering] = useState<number>();
+  // 리뷰 모달
+  const { isModalOpen, selectedGathering, handleOpen, handleClose } = useMypageModal();
 
   // 취소 확인 모달
   const [isCancelModalOpen, setCancelModalOpen] = useState(false);
   const [selectedCancelGathering, setSelectedCancelGathering] = useState<number>();
-  const handleOpen = (gatheringId: number) => {
-    setSelectedGathering(gatheringId);
-    setModalOpen(true);
-  };
-
-  const handleClose = () => {
-    setModalOpen(false);
-  };
 
   const handleCancelModalOpen = (gatheringId: number) => {
     setSelectedCancelGathering(gatheringId);
@@ -55,14 +48,6 @@ export default function MyGatherings() {
 
   const mutation = useLeaveGathering(["user", "gatherings"]);
 
-  const handleCancelGathering = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    mutation.mutate(selectedCancelGathering as number, {
-      onSuccess: () => {
-        handleCancelModalClose();
-      },
-    });
-  };
   return (
     <>
       <MypageList
@@ -133,8 +118,8 @@ export default function MyGatherings() {
       <CancelConfirmModal
         isOpen={isCancelModalOpen}
         onClose={handleCancelModalClose}
-        onConfirm={handleCancelGathering}
-        isPending={mutation.isPending}
+        gatheringId={selectedCancelGathering as number}
+        handleModalClose={handleCancelModalClose}
       />
     </>
   );
