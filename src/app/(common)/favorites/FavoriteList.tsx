@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Card from "@/components/Card";
-import { GatheringType } from "@/app/(common)/gathering/types";
+import { GatheringType } from "@/types";
 
 type FavoriteListProps = {
   isLoading: boolean;
