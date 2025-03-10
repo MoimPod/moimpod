@@ -1,13 +1,14 @@
 import ListItem from "@/components/ListItem";
 import Image from "next/image";
 import Button from "@/components/Button";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import MypageList from "@/app/(common)/mypage/_components/MypageList";
 import { fetchMyGatherings } from "@/app/(common)/mypage/utils/apis";
 import DEFAULT_IMAGE from "@/images/default_image.png";
 import { ReviewModal } from "@/app/(common)/mypage/_components/ReviewModal";
 import Link from "next/link";
+import CancelConfirmModal from "@/app/(common)/mypage/_components/CancelConfirmModal";
 
 // 이용 예정 => 모임 참여 신청했고 isCompleted가 false인 경우
 // 이용 완료 => 모임 참여 신청했고 isCompleted가 true인 경우
@@ -30,6 +31,10 @@ import Link from "next/link";
 export default function MyGatherings() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedGathering, setSelectedGathering] = useState<number | null>(null);
+
+  // 취소 확인 모달
+  const [isCancelModalOpen, setCancelModalOpen] = useState(false);
+  const [selectedCancelGathering, setSelectedCancelGathering] = useState<number | null>(null);
   const handleOpen = (gatheringId: number) => {
     setSelectedGathering(gatheringId);
     setModalOpen(true);
@@ -39,8 +44,22 @@ export default function MyGatherings() {
     setModalOpen(false);
   };
 
+  const handleCancelModalOpen = (gatheringId: number) => {
+    setSelectedCancelGathering(gatheringId);
+    setCancelModalOpen(true);
+  };
+
+  const handleCancelModalClose = () => {
+    setCancelModalOpen(false);
+  };
+
   const mutation = useLeaveGathering(["user", "gatherings"]);
 
+  const handleCancelGathering = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    mutation.mutate(selectedCancelGathering as number);
+    handleCancelModalClose();
+  };
   return (
     <>
       <MypageList
@@ -89,7 +108,8 @@ export default function MyGatherings() {
                           }
                         : (e) => {
                             e.preventDefault();
-                            mutation.mutate(gathering.id);
+                            handleCancelModalOpen(gathering.id);
+                            // mutation.mutate(gathering.id);
                           }
                     }
                     className={"mt-[18px] w-full max-w-[120px]"}
@@ -107,6 +127,13 @@ export default function MyGatherings() {
         )}
       />
       {selectedGathering && <ReviewModal isOpen={isModalOpen} onClose={handleClose} gatheringId={selectedGathering} />}
+      {selectedCancelGathering && (
+        <CancelConfirmModal
+          isOpen={isCancelModalOpen}
+          onClose={handleCancelModalClose}
+          onConfirm={handleCancelGathering}
+        />
+      )}
     </>
   );
 }
