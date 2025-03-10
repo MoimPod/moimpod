@@ -57,8 +57,11 @@ export default function MyGatherings() {
 
   const handleCancelGathering = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    mutation.mutate(selectedCancelGathering as number);
-    handleCancelModalClose();
+    mutation.mutate(selectedCancelGathering as number, {
+      onSuccess: () => {
+        handleCancelModalClose();
+      },
+    });
   };
   return (
     <>
@@ -132,6 +135,7 @@ export default function MyGatherings() {
           isOpen={isCancelModalOpen}
           onClose={handleCancelModalClose}
           onConfirm={handleCancelGathering}
+          isPending={mutation.isPending}
         />
       )}
     </>
