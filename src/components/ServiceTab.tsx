@@ -37,23 +37,6 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
     setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
   }, [searchParams, isFilteringLoading]);
 
-  // searchParams 변경 감지해서 반영
-  // useEffect(() => {
-  //   const currentType = searchParams.get("type") || "DALLAEMFIT";
-
-  //   if (currentType !== selectedTab) {
-  //     setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
-
-  //     // 탭이 변경될 때, 기존에 선택한 카테고리를 유지하도록 수정
-  //     if (currentType === "WORKATION") {
-  //       setSelectedCategory("전체");
-  //     } else {
-  //       const matchedCategory = CATEGORIES.find((c) => c.type === currentType)?.name || "전체";
-  //       setSelectedCategory(matchedCategory);
-  //     }
-  //   }
-  // }, [searchParams]);
-
   // 탭 변경 핸들러
   const handleTabChange = (tabName: string) => {
     if (isFilteringLoading) return; // 필터링 중이면 변경 X
