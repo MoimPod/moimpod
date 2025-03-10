@@ -12,7 +12,7 @@ export const FormActions: React.FC<FormActionsProps> = ({ onCancel, isSubmitDisa
       <Button className="w-full" styleType={"outline"} onClick={onCancel}>
         취소
       </Button>
-      <Button className="w-full" type="submit" disabled={isSubmitDisabled} loading={isPending}>
+      <Button className="w-full" type="submit" disabled={isSubmitDisabled || isPending} loading={isPending}>
         리뷰 등록
       </Button>
     </div>
