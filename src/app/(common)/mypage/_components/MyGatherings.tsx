@@ -1,7 +1,6 @@
 import ListItem from "@/components/ListItem";
 import Image from "next/image";
 import Button from "@/components/Button";
-import { useState } from "react";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import MypageList from "@/app/(common)/mypage/_components/MypageList";
 import { fetchMyGatherings } from "@/app/(common)/mypage/utils/apis";
@@ -34,20 +33,14 @@ export default function MyGatherings() {
   const { isModalOpen, selectedGathering, handleOpen, handleClose } = useMypageModal();
 
   // 취소 확인 모달
-  const [isCancelModalOpen, setCancelModalOpen] = useState(false);
-  const [selectedCancelGathering, setSelectedCancelGathering] = useState<number>();
-
-  const handleCancelModalOpen = (gatheringId: number) => {
-    setSelectedCancelGathering(gatheringId);
-    setCancelModalOpen(true);
-  };
-
-  const handleCancelModalClose = () => {
-    setCancelModalOpen(false);
-  };
+  const {
+    isModalOpen: isCancelModalOpen,
+    selectedGathering: cancelGathering,
+    handleOpen: handleCancelGathering,
+    handleClose: handleCancelGatheringClose,
+  } = useMypageModal();
 
   const mutation = useLeaveGathering(["user", "gatherings"]);
-
   return (
     <>
       <MypageList
@@ -96,8 +89,7 @@ export default function MyGatherings() {
                           }
                         : (e) => {
                             e.preventDefault();
-                            handleCancelModalOpen(gathering.id);
-                            // mutation.mutate(gathering.id);
+                            handleCancelGathering(gathering.id);
                           }
                     }
                     className={"mt-[18px] w-full max-w-[120px]"}
@@ -117,9 +109,9 @@ export default function MyGatherings() {
       <ReviewModal isOpen={isModalOpen} onClose={handleClose} gatheringId={selectedGathering as number} />
       <CancelConfirmModal
         isOpen={isCancelModalOpen}
-        onClose={handleCancelModalClose}
-        gatheringId={selectedCancelGathering as number}
-        handleModalClose={handleCancelModalClose}
+        onClose={handleCancelGatheringClose}
+        gatheringId={cancelGathering as number}
+        handleModalClose={handleCancelGatheringClose}
       />
     </>
   );
