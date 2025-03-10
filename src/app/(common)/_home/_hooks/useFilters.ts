@@ -1,11 +1,15 @@
+"use client";
+
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState, useEffect } from "react";
 
 export const useFilters = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const searchParamsString = searchParams.toString();
+
+  const [isFilteringLoading, setIsFilteringLoading] = useState(false); // 필터링 로딩 상태 추가
 
   // searchParams에서 필터 값을 추출
   const filters = useMemo(() => {
@@ -33,11 +37,17 @@ export const useFilters = () => {
       const newParamsString = params.toString();
 
       if (newParamsString !== searchParamsString) {
+        setIsFilteringLoading(true); // 필터링 시작
         router.push(`${pathname}?${newParamsString}`);
       }
     },
     [searchParamsString, router, pathname],
   );
 
-  return { filters, handleFilterChange };
+  // URL이 변경되면 필터링 완료 처리
+  useEffect(() => {
+    setIsFilteringLoading(false);
+  }, [searchParamsString]);
+
+  return { filters, handleFilterChange, isFilteringLoading };
 };

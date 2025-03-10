@@ -14,7 +14,7 @@ import GatheringLogo from "@/images/gathering_logo.svg";
 import { useState, useEffect } from "react";
 
 export default function CardList() {
-  const { filters, handleFilterChange } = useFilters(); // 필터 관리 적용
+  const { filters, handleFilterChange, isFilteringLoading } = useFilters(); // 필터 관리 적용
   const { filteredCards, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, dataFetched } =
     useGatherings(filters);
   const { checkAuth, isAuthModalOpen, setAuthModalOpen, shouldOpenCreateModal, setShouldOpenCreateModal } = useAuth(); // 로그인 체크 적용
@@ -54,6 +54,7 @@ export default function CardList() {
             onCategoryChange={(type) => {
               handleFilterChange({ type });
             }}
+            isFilteringLoading={isFilteringLoading}
           />
 
           <LoginPopup

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import CategoryButton from "@/components/CategoryButton";
 import Tab from "@/components/Tab";
 import Dalaemfit from "@/images/dalaemfit.svg";
@@ -21,35 +20,44 @@ const CATEGORIES = [
 type ServiceTabProps = {
   searchParams: URLSearchParams; // 부모에서 받은 searchParams
   onCategoryChange: (type: string | undefined) => void;
+  isFilteringLoading: boolean; // 필터링 중인지 판단하는 변수
 };
 
-export default function ServiceTab({ searchParams, onCategoryChange }: ServiceTabProps) {
-  const router = useRouter();
-
+export default function ServiceTab({ searchParams, onCategoryChange, isFilteringLoading }: ServiceTabProps) {
   const [selectedTab, setSelectedTab] = useState<"DALLAEMFIT" | "WORKATION">(
     () => (searchParams.get("type") || "DALLAEMFIT") as "DALLAEMFIT" | "WORKATION",
   );
   const [selectedCategory, setSelectedCategory] = useState<string>("전체");
 
-  // searchParams 변경 감지해서 반영
+  // URL이 변경되었을 때 필터링 로딩 상태 해제
   useEffect(() => {
+    if (!isFilteringLoading) return;
+
     const currentType = searchParams.get("type") || "DALLAEMFIT";
+    setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
+  }, [searchParams, isFilteringLoading]);
 
-    if (currentType !== selectedTab) {
-      setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
+  // searchParams 변경 감지해서 반영
+  // useEffect(() => {
+  //   const currentType = searchParams.get("type") || "DALLAEMFIT";
 
-      // 탭이 변경될 때, 기존에 선택한 카테고리를 유지하도록 수정
-      if (currentType === "WORKATION") {
-        setSelectedCategory("전체");
-      } else {
-        const matchedCategory = CATEGORIES.find((c) => c.type === currentType)?.name || "전체";
-        setSelectedCategory(matchedCategory);
-      }
-    }
-  }, [searchParams]);
+  //   if (currentType !== selectedTab) {
+  //     setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
+
+  //     // 탭이 변경될 때, 기존에 선택한 카테고리를 유지하도록 수정
+  //     if (currentType === "WORKATION") {
+  //       setSelectedCategory("전체");
+  //     } else {
+  //       const matchedCategory = CATEGORIES.find((c) => c.type === currentType)?.name || "전체";
+  //       setSelectedCategory(matchedCategory);
+  //     }
+  //   }
+  // }, [searchParams]);
 
   // 탭 변경 핸들러
   const handleTabChange = (tabName: string) => {
+    if (isFilteringLoading) return; // 필터링 중이면 변경 X
+
     const tabType = SERVICE_TABS.find((t) => t.name === tabName)?.type;
     if (!tabType) return;
 
@@ -65,6 +73,8 @@ export default function ServiceTab({ searchParams, onCategoryChange }: ServiceTa
 
   // 카테고리 변경 핸들러
   const handleCategoryChange = (categoryName: string) => {
+    if (isFilteringLoading) return;
+
     const categoryType = CATEGORIES.find((c) => c.name === categoryName)?.type;
     if (!categoryType) return;
 
@@ -86,8 +96,14 @@ export default function ServiceTab({ searchParams, onCategoryChange }: ServiceTa
       >
         {SERVICE_TABS.map((tabItem, idx) => (
           <Tab.Item key={tabItem.name} index={idx}>
-            <button onClick={() => handleTabChange(tabItem.name)}>{tabItem.name}</button>
-            <tabItem.icon />
+            <button
+              onClick={() => handleTabChange(tabItem.name)}
+              className="flex items-center"
+              disabled={isFilteringLoading}
+            >
+              {tabItem.name}
+              <tabItem.icon className="items-center" />
+            </button>
           </Tab.Item>
         ))}
       </Tab>
