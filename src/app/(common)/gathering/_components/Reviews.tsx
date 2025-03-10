@@ -17,7 +17,7 @@ import {
   SORT_OPTIONS,
 } from "../_utils/constants";
 import { getInitialSort } from "../_utils/queryUtils";
-import type { ReviewQuery } from "../types";
+import type { ReviewQuery } from "@/types";
 
 export default function Reviews({ gatheringId, reviewQuery }: { gatheringId: string; reviewQuery: ReviewQuery }) {
   const pathname = usePathname();
