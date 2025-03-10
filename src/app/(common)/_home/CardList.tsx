@@ -3,20 +3,16 @@
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
 import { useCheckAuth } from "@/app/(common)/_home/_hooks/useCheckAuth";
-import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
 import { LoginPopup } from "@/components/Popup";
 import ServiceTab from "@/components/ServiceTab";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { useGatherings } from "@/app/(common)/_home/_hooks/useGathering";
 import GatheringLogo from "@/images/gathering_logo.svg";
 import { useUserStore } from "@/stores/useUserStore";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-
-dayjs.extend(utc);
 
 export default function CardList() {
   const searchParams = useSearchParams();
@@ -35,8 +31,7 @@ export default function CardList() {
   );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useFetchGatherings(filters);
+  const { filteredCards, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useGatherings(filters);
 
   // 로그인 체크 훅
   const { checkAuth, isAuthModalOpen, setAuthModalOpen } = useCheckAuth();
@@ -80,29 +75,6 @@ export default function CardList() {
   // 무한 스크롤 훅 사용
   const { observerRef } = useInfiniteScroll({ fetchNextPage, hasNextPage, isFetchingNextPage });
 
-  // 마감되지 않은 모임 필터 적용, useMemo로 재계산 방지
-  const filteredCards = useMemo(
-    () =>
-      data?.pages
-        ?.flatMap((page) => page.data)
-        ?.filter((card) => {
-          const endDate = dayjs.utc(card.registrationEnd); // UTC 변환
-          const now = dayjs().add(9, "hour").utc(); // 로컬 + 9시간 후 utc 전환
-
-          console.log("카드 ID:", card.id, " | 마감시간:", endDate.format(), " | 현재 UTC:", now.format());
-
-          return endDate.isValid() && endDate.isAfter(now); // 현재 UTC 시간과 비교
-        }) || [],
-    [data], // data가 변경될 때만 다시 계산
-  );
-
-  useEffect(() => {
-    // 현재 로딩 중이 아니고, 모임이 없으며, 다음 페이지가 있다면 fetchNextPage 실행
-    if (!isLoading && filteredCards.length === 0 && hasNextPage) {
-      fetchNextPage();
-    }
-  }, [filteredCards, hasNextPage, isLoading, fetchNextPage]);
-
   return (
     <div>
       <div className="mb-5 flex flex-row items-center gap-4 pl-3 pt-10">
@@ -142,21 +114,19 @@ export default function CardList() {
       <div>
         <GatheringFilters onChange={handleFilterChange} />
 
-        {isLoading ? ( // 첫 페이지 로딩 중일 때
+        {isLoading ? (
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>모임 정보를 불러오는 중...</p>
           </div>
-        ) : filteredCards.length === 0 ? ( // 첫 페이지 로딩 후 데이터 없을 때
+        ) : filteredCards.length === 0 ? (
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>아직 모임이 없어요</p>
             <p className="mt-2">지금 바로 모임을 만들어보세요</p>
           </div>
         ) : (
-          filteredCards?.map((card) => <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />)
+          filteredCards.map((card) => <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />)
         )}
-        {/* 무한 스크롤 감지용 div */}
         {!isLoading && <div ref={observerRef} className="h-10"></div>}
-        {/* 추가 데이터를 불러올 때만 메시지 표시 */}
         {!isLoading && isFetchingNextPage && <div className="text-center text-sm text-gray-500">불러오는 중...</div>}
       </div>
 
