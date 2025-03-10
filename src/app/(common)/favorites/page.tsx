@@ -7,7 +7,6 @@ import ServiceTab from "@/components/ServiceTab";
 import FavoritesLogo from "@/images/favorites_logo.svg";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
-import { useFilters } from "@/app/(common)/_home/_hooks/useFilters";
 
 export default function Page() {
   return (
@@ -49,20 +48,27 @@ function FavoritesPage() {
   // 필터 업데이트 함수
   const handleFilterChange = useCallback(
     (newType: string | undefined) => {
-      if (isFilteringLoading) return;
-
-      setIsFilteringLoading(true);
-
       const params = new URLSearchParams(searchParams.toString());
       if (newType) {
         params.set("type", newType);
       } else {
         params.delete("type");
       }
-      router.push(`${pathname}?${params.toString()}`);
+
+      const newParamsString = params.toString();
+
+      if (newParamsString !== searchParams.toString()) {
+        setIsFilteringLoading(true); // 필터링 시작
+        router.push(`${pathname}?${newParamsString}`);
+      }
     },
     [searchParams, router, pathname, isFilteringLoading],
   );
+
+  // URL이 변경되면 필터링 완료 처리
+  useEffect(() => {
+    setIsFilteringLoading(false);
+  }, [searchParams.toString()]);
 
   return (
     <div className="w-full">

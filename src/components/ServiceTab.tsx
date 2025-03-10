@@ -31,11 +31,28 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
 
   // URL이 변경되었을 때 필터링 로딩 상태 해제
   useEffect(() => {
-    if (isFilteringLoading) return;
+    if (!isFilteringLoading) return;
 
     const currentType = searchParams.get("type") || "DALLAEMFIT";
     setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
   }, [searchParams, isFilteringLoading]);
+
+  // searchParams 변경 감지해서 반영
+  useEffect(() => {
+    const currentType = searchParams.get("type") || "DALLAEMFIT";
+
+    if (currentType !== selectedTab) {
+      setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
+
+      // 탭이 변경될 때, 기존에 선택한 카테고리를 유지하도록 수정
+      if (currentType === "WORKATION") {
+        setSelectedCategory("전체");
+      } else {
+        const matchedCategory = CATEGORIES.find((c) => c.type === currentType)?.name || "전체";
+        setSelectedCategory(matchedCategory);
+      }
+    }
+  }, [searchParams]);
 
   // 탭 변경 핸들러
   const handleTabChange = (tabName: string) => {
