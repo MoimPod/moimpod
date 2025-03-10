@@ -31,7 +31,7 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
 
   // URL이 변경되었을 때 필터링 로딩 상태 해제
   useEffect(() => {
-    if (!isFilteringLoading) return;
+    if (isFilteringLoading) return;
 
     const currentType = searchParams.get("type") || "DALLAEMFIT";
     setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
