@@ -4,8 +4,16 @@ import { Suspense } from "react";
 import AllReview from "../reviews/_components/AllReview";
 import GatheringLogo from "@/images/gathering_logo.svg";
 import Spinner from "@/components/Spinner";
+import type { ReviewQuery } from "@/types";
 
-export default function Page() {
+export default async function Page({ searchParams }: { searchParams: Promise<ReviewQuery> }) {
+  const query = await searchParams;
+
+  const type = query.type ?? "DALLAEMFIT";
+  const sortBy = query.sortBy ?? "createdAt";
+  const sortOrder = query.sortOrder ?? "desc";
+  const reviewParams = { type, sortBy, sortOrder };
+
   return (
     <div className="w-full">
       <div className="mb-5 flex flex-row items-center gap-4 pl-3 pt-10">
@@ -17,7 +25,7 @@ export default function Page() {
       </div>
 
       <Suspense fallback={<Loading />}>
-        <AllReview>
+        <AllReview defaultQuery={reviewParams}>
           <ReviewsAverage />
         </AllReview>
       </Suspense>
