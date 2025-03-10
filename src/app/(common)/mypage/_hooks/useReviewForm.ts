@@ -1,4 +1,5 @@
 import usePostReviews from "@/app/(common)/mypage/_hooks/usePostReviews";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export type ReviewFormValues = {
@@ -19,7 +20,11 @@ export const useReviewForm = ({ gatheringId, onClose }: UseReviewFormProps) => {
       comment: "",
     },
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handleErrorModalClose = () => {
+    setIsModalOpen(false);
+  };
   const comment = reviewForm.watch("comment");
   const mutation = usePostReviews();
 
@@ -30,7 +35,9 @@ export const useReviewForm = ({ gatheringId, onClose }: UseReviewFormProps) => {
         onSuccess: () => {
           onClose();
         },
-        onError: () => {},
+        onError: () => {
+          setIsModalOpen(true);
+        },
       },
     );
   };
@@ -46,5 +53,7 @@ export const useReviewForm = ({ gatheringId, onClose }: UseReviewFormProps) => {
     comment,
     onSubmit,
     handleClose,
+    isModalOpen,
+    handleErrorModalClose,
   };
 };
