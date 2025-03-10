@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Card from "@/components/Card";
 import { GatheringType } from "@/app/(common)/gathering/types";
@@ -20,6 +21,12 @@ export default function FavoriteList({
   hasNextPage,
 }: FavoriteListProps) {
   const { observerRef } = useInfiniteScroll({ fetchNextPage, hasNextPage, isFetchingNextPage });
+
+  useEffect(() => {
+    if (!isLoading && favoriteCards.length === 0 && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [favoriteCards, hasNextPage, isLoading, fetchNextPage]);
 
   if (isLoading) {
     return (

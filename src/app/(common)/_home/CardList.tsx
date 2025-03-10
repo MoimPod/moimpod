@@ -96,6 +96,13 @@ export default function CardList() {
     [data], // data가 변경될 때만 다시 계산
   );
 
+  useEffect(() => {
+    // 현재 로딩 중이 아니고, 모임이 없으며, 다음 페이지가 있다면 fetchNextPage 실행
+    if (!isLoading && filteredCards.length === 0 && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [filteredCards, hasNextPage, isLoading, fetchNextPage]);
+
   return (
     <div>
       <div className="mb-5 flex flex-row items-center gap-4 pl-3 pt-10">
