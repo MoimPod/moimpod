@@ -30,11 +30,11 @@ import CancelConfirmModal from "@/app/(common)/mypage/_components/CancelConfirmM
 
 export default function MyGatherings() {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedGathering, setSelectedGathering] = useState<number | null>(null);
+  const [selectedGathering, setSelectedGathering] = useState<number>();
 
   // 취소 확인 모달
   const [isCancelModalOpen, setCancelModalOpen] = useState(false);
-  const [selectedCancelGathering, setSelectedCancelGathering] = useState<number | null>(null);
+  const [selectedCancelGathering, setSelectedCancelGathering] = useState<number>();
   const handleOpen = (gatheringId: number) => {
     setSelectedGathering(gatheringId);
     setModalOpen(true);
@@ -129,15 +129,13 @@ export default function MyGatherings() {
           </div>
         )}
       />
-      {selectedGathering && <ReviewModal isOpen={isModalOpen} onClose={handleClose} gatheringId={selectedGathering} />}
-      {selectedCancelGathering && (
-        <CancelConfirmModal
-          isOpen={isCancelModalOpen}
-          onClose={handleCancelModalClose}
-          onConfirm={handleCancelGathering}
-          isPending={mutation.isPending}
-        />
-      )}
+      <ReviewModal isOpen={isModalOpen} onClose={handleClose} gatheringId={selectedGathering as number} />
+      <CancelConfirmModal
+        isOpen={isCancelModalOpen}
+        onClose={handleCancelModalClose}
+        onConfirm={handleCancelGathering}
+        isPending={mutation.isPending}
+      />
     </>
   );
 }
