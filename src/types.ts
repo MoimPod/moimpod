@@ -41,7 +41,7 @@ export type ReviewResponse = {
   score: number;
   comment: string;
   createdAt: string;
-  Gathering?: GatheringType;
+  Gathering: GatheringType;
   User: UserType;
 };
 

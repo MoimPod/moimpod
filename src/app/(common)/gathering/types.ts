@@ -8,4 +8,4 @@ export type GatheringParticipantType = {
   joinedAt: string;
 };
 
-export type Review = Omit<ReviewResponse, "User"> & { user: UserType };
+export type Review = Omit<ReviewResponse, "User" | "Gathering"> & { user: UserType };
