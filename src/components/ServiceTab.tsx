@@ -20,7 +20,7 @@ const CATEGORIES = [
 type ServiceTabProps = {
   searchParams: URLSearchParams; // 부모에서 받은 searchParams
   onCategoryChange: (type: string | undefined) => void;
-  isFilteringLoading: boolean; // 필터링 중인지 판단하는 변수
+  isFilteringLoading?: boolean; // 필터링 중인지 판단하는 변수
 };
 
 export default function ServiceTab({ searchParams, onCategoryChange, isFilteringLoading }: ServiceTabProps) {
