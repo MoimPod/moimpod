@@ -6,7 +6,7 @@ import Gathering from "../_components/Gathering";
 import Reviews from "../_components/Reviews";
 import FloatingBar from "../_components/FloatingBar";
 import { REVIEW_LIMIT } from "../_utils/constants";
-import type { GatheringType, ReviewQuery } from "../types";
+import type { GatheringType, ReviewQuery } from "@/types";
 
 export default async function Page({
   params,

@@ -15,20 +15,27 @@ import { useQueryParams } from "@/hooks/useQueryParams";
 import ServiceTab from "@/components/ServiceTab";
 import { format } from "date-fns";
 import { GATHERING_TYPE } from "@/utils/constants";
+import type { ReviewQuery } from "@/types";
 
-const sortOptions = [
-  { label: "최신순", value: "latest" }, // sortBy=createdAt&sortOrder=desc
-  { label: "별점 높은순", value: "highScore" }, // sortBy=score&sortOrder=desc
-  { label: "참여 인원순", value: "highParticipants" }, // sortBy=participantCount&sortOrder=desc
+const SORT_OPTION = [
+  { label: "최신순", value: "latest" },
+  { label: "별점 높은순", value: "highScore" },
+  { label: "참여 인원순", value: "highParticipants" },
 ];
 
-export default function AllReview({ children }: { children: React.ReactNode }) {
+type AllReviewProps = {
+  children: React.ReactNode;
+  defaultQuery: ReviewQuery;
+};
+
+export default function AllReview({ children, defaultQuery }: AllReviewProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
 
-  const query = useQueryParams();
+  const paramsObj = useQueryParams();
+  const query = Object.keys(paramsObj).length ? paramsObj : defaultQuery;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useAllReview(query);
 
@@ -85,14 +92,9 @@ export default function AllReview({ children }: { children: React.ReactNode }) {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const DEFAULT_PARAMS = {
-    sortBy: "createdAt",
-    sortOrder: "desc",
-  };
-
   useEffect(() => {
-    Object.entries(DEFAULT_PARAMS).forEach(([key, value]) => {
-      if (!params.has(key)) params.set(key, value);
+    Object.entries(defaultQuery).forEach(([key, value]) => {
+      if (!params.has(key)) params.set(key, value.toString());
     });
 
     router.replace(`${pathname}?${params.toString()}`);
@@ -114,7 +116,7 @@ export default function AllReview({ children }: { children: React.ReactNode }) {
               />
               <DateSelect onDateChange={handleDateSelect} />
             </div>
-            <SortButton setSortType={handleSelect} sortOption={sortOptions} />
+            <SortButton setSortType={handleSelect} sortOption={SORT_OPTION} />
           </div>
         </div>
 

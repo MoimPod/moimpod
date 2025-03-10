@@ -1,6 +1,6 @@
 import GatheringInfo from "@/app/(common)/gathering/_components/GatheringInfo";
 import Thumbnail from "@/app/(common)/gathering/_components/Thumbnail";
-import type { GatheringType } from "@/app/(common)/gathering/types";
+import type { GatheringType } from "@/types";
 
 type GatheringProps = {
   gatheringId: string;
