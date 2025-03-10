@@ -14,6 +14,9 @@ import { useUserStore } from "@/stores/useUserStore";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 export default function CardList() {
   const searchParams = useSearchParams();
@@ -82,9 +85,17 @@ export default function CardList() {
     () =>
       data?.pages
         ?.flatMap((page) => page.data)
-        ?.filter((card) => !dayjs(card.registrationEnd) || dayjs(card.registrationEnd).isAfter(dayjs())) || [],
+        ?.filter((card) => {
+          const endDate = dayjs.utc(card.registrationEnd); // UTC 변환
+          const now = dayjs().add(9, "hour").utc(); // 로컬 + 9시간 후 utc 전환
+
+          console.log("카드 ID:", card.id, " | 마감시간:", endDate.format(), " | 현재 UTC:", now.format());
+
+          return endDate.isValid() && endDate.isAfter(now); // 현재 UTC 시간과 비교
+        }) || [],
     [data], // data가 변경될 때만 다시 계산
   );
+
   return (
     <div>
       <div className="mb-5 flex flex-row items-center gap-4 pl-3 pt-10">

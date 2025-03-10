@@ -1,19 +1,15 @@
 import Alarm from "@/images/alarm.svg";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
 dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(isSameOrBefore);
 
 type TagProps = {
   registrationEnd: string; // 모집 마감 날짜를 받음
 };
 
 export default function Tag({ registrationEnd }: TagProps) {
-  const now = dayjs.utc(); // 현재 로컬 시간(KST)
+  const now = dayjs.utc();
   const endDate = dayjs.utc(registrationEnd);
 
   let displayText = "";
