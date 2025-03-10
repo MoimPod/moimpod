@@ -8,6 +8,8 @@ dayjs.extend(utc);
 export const useGatherings = (filters: any) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useFetchGatherings(filters);
 
+  const dataFetched = !!data;
+
   // 마감되지 않은 모임 필터 적용
   const filteredCards = useMemo(
     () =>
@@ -24,12 +26,12 @@ export const useGatherings = (filters: any) => {
     [data], // data가 변경될 때만 다시 계산
   );
 
-  // 자동 fetch (모임이 없고, 다음 페이지가 있다면 fetchNextPage 실행)
+  // 자동 fetch (다음 페이지가 있다면 fetchNextPage 실행)
   useEffect(() => {
-    if (!isLoading && filteredCards.length === 0 && hasNextPage) {
+    if (!isLoading && hasNextPage) {
       fetchNextPage();
     }
   }, [filteredCards, hasNextPage, isLoading, fetchNextPage]);
 
-  return { filteredCards, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading };
+  return { filteredCards, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, dataFetched };
 };
