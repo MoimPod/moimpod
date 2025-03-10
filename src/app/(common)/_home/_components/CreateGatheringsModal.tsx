@@ -274,6 +274,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
                 setErrorMessage("과거 날짜는 선택할 수 없습니다.");
                 return;
               }
+              setErrorMessage("");
               updateFormData("meetingDateTime", date);
             }}
             deadlineDateTime={formData.deadlineDateTime}

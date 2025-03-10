@@ -19,8 +19,6 @@ export const useGatherings = (filters: any) => {
           const endDate = dayjs.utc(card.registrationEnd); // UTC 변환
           const now = dayjs().add(9, "hour").utc(); // 현재 시간 (로컬 + 9시간 후 UTC 변환)
 
-          console.log("카드 ID:", card.id, " | 마감시간:", endDate.format(), " | 현재 UTC:", now.format());
-
           return endDate.isValid() && endDate.isAfter(now); // 현재 UTC 시간보다 이후면 유효한 모임
         }) || [],
     [data], // data가 변경될 때만 다시 계산
