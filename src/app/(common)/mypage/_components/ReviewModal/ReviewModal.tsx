@@ -5,7 +5,7 @@ import CommentInput from "@/app/(common)/mypage/_components/ReviewModal/CommentI
 import { FormActions } from "@/app/(common)/mypage/_components/ReviewModal/FormActions";
 import { useReviewForm } from "@/app/(common)/mypage/_hooks/useReviewForm";
 import RatingInput from "@/app/(common)/mypage/_components/ReviewModal/RatingInput";
-import Button from "@/components/Button";
+import { Popup } from "@/components/Popup";
 
 interface ReviewModalProps {
   isOpen: boolean;
@@ -41,16 +41,9 @@ export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModa
           <FormActions onCancel={handleClose} isSubmitDisabled={!isValid} isPending={mutation.isPending} />
         </form>
       </Modal>
-      <Modal isOpen={isModalOpen} onClose={handleErrorModalClose}>
-        <div className="w-full min-w-[252px]">
-          <p className="py-12 text-center text-base font-medium text-gray-900">에러: {mutation.error?.message}</p>
-          <div className="m-auto flex w-[120px]">
-            <Button onClick={handleErrorModalClose} size="sm" className="w-full">
-              확인
-            </Button>
-          </div>
-        </div>
-      </Modal>
+      <Popup isOpen={isModalOpen} onClose={handleErrorModalClose} onClick={handleErrorModalClose} type="alert">
+        에러: {mutation.error?.message}
+      </Popup>
     </>
   );
 }

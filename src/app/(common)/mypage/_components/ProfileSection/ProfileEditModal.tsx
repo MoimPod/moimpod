@@ -6,6 +6,7 @@ import Input from "@/components/Input";
 import Edit from "@/images/edit.svg";
 import Avatar from "@/components/Avatar";
 import { useProfileEditForm } from "@/app/(common)/mypage/_hooks/useProfileEditForm";
+import { Popup } from "@/components/Popup";
 
 type ProfileEditModalProps = {
   isOpen: boolean;
@@ -61,16 +62,9 @@ export default function ProfileEditModal({ isOpen, onClose }: ProfileEditModalPr
           </div>
         </form>
       </Modal>
-      <Modal isOpen={isModalOpen} onClose={handleModalClose}>
-        <div className="w-full min-w-[252px]">
-          <p className="py-12 text-center text-base font-medium text-gray-900">에러: {mutation.error?.message}</p>
-          <div className="m-auto flex w-[120px]">
-            <Button onClick={handleModalClose} size="sm" className="w-full">
-              확인
-            </Button>
-          </div>
-        </div>
-      </Modal>
+      <Popup isOpen={isModalOpen} onClose={handleModalClose} onClick={handleModalClose} type="alert">
+        에러: {mutation.error?.message}
+      </Popup>
     </>
   );
 }
