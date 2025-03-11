@@ -1,6 +1,7 @@
 import axiosInstance from "@/lib/axiosInstance";
 
-import type { ReviewQuery, ReviewsResponse, GatheringParticipantType } from "../types";
+import type { ReviewQuery, ReviewsResponse } from "@/types";
+import type { GatheringParticipantType } from "../types";
 
 export const fetchReviews = async (query?: ReviewQuery): Promise<ReviewsResponse> => {
   try {

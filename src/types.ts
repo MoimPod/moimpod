@@ -25,7 +25,7 @@ export type GatheringType = {
 export type ReviewQuery = {
   gatheringId?: string;
   userId?: number;
-  type?: string;
+  type?: "OFFICE_STRETCHING" | "MINDFULNESS" | "WORKATION" | "DALLAEMFIT";
   location?: string;
   date?: string;
   registrationEnd?: string;

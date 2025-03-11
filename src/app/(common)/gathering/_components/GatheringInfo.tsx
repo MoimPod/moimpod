@@ -8,7 +8,8 @@ import DashedLine from "@/components/DashedLine";
 import GatheredProfiles from "./GatheredProfiles";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useGetParticipants } from "@/app/(common)/gathering/_hooks/useGetParticipants";
-import type { GatheringType, GatheringParticipantType } from "../types";
+import type { GatheringType } from "@/types";
+import type { GatheringParticipantType } from "../types";
 
 export type GatheringProps = {
   gatheringId: string;
