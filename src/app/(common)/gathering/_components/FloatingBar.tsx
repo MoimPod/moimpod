@@ -9,7 +9,7 @@ import { useJoin } from "../_hooks/useJoin";
 import { useGetParticipants } from "../_hooks/useGetParticipants";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import { useCancelGathering } from "../_hooks/useCancelGathering";
-import type { GatheringType } from "@/types";
+import type { GatheringType } from "../types";
 import dayjs from "dayjs";
 
 type FloatingBarProps = {
