@@ -2,89 +2,42 @@
 
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
-import { useCheckAuth } from "@/app/(common)/_home/_hooks/useCheckAuth";
-import { useFetchGatherings } from "@/app/(common)/_home/_hooks/useFetchGatherings";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
 import { LoginPopup } from "@/components/Popup";
 import ServiceTab from "@/components/ServiceTab";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { useFilters } from "@/app/(common)/_home/_hooks/useFilters";
+import { useGatherings } from "@/app/(common)/_home/_hooks/useGathering";
+import { useAuth } from "@/app/(common)/_home/_hooks/useAuth";
 import GatheringLogo from "@/images/gathering_logo.svg";
-import { useUserStore } from "@/stores/useUserStore";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import dayjs from "dayjs";
+import { useState, useEffect } from "react";
 
 export default function CardList() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParamsString = searchParams.toString();
-
-  const filters = useMemo(
-    () => ({
-      location: searchParams.get("location") || undefined,
-      date: searchParams.get("date") || undefined,
-      sortBy: searchParams.get("sortBy") || undefined,
-      type: searchParams.get("type") || "DALLAEMFIT",
-    }),
-    [searchParamsString],
-  );
-
+  const { filters, handleFilterChange, isFilteringLoading } = useFilters(); // 필터 관리 적용
+  const { filteredCards, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, dataFetched } =
+    useGatherings(filters);
+  const { checkAuth, isAuthModalOpen, setAuthModalOpen, shouldOpenCreateModal, setShouldOpenCreateModal } = useAuth(); // 로그인 체크 적용
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useFetchGatherings(filters);
-
-  // 로그인 체크 훅
-  const { checkAuth, isAuthModalOpen, setAuthModalOpen } = useCheckAuth();
-  const shouldOpenCreateModal = useUserStore((state) => state.shouldOpenCreateModal);
-  const setShouldOpenCreateModal = useUserStore((state) => state.setShouldOpenCreateModal);
 
   useEffect(() => {
     if (shouldOpenCreateModal) {
       setIsModalOpen(true);
-      setShouldOpenCreateModal(false); // 상태 초기화
+      setShouldOpenCreateModal(false); // 로그인 후 다시 열리지 않도록 초기화
     }
-  }, [shouldOpenCreateModal]);
+  }, [shouldOpenCreateModal, setShouldOpenCreateModal]);
 
   const handleOpen = () => {
-    checkAuth(() => setIsModalOpen(true)); // 로그인 여부 확인 후 실행
+    checkAuth(() => {
+      setIsModalOpen(true);
+      setShouldOpenCreateModal(false);
+    });
   };
   const handleClose = () => setIsModalOpen(false);
-
-  // 필터를 업데이트 : searchParamsString을 사용하여 불필요한 재생성 방지
-  const handleFilterChange = useCallback(
-    (newFilter: Partial<typeof filters>) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      Object.entries(newFilter).forEach(([key, value]) => {
-        if (value) {
-          params.set(key, value);
-        } else {
-          params.delete(key);
-        }
-      });
-
-      const newParamsString = params.toString();
-
-      if (newParamsString !== searchParamsString) {
-        router.push(`${pathname}?${newParamsString}`);
-      }
-    },
-    [searchParamsString, router, pathname],
-  );
 
   // 무한 스크롤 훅 사용
   const { observerRef } = useInfiniteScroll({ fetchNextPage, hasNextPage, isFetchingNextPage });
 
-  // 마감되지 않은 모임 필터 적용, useMemo로 재계산 방지
-  const filteredCards = useMemo(
-    () =>
-      data?.pages
-        ?.flatMap((page) => page.data)
-        ?.filter((card) => !dayjs(card.registrationEnd) || dayjs(card.registrationEnd).isAfter(dayjs())) || [],
-    [data], // data가 변경될 때만 다시 계산
-  );
   return (
     <div>
       <div className="mb-5 flex flex-row items-center gap-4 pl-3 pt-10">
@@ -97,10 +50,11 @@ export default function CardList() {
       <div className="relative mt-6">
         <div className="flex flex-row">
           <ServiceTab
-            searchParams={searchParams}
+            searchParams={new URLSearchParams(filters.toString())}
             onCategoryChange={(type) => {
               handleFilterChange({ type });
             }}
+            isFilteringLoading={isFilteringLoading}
           />
 
           <LoginPopup
@@ -124,21 +78,19 @@ export default function CardList() {
       <div>
         <GatheringFilters onChange={handleFilterChange} />
 
-        {isLoading ? ( // 첫 페이지 로딩 중일 때
+        {isLoading ? (
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>모임 정보를 불러오는 중...</p>
           </div>
-        ) : filteredCards.length === 0 ? ( // 첫 페이지 로딩 후 데이터 없을 때
+        ) : filteredCards.length === 0 ? (
           <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
             <p>아직 모임이 없어요</p>
             <p className="mt-2">지금 바로 모임을 만들어보세요</p>
           </div>
         ) : (
-          filteredCards?.map((card) => <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />)
+          filteredCards.map((card) => <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />)
         )}
-        {/* 무한 스크롤 감지용 div */}
         {!isLoading && <div ref={observerRef} className="h-10"></div>}
-        {/* 추가 데이터를 불러올 때만 메시지 표시 */}
         {!isLoading && isFetchingNextPage && <div className="text-center text-sm text-gray-500">불러오는 중...</div>}
       </div>
 
