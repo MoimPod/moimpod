@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import CategoryButton from "@/components/CategoryButton";
 import Tab from "@/components/Tab";
 import Dalaemfit from "@/images/dalaemfit.svg";
@@ -43,14 +43,6 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
 
     if (currentType !== selectedTab) {
       setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
-
-      // 탭이 변경될 때, 기존에 선택한 카테고리를 유지하도록 수정
-      if (currentType === "WORKATION") {
-        setSelectedCategory("전체");
-      } else {
-        const matchedCategory = CATEGORIES.find((c) => c.type === currentType)?.name || "전체";
-        setSelectedCategory(matchedCategory);
-      }
     }
   }, [searchParams]);
 
@@ -63,12 +55,8 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
 
     setSelectedTab(tabType as "DALLAEMFIT" | "WORKATION");
 
-    if (tabType === "WORKATION") {
-      setSelectedCategory("전체"); // 워케이션 선택 시 카테고리 리셋
-      onCategoryChange("WORKATION");
-    } else {
-      onCategoryChange("DALLAEMFIT");
-    }
+    onCategoryChange(tabType);
+    handleCategoryReset();
   };
 
   // 카테고리 변경 핸들러
@@ -82,11 +70,21 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
     onCategoryChange(categoryType);
   };
 
+  // "전체" 카테고리로 리셋하는 함수
+  const handleCategoryReset = useCallback(() => {
+    setSelectedCategory("전체");
+  }, []);
+
   return (
     <>
       <Tab
         category={
-          <CategoryButton categories={CATEGORIES.map((c) => c.name)} setValue={handleCategoryChange}>
+          <CategoryButton
+            categories={CATEGORIES.map((c) => c.name)}
+            selectedCategory={selectedCategory} // 외부에서 selectedCategory를 직접 전달
+            setSelectedCategory={setSelectedCategory}
+            setValue={handleCategoryChange}
+          >
             {CATEGORIES.map((category) => (
               <CategoryButton.Title key={category.name} category={category.name} />
             ))}
