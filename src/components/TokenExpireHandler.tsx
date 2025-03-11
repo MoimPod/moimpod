@@ -3,12 +3,13 @@
 import axiosInstance from "@/lib/axiosInstance";
 import { useUserStore } from "@/stores/useUserStore";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LoginPopup } from "./Popup";
 
 export default function TokenExpireHandler() {
   const router = useRouter();
+  const pathname = usePathname();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const queryClient = useQueryClient();
 
@@ -51,7 +52,13 @@ export default function TokenExpireHandler() {
           deleteCookie("token");
           deleteLocalStorage();
           signout();
-          setIsModalOpen(true);
+          if (pathname === "/mypage") {
+            setIsModalOpen(true);
+          } else if (pathname === "/") {
+            window.location.reload();
+          } else {
+            router.push("/");
+          }
         }
         return Promise.reject(error);
       },
@@ -60,7 +67,7 @@ export default function TokenExpireHandler() {
     return () => {
       axiosInstance.interceptors.response.eject(interceptor);
     };
-  }, [router]);
+  }, [router, pathname]);
 
   return <LoginPopup isOpen={isModalOpen} onClose={closeModal} />;
 }
