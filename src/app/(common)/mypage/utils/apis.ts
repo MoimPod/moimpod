@@ -4,10 +4,10 @@ import { CardData } from "@/stores/useGatheringStore";
 import { GatheringType, ReviewsResponse } from "@/types";
 import dayjs from "dayjs";
 
-interface FetchMyGatheringsParams {
+type FetchMyGatheringsParams = {
   completed?: boolean;
   reviewed?: boolean;
-}
+};
 
 const fetchMyGatherings = async (query?: FetchMyGatheringsParams, isReviewable?: boolean) => {
   const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
