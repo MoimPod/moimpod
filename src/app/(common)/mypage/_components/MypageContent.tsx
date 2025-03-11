@@ -100,7 +100,7 @@ export default function MypageContent() {
           </Tab.Item>
         ))}
       </Tab>
-      <div
+      <section
         className={`flex flex-1 flex-col ${selectedCategory !== "작성한 리뷰" ? "divide-y-2 divide-dashed" : "gap-6"}`}
       >
         <ErrorBoundary>
@@ -117,7 +117,7 @@ export default function MypageContent() {
             {selectedTab === "내가 만든 모임" && <MyCreatedGatherings />}
           </Suspense>
         </ErrorBoundary>
-      </div>
+      </section>
     </div>
   );
 }
