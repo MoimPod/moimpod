@@ -1,20 +1,14 @@
 "use client";
 
-import MyCreatedGatherings from "@/app/(common)/mypage/_components/MyCreatedGatherings";
-import MyGatherings from "@/app/(common)/mypage/_components/MyGatherings";
+import MypageContentSection from "@/app/(common)/mypage/_components/MypageContentSection";
 import MypageTab from "@/app/(common)/mypage/_components/MypageTab";
-import MyReviews from "@/app/(common)/mypage/_components/MyReviews";
-import ReviewableGatherings from "@/app/(common)/mypage/_components/ReviewableGatherings";
 import { useGetUserInfo } from "@/app/(common)/mypage/_hooks/useGetUserInfo";
 import useMypageTab from "@/app/(common)/mypage/_hooks/useMypageTab";
 import { MyGathering } from "@/app/(common)/mypage/types";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import Spinner from "@/components/Spinner";
 import axiosInstance from "@/lib/axiosInstance";
 import { UserType, ReviewsResponse, GatheringType } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import { Suspense } from "react";
 
 // 나의 모임 -> 로그인된 사용자가 참석한 모임 목록 조회
 // 나의 리뷰 - 작성 가능한 리뷰 -> 로그인된 사용자가 참석한 모임 목록 조회 (리뷰 작성 여부 false 필터링)
@@ -74,24 +68,7 @@ export default function MypageContent() {
   return (
     <div className="flex flex-1 flex-col gap-6 border-t-2 border-gray-900 bg-white p-6">
       <MypageTab setSelectedCategory={setSelectedCategory} setSelectedTab={setSelectedTab} />
-      <section
-        className={`flex flex-1 flex-col ${selectedCategory !== "작성한 리뷰" ? "divide-y-2 divide-dashed" : "gap-6"}`}
-      >
-        <ErrorBoundary>
-          <Suspense
-            fallback={
-              <div className="flex flex-1 items-center justify-center">
-                <Spinner />
-              </div>
-            }
-          >
-            {selectedTab === "나의 모임" && <MyGatherings />}
-            {selectedTab === "나의 리뷰" && selectedCategory === "작성 가능한 리뷰" && <ReviewableGatherings />}
-            {selectedTab === "나의 리뷰" && selectedCategory === "작성한 리뷰" && <MyReviews />}
-            {selectedTab === "내가 만든 모임" && <MyCreatedGatherings />}
-          </Suspense>
-        </ErrorBoundary>
-      </section>
+      <MypageContentSection selectedTab={selectedTab} selectedCategory={selectedCategory} />
     </div>
   );
 }
