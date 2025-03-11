@@ -19,12 +19,12 @@ export const useFilters = () => {
       sortBy: searchParams.get("sortBy") || undefined,
       type: searchParams.get("type") || "DALLAEMFIT",
     };
-  }, [searchParamsString]); // `searchParamsString` 대신 `searchParams` 사용
+  }, [searchParamsString]);
 
   // 필터를 업데이트 : searchParamsString을 사용하여 불필요한 재생성 방지
   const handleFilterChange = useCallback(
     (newFilter: Partial<typeof filters>) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParamsString);
 
       Object.entries(newFilter).forEach(([key, value]) => {
         if (value) {
