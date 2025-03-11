@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { GatheringType } from "@/app/(common)/gathering/types";
+import { GatheringType } from "@/types";
 import axiosInstance from "@/lib/axiosInstance";
 
 type FetchParams = {
