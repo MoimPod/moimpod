@@ -1,4 +1,5 @@
 import usePostReviews from "@/app/(common)/mypage/_hooks/usePostReviews";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export type ReviewFormValues = {
@@ -12,40 +13,47 @@ export type UseReviewFormProps = {
 };
 
 export const useReviewForm = ({ gatheringId, onClose }: UseReviewFormProps) => {
-  const {
-    control,
-    handleSubmit,
-    formState: { isValid, errors },
-    watch,
-    reset,
-  } = useForm<ReviewFormValues>({
+  const reviewForm = useForm<ReviewFormValues>({
     mode: "onBlur",
     defaultValues: {
       score: 0,
       comment: "",
     },
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const comment = watch("comment");
+  const handleErrorModalClose = () => {
+    setIsModalOpen(false);
+  };
+  const comment = reviewForm.watch("comment");
   const mutation = usePostReviews();
 
   const onSubmit = (data: ReviewFormValues) => {
-    mutation.mutate({ ...data, gatheringId });
-    onClose();
+    mutation.mutate(
+      { ...data, gatheringId },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+        onError: () => {
+          setIsModalOpen(true);
+        },
+      },
+    );
   };
 
   const handleClose = () => {
-    reset();
+    reviewForm.reset();
     onClose();
   };
 
   return {
-    control,
-    handleSubmit,
-    isValid,
-    errors,
+    reviewForm,
+    mutation,
     comment,
     onSubmit,
     handleClose,
+    isModalOpen,
+    handleErrorModalClose,
   };
 };

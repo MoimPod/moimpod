@@ -128,7 +128,7 @@ ListItem.ServiceInfo = ({ children }: { children: React.ReactNode }) => {
 
 // 리뷰 작성자의 정보
 type MetaInfoProps = {
-  imageUrl?: string;
+  imageUrl?: string | null;
   primary?: string;
   secondary: string;
 };
