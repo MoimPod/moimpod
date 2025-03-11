@@ -32,8 +32,9 @@ export default function Card({
   const { toggleFavorite, favorites } = useFavoritesStore();
 
   const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
-  const endDate = dayjs(registrationEnd);
-  const isClosed = Boolean(endDate && dayjs(endDate).isBefore(dayjs()));
+  const now = dayjs().add(9, "hour").utc();
+  const endDate = dayjs.utc(registrationEnd);
+  const isClosed = Boolean(endDate && endDate.isBefore(now));
   const isLiked = favorites.includes(id.toString());
 
   const handleCardClick = () => {
@@ -58,7 +59,10 @@ export default function Card({
       transition={{ duration: 0.5, ease: "easeInOut" }}
       className="relative my-5"
     >
-      <div className="relative my-5 items-center overflow-hidden rounded-3xl bg-white hover:shadow-md md:flex lg:flex">
+      <div
+        onClick={handleCardClick}
+        className="relative my-5 items-center overflow-hidden rounded-3xl bg-white hover:shadow-md md:flex lg:flex"
+      >
         {/* Inactive Layer: 모집 마감된 경우 반투명 레이어 추가 */}
         {isClosed && <InactiveLayer message="마감된 챌린지예요" onClick={() => toggleFavorite(id.toString())} />}
 
@@ -104,14 +108,9 @@ export default function Card({
           <div className="flex items-center gap-x-5">
             <ProgressBar progress={progress} />
             {participantCount === capacity || isClosed ? (
-              <button onClick={handleCardClick} className="flex gap-1 whitespace-nowrap font-semibold text-sky-400">
-                Closed
-              </button>
+              <button className="flex gap-1 whitespace-nowrap font-semibold text-sky-400">Closed</button>
             ) : (
-              <button
-                onClick={handleCardClick}
-                className="flex gap-1 whitespace-nowrap font-semibold text-primary-color"
-              >
+              <button className="flex gap-1 whitespace-nowrap font-semibold text-primary-color">
                 join now
                 <JoinArrow className="mt-0.5" />
               </button>
