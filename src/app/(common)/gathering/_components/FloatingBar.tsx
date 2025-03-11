@@ -40,6 +40,7 @@ export default function FloatingBar({ gatheringId, gathering, hostUserId }: Floa
 
   const isHost = user?.id === hostUserId;
   const isJoined = user ? participantIdList?.includes(user?.id) : false;
+  const isValid = dayjs().isBefore(dayjs(registrationEnd));
 
   const closeModal = () => setActiveModal(null);
 
@@ -71,6 +72,7 @@ export default function FloatingBar({ gatheringId, gathering, hostUserId }: Floa
               size="sm"
               className={buttonStyles}
               onClick={() => setActiveModal(MODAL.cancel)}
+              disabled={!isValid}
               loading={isPendingCancel}
             >
               취소하기
@@ -116,7 +118,7 @@ export default function FloatingBar({ gatheringId, gathering, hostUserId }: Floa
               className={buttonStyles}
               onClick={() => mutateLeaveGathering(gatheringId)}
               loading={isPendingLeave}
-              disabled={dayjs(registrationEnd).isBefore(dayjs())}
+              disabled={!isValid}
             >
               참여 취소하기
             </Button>
@@ -127,7 +129,7 @@ export default function FloatingBar({ gatheringId, gathering, hostUserId }: Floa
               className={buttonStyles}
               onClick={handleJoin}
               loading={isPendingJoin}
-              disabled={isPendingJoin || dayjs(registrationEnd).isBefore(dayjs())}
+              disabled={isPendingJoin || !isValid}
             >
               참여하기
             </Button>
