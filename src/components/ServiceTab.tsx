@@ -45,7 +45,7 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
       setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
 
       // 탭이 변경될 때, 기존에 선택한 카테고리를 유지하도록 수정
-      if (currentType === "WORKATION") {
+      if (currentType === "WORKATION" || currentType === "DALLAEMFIT") {
         setSelectedCategory("전체");
       } else {
         const matchedCategory = CATEGORIES.find((c) => c.type === currentType)?.name || "전체";
@@ -67,6 +67,7 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
       setSelectedCategory("전체"); // 워케이션 선택 시 카테고리 리셋
       onCategoryChange("WORKATION");
     } else {
+      setSelectedCategory("전체");
       onCategoryChange("DALLAEMFIT");
     }
   };
@@ -86,7 +87,12 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
     <>
       <Tab
         category={
-          <CategoryButton categories={CATEGORIES.map((c) => c.name)} setValue={handleCategoryChange}>
+          <CategoryButton
+            categories={CATEGORIES.map((c) => c.name)}
+            selectedCategory={selectedCategory} // 외부에서 selectedCategory를 직접 전달
+            setSelectedCategory={setSelectedCategory}
+            setValue={handleCategoryChange}
+          >
             {CATEGORIES.map((category) => (
               <CategoryButton.Title key={category.name} category={category.name} />
             ))}
