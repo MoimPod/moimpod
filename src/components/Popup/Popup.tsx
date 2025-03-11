@@ -14,13 +14,13 @@ export default function Popup({ isOpen, type = "alert", onClose, onClick, childr
     <Modal isOpen={isOpen} onClose={onClose} className="w-full max-w-[450px]">
       <div className="flex h-[151px] w-full flex-col items-center justify-between text-base font-medium">
         <div className="flex flex-1 flex-col items-center justify-center">{children}</div>
-        <div className="flex gap-2">
+        <div className="flex w-full justify-center gap-2">
           {type === "confirm" && (
-            <Button styleType="outline" onClick={onClose} className="w-[120px]">
+            <Button styleType="outline" onClick={onClose} className="w-full max-w-[120px]">
               취소
             </Button>
           )}
-          <Button onClick={onClick} className="w-[120px]">
+          <Button onClick={onClick} className="w-full max-w-[120px]">
             확인
           </Button>
         </div>
