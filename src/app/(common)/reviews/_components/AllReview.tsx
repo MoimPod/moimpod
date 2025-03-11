@@ -101,7 +101,7 @@ export default function AllReview({ children, defaultQuery }: AllReviewProps) {
   }, []);
 
   return (
-    <div className="mt-9">
+    <div className="mt-6">
       <ServiceTab onCategoryChange={handleTypeChange} searchParams={searchParams} />
       <hr className="border-1 mb-6 mt-4" />
       {children}
