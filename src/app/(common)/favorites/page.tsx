@@ -6,7 +6,7 @@ import FavoriteList from "./FavoriteList";
 import ServiceTab from "@/components/ServiceTab";
 import FavoritesLogo from "@/images/favorites_logo.svg";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useEffect } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 
 export default function Page() {
   return (
@@ -23,6 +23,8 @@ function FavoritesPage() {
   const { favorites } = useFavoritesStore();
 
   const type = searchParams.get("type") || "DALLAEMFIT";
+
+  const [isFilteringLoading, setIsFilteringLoading] = useState(false);
 
   useEffect(() => {
     if (!searchParams.get("type")) {
@@ -52,10 +54,21 @@ function FavoritesPage() {
       } else {
         params.delete("type");
       }
-      router.push(`${pathname}?${params.toString()}`);
+
+      const newParamsString = params.toString();
+
+      if (newParamsString !== searchParams.toString()) {
+        setIsFilteringLoading(true); // 필터링 시작
+        router.push(`${pathname}?${newParamsString}`);
+      }
     },
-    [searchParams, router, pathname],
+    [searchParams, router, pathname, isFilteringLoading],
   );
+
+  // URL이 변경되면 필터링 완료 처리
+  useEffect(() => {
+    setIsFilteringLoading(false);
+  }, [searchParams.toString()]);
 
   return (
     <div className="w-full">
@@ -67,7 +80,11 @@ function FavoritesPage() {
         </div>
       </div>
       <div className="mt-6 flex flex-row">
-        <ServiceTab searchParams={searchParams} onCategoryChange={handleFilterChange} />
+        <ServiceTab
+          searchParams={searchParams}
+          onCategoryChange={handleFilterChange}
+          isFilteringLoading={isFilteringLoading}
+        />
       </div>
       <FavoriteList
         isLoading={isLoading}

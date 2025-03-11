@@ -144,10 +144,6 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
     //const adjustedMeetingDate = dayjs(data.dateTime).subtract(9, "hour").format("YYYY-MM-DDTHH:mm:ss");
     //const adjustedDeadlineDate = dayjs(data.registrationEnd).subtract(9, "hour").format("YYYY-MM-DDTHH:mm:ss");
 
-    // utc 시간으로 전송
-    const adjustedMeetingDate = dayjs(data.dateTime).utc().format("YYYY-MM-DDTHH:mm:ss[Z]");
-    const adjustedDeadlineDate = dayjs(data.registrationEnd).utc().format("YYYY-MM-DDTHH:mm:ss[Z]");
-
     console.log("모임 시간 제출: ", data.dateTime);
     requestData.append("dateTime", data.dateTime);
     requestData.append("registrationEnd", data.registrationEnd);
@@ -278,6 +274,7 @@ export default function CreateGatheringsModal({ isOpen, onClose }: CreateGatheri
                 setErrorMessage("과거 날짜는 선택할 수 없습니다.");
                 return;
               }
+              setErrorMessage("");
               updateFormData("meetingDateTime", date);
             }}
             deadlineDateTime={formData.deadlineDateTime}
