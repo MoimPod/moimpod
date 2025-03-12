@@ -22,6 +22,7 @@ const MODAL = {
   join: "join",
   cancel: "cancel",
   share: "share",
+  overcapacity: "overcapacity",
 };
 
 export default function FloatingBar({ gatheringId, gathering, hostUserId }: FloatingBarProps) {
@@ -32,7 +33,7 @@ export default function FloatingBar({ gatheringId, gathering, hostUserId }: Floa
   const { user } = useUserStore();
 
   const { data: participantList } = useGetParticipants(gatheringId);
-  const { mutate: mutateJoin, isPending: isPendingJoin } = useJoin(gatheringId);
+  const { mutate: mutateJoin, isPending: isPendingJoin, error: joinError } = useJoin(gatheringId);
   const { mutate: mutateLeaveGathering, isPending: isPendingLeave } = useLeaveGathering(["participants", gatheringId]);
   const { mutate: mutateCancelGathering, isPending: isPendingCancel } = useCancelGathering();
 
@@ -49,7 +50,9 @@ export default function FloatingBar({ gatheringId, gathering, hostUserId }: Floa
       setActiveModal(MODAL.join);
     } else {
       // 참여하기 api 요청
-      mutateJoin(gatheringId);
+      mutateJoin(gatheringId, {
+        onError: () => setActiveModal(MODAL.overcapacity),
+      });
     }
   };
 
@@ -137,6 +140,11 @@ export default function FloatingBar({ gatheringId, gathering, hostUserId }: Floa
         </div>
       </Container>
       {activeModal === MODAL.join && <LoginPopup isOpen={!user && !!activeModal} onClose={closeModal} />}
+      {activeModal === MODAL.overcapacity && (
+        <Popup type={"alert"} isOpen={!!activeModal} onClick={closeModal} onClose={closeModal}>
+          {joinError?.message}
+        </Popup>
+      )}
     </>
   );
 }
