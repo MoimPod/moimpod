@@ -22,7 +22,6 @@ export const getUser = async (): Promise<User> => {
       if (response) {
         // 서버에서 응답은 있었음
         const { status, data } = response;
-        if (status === 401) throw new Error("인증 실패. 재로그인 해주세요.");
         if (status === 404) {
           if (data.message === "사용자를 찾을 수 없습니다.") {
             throw new Error("사용자를 찾을 수 없습니다.");
