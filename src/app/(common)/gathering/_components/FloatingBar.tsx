@@ -22,6 +22,7 @@ const MODAL = {
   join: "join",
   cancel: "cancel",
   share: "share",
+  overcapacity: "overcapacity",
 };
 
 export default function FloatingBar({ gatheringId, gathering, hostUserId }: FloatingBarProps) {
@@ -49,7 +50,9 @@ export default function FloatingBar({ gatheringId, gathering, hostUserId }: Floa
       setActiveModal(MODAL.join);
     } else {
       // 참여하기 api 요청
-      mutateJoin(gatheringId);
+      mutateJoin(gatheringId, {
+        onError: () => setActiveModal(MODAL.overcapacity),
+      });
     }
   };
 
@@ -137,6 +140,11 @@ export default function FloatingBar({ gatheringId, gathering, hostUserId }: Floa
         </div>
       </Container>
       {activeModal === MODAL.join && <LoginPopup isOpen={!user && !!activeModal} onClose={closeModal} />}
+      {activeModal === MODAL.overcapacity && (
+        <Popup type={"alert"} isOpen={!!activeModal} onClick={closeModal} onClose={closeModal}>
+          정원이 초과하였습니다
+        </Popup>
+      )}
     </>
   );
 }
