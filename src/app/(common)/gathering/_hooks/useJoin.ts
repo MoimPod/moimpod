@@ -20,6 +20,5 @@ export const useJoin = (gatheringId: string) => {
       queryClient.invalidateQueries({
         queryKey: ["participants", gatheringId],
       }),
-    onError: (e) => console.error(e.message),
   });
 };

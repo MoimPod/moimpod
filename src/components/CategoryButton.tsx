@@ -3,7 +3,7 @@
 import CheckedIcon from "@/images/checkbox_checked.svg";
 import UncheckedIcon from "@/images/checkbox_unchecked.svg";
 import { cn } from "@/utils/classnames";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const CategoryContext = createContext<{
   selectedCategory: string;
@@ -13,6 +13,8 @@ const CategoryContext = createContext<{
 type CategoryButtonProps = {
   categories: string[];
   defaultCategory?: string;
+  selectedCategory?: string; // 외부에서 상태 변경 가능하게 prop 추가
+  setSelectedCategory?: (category: string) => void;
   children: React.ReactNode;
   className?: string;
   setValue?: (value: string) => void;
@@ -22,6 +24,8 @@ type CategoryButtonProps = {
 export default function CategoryButton({
   categories,
   defaultCategory,
+  selectedCategory: externalSelectedCategory,
+  setSelectedCategory: externalSetSelectedCategory,
   children,
   setValue,
   onChange,
@@ -29,8 +33,15 @@ export default function CategoryButton({
 }: CategoryButtonProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>(defaultCategory ?? categories[0]);
 
+  useEffect(() => {
+    if (externalSelectedCategory !== undefined) {
+      setSelectedCategory(externalSelectedCategory); // 외부에서 변경되면 반영
+    }
+  }, [externalSelectedCategory]);
+
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
+    externalSetSelectedCategory?.(category);
     setValue?.(category);
     onChange?.(category);
   };
