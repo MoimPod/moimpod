@@ -13,7 +13,7 @@ export default function MypageList<T extends MyGathering | ReviewResponse | Gath
   emptyMessage,
   queryOption,
 }: GatheringListProps<T>) {
-  const { data, error } = useSuspenseQuery({ ...queryOption });
+  const { data, error } = useSuspenseQuery({ ...queryOption, staleTime: 300000 });
 
   if (error) {
     return (

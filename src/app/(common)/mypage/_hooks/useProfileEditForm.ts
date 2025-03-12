@@ -39,7 +39,7 @@ export function useProfileEditForm(isOpen: boolean, onClose: () => void) {
       profileForm.reset({ companyName: data?.companyName, profileImg: undefined });
       setPreviewUrl(data?.image || "");
     }
-  }, [isOpen, data?.companyName, data?.image]);
+  }, [isOpen]);
 
   // 폼 제출 로직
   const onSubmit = (data: FormValues) => {
