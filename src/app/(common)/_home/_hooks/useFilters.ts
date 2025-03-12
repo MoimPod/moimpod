@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useCallback, useState, useEffect } from "react";
+import { FiltersType } from "@/types";
 
 export const useFilters = () => {
   const searchParams = useSearchParams();
@@ -12,7 +13,7 @@ export const useFilters = () => {
   const [isFilteringLoading, setIsFilteringLoading] = useState(false); // 필터링 로딩 상태 추가
 
   // searchParams에서 필터 값을 추출
-  const filters = useMemo(() => {
+  const filters: FiltersType = useMemo(() => {
     return {
       location: searchParams.get("location") || undefined,
       date: searchParams.get("date") || undefined,

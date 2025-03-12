@@ -1,17 +1,10 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { GatheringType } from "@/types";
 import axiosInstance from "@/lib/axiosInstance";
-
-type FetchParams = {
-  location?: string;
-  date?: string;
-  type?: string;
-  sortBy?: string;
-  sortOrder?: "asc"; // 오름차순 정렬
-};
+import { FiltersType } from "@/types";
 
 // type 기본값 설정
-const defaultFilters: FetchParams = {
+const defaultFilters: FiltersType = {
   type: "DALLAEMFIT",
 };
 
@@ -21,7 +14,7 @@ export const fetchGatherings = async ({
   filters = {},
 }: {
   pageParam: number;
-  filters?: FetchParams;
+  filters?: FiltersType;
 }) => {
   try {
     const mergedFilters = { ...defaultFilters, ...filters };
@@ -41,7 +34,7 @@ export const fetchGatherings = async ({
 };
 
 // 클라이언트에서 무한스크롤을 위한 데이터 패칭
-export const useFetchGatherings = (filters?: FetchParams) => {
+export const useFetchGatherings = (filters?: FiltersType) => {
   return useInfiniteQuery({
     queryKey: ["gatherings", filters],
     queryFn: ({ pageParam = 0 }) => fetchGatherings({ pageParam, filters }),

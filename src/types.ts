@@ -51,3 +51,11 @@ export type ReviewsResponse = {
   currentPage: number;
   totalPages: number;
 };
+
+export type FiltersType = {
+  location?: string;
+  date?: string;
+  type?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+};
