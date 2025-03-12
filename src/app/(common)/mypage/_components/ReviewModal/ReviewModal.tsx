@@ -7,11 +7,11 @@ import { useReviewForm } from "@/app/(common)/mypage/_hooks/useReviewForm";
 import RatingInput from "@/app/(common)/mypage/_components/ReviewModal/RatingInput";
 import { Popup } from "@/components/Popup";
 
-interface ReviewModalProps {
+type ReviewModalProps = {
   isOpen: boolean;
   onClose: () => void;
   gatheringId: number;
-}
+};
 
 export default function ReviewModal({ isOpen, onClose, gatheringId }: ReviewModalProps) {
   const {

@@ -1,11 +1,11 @@
 import { ReviewFormValues } from "@/app/(common)/mypage/_hooks/useReviewForm";
 import { Control, Controller, FieldErrors } from "react-hook-form";
 
-interface CommentInputProps {
+type CommentInputProps = {
   control: Control<ReviewFormValues>;
   errors: FieldErrors<ReviewFormValues>;
   commentLength: number;
-}
+};
 
 export default function CommentInput({ control, errors, commentLength }: CommentInputProps) {
   return (
