@@ -15,7 +15,7 @@ const GatheringList = ({ filters }: { filters: FiltersType }) => {
     );
   }
 
-  if (filteredCards.length === 0) {
+  if (!hasNextPage && filteredCards.length === 0) {
     return (
       <div className="flex h-[calc(100vh-50vh)] flex-col items-center justify-center text-center text-sm font-medium text-gray-500">
         <p>아직 모임이 없어요</p>
@@ -30,7 +30,6 @@ const GatheringList = ({ filters }: { filters: FiltersType }) => {
         <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />
       ))}
       <div ref={observerRef} className="h-10"></div>
-      {isFetchingNextPage && <div className="text-center text-sm text-gray-500">불러오는 중...</div>}
     </>
   );
 };

@@ -17,7 +17,7 @@ export const useFilters = () => {
     return {
       location: searchParams.get("location") || undefined,
       date: searchParams.get("date") || undefined,
-      sortBy: searchParams.get("sortBy") || "asc",
+      sortBy: searchParams.get("sortBy") || undefined,
       type: searchParams.get("type") || "DALLAEMFIT",
     };
   }, [searchParamsString]);

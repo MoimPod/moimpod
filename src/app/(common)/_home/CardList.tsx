@@ -3,12 +3,10 @@
 import CreateGatheringsModal from "@/app/(common)/_home/_components/CreateGatheringsModal";
 import GatheringFilters from "@/app/(common)/_home/_components/GatheringFilters";
 import Button from "@/components/Button";
-import Card from "@/components/Card";
 import { LoginPopup } from "@/components/Popup";
 import ServiceTab from "@/components/ServiceTab";
 import HeaderSection from "./_components/HeaderSection";
 import GatheringList from "./_components/GatheringList";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useFilters } from "@/app/(common)/_home/_hooks/useFilters";
 import { useAuth } from "@/app/(common)/_home/_hooks/useAuth";
 import { useState, useEffect } from "react";
