@@ -33,7 +33,7 @@ export default function FloatingBar({ gatheringId, gathering, hostUserId }: Floa
   const { user } = useUserStore();
 
   const { data: participantList } = useGetParticipants(gatheringId);
-  const { mutate: mutateJoin, isPending: isPendingJoin } = useJoin(gatheringId);
+  const { mutate: mutateJoin, isPending: isPendingJoin, error: joinError } = useJoin(gatheringId);
   const { mutate: mutateLeaveGathering, isPending: isPendingLeave } = useLeaveGathering(["participants", gatheringId]);
   const { mutate: mutateCancelGathering, isPending: isPendingCancel } = useCancelGathering();
 
@@ -142,7 +142,7 @@ export default function FloatingBar({ gatheringId, gathering, hostUserId }: Floa
       {activeModal === MODAL.join && <LoginPopup isOpen={!user && !!activeModal} onClose={closeModal} />}
       {activeModal === MODAL.overcapacity && (
         <Popup type={"alert"} isOpen={!!activeModal} onClick={closeModal} onClose={closeModal}>
-          정원이 초과하였습니다
+          {joinError?.message}
         </Popup>
       )}
     </>
