@@ -6,9 +6,10 @@ import { format } from "date-fns";
 import DateSelect from "@/components/Filtering/DateSelect";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import SortButton from "@/components/SortButton";
+import { FiltersType } from "@/types";
 
 type GatheringFiltersProps = {
-  onChange: (filters: Partial<{ location?: string; date?: string; sortBy?: string }>) => void;
+  onChange: (filters: Partial<FiltersType>) => void;
 };
 
 const sortOption = [
