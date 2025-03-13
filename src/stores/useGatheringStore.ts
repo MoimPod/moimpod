@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axiosInstance from "@/lib/axiosInstance";
+import { GatheringType } from "@/types";
 
 export type CardData = {
   id: number;
@@ -16,8 +17,8 @@ export type CardData = {
 };
 
 type GatheringStore = {
-  allCards: CardData[]; // API에서 받아온 전체 모임 데이터
-  filteredCards: CardData[]; // 필터링된 모임 데이터
+  allCards: GatheringType[]; // API에서 받아온 전체 모임 데이터
+  filteredCards: GatheringType[]; // 필터링된 모임 데이터
   selectedLocation: string;
   selectedCategory: string;
   sortBy: string;

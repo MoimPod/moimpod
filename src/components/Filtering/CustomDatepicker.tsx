@@ -32,7 +32,7 @@ export default function CustomDatepicker({ selectedDate, onDateChange }: CustomD
         items: {
           item: {
             base: "block flex-1 cursor-pointer rounded-lg text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-gray-100 ",
-            selected: "bg-primary-color text-white hover:bg-blue-600", // 선택된 날짜 색상 변경
+            selected: "bg-primary-color text-white hover:bg-blue-8", // 선택된 날짜 색상 변경
             disabled: "text-red-100", // 현재 달이 아닌 날짜 연하게
           },
         },
@@ -40,11 +40,13 @@ export default function CustomDatepicker({ selectedDate, onDateChange }: CustomD
     },
   };
 
+  const now = new Date();
+
   return (
     <div>
       <Datepicker
         inline
-        value={selectedDate}
+        value={selectedDate ?? now}
         onChange={onDateChange}
         showClearButton={false}
         showTodayButton={false}
