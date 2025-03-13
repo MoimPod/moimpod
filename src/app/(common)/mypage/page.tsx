@@ -12,34 +12,34 @@ export default async function Page() {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
   const queryClient = getQueryClient();
-  Promise.all([
-    await queryClient.prefetchQuery({
-      queryKey: ["user"],
-      queryFn: async () => {
-        const response = await axios.get<UserType>(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/user`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        return response.data;
-      },
-    }),
-    await queryClient.prefetchQuery({
-      queryKey: ["user", "gatherings", "joined"],
-      queryFn: async () => {
-        const response = await axios.get<MyGathering[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings/joined`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            limit: 100,
-          },
-        });
 
-        return response.data.sort((a, b) => dayjs(b.dateTime).valueOf() - dayjs(a.dateTime).valueOf());
-      },
-    }),
-  ]);
+  await queryClient.prefetchQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const response = await axios.get<UserType>(`${process.env.NEXT_PUBLIC_API_BASE_URL}auths/user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    },
+  });
+  await queryClient.prefetchQuery({
+    queryKey: ["user", "gatherings", "joined"],
+    queryFn: async () => {
+      const response = await axios.get<MyGathering[]>(`${process.env.NEXT_PUBLIC_API_BASE_URL}gatherings/joined`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          limit: 100,
+        },
+      });
+
+      return response.data.sort((a, b) => dayjs(b.dateTime).valueOf() - dayjs(a.dateTime).valueOf());
+    },
+  });
+
   return (
     <div className="flex flex-1 flex-col gap-[30px] pt-8">
       <HydrationBoundary state={dehydrate(queryClient)}>
