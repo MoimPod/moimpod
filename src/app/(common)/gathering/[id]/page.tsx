@@ -6,9 +6,9 @@ import Gathering from "../_components/Gathering";
 import Reviews from "../_components/Reviews";
 import FloatingBar from "../_components/FloatingBar";
 import { REVIEW_LIMIT } from "../_utils/constants";
-import type { GatheringType, ReviewQuery } from "@/types";
-import { getParticipants } from "@/app/(common)/gathering/_utils/apis";
+import { getParticipants } from "../_utils/apis";
 import { getReviews } from "@/hooks/useGetReviews";
+import type { GatheringType, ReviewQuery } from "@/types";
 
 export default async function Page({
   params,
@@ -19,6 +19,7 @@ export default async function Page({
 }) {
   const { id: gatheringId } = await params;
   const { data: gathering } = await axiosInstance.get<GatheringType>(`/gatherings/${gatheringId}`);
+
   const query = await searchParams;
 
   const reviewParams = Object.assign(

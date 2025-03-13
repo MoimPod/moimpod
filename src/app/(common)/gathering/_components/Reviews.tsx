@@ -3,24 +3,18 @@
 import { useEffect, useMemo } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import SortButton from "@/components/SortButton";
-import { useQueryParams } from "@/hooks/useQueryParams";
 import ReviewList from "../_components/ReviewList";
 import Pagination from "../_components/Pagination";
 import { useGetReviews } from "@/hooks/useGetReviews";
 import { QUERY_PARAMS, SORT_VALUE, REVIEW_LIMIT, SORT_BY, SORT_ORDER, SORT_OPTIONS } from "../_utils/constants";
-import { getInitialSort } from "../_utils/queryUtils";
+import { getSortValue } from "../_utils/queryUtils";
 import type { ReviewQuery } from "@/types";
 
 export default function Reviews({ reviewQuery }: { reviewQuery: ReviewQuery }) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const paramsObj = useQueryParams(searchParams);
   const params = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
-
-  const query = Object.keys(paramsObj).length ? paramsObj : reviewQuery;
-  console.log("reviewQuery", reviewQuery);
-  console.log("paramsObj", paramsObj);
 
   const { data } = useGetReviews(reviewQuery);
 
@@ -35,21 +29,11 @@ export default function Reviews({ reviewQuery }: { reviewQuery: ReviewQuery }) {
   };
 
   const handleSortChange = (selected: string) => {
-    const sort = selected;
+    const sortBy = selected === SORT_VALUE.latest ? SORT_BY.createdAt : SORT_BY.score;
+    const sortOrder = selected === SORT_VALUE.lowScore ? SORT_ORDER.asc : SORT_ORDER.desc;
 
-    if (sort === SORT_VALUE.latest) {
-      // 최신순
-      params.set(QUERY_PARAMS.sortBy, SORT_BY.createdAt);
-      params.set(QUERY_PARAMS.sortOrder, SORT_ORDER.desc);
-    } else if (sort === SORT_VALUE.highScore) {
-      // 별점 높은순
-      params.set(QUERY_PARAMS.sortBy, SORT_BY.score);
-      params.set(QUERY_PARAMS.sortOrder, SORT_ORDER.desc);
-    } else if (sort === SORT_VALUE.lowScore) {
-      // 별점 낮은순
-      params.set(QUERY_PARAMS.sortBy, SORT_BY.score);
-      params.set(QUERY_PARAMS.sortOrder, SORT_ORDER.asc);
-    }
+    params.set(QUERY_PARAMS.sortBy, sortBy);
+    params.set(QUERY_PARAMS.sortOrder, sortOrder);
 
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
@@ -75,12 +59,7 @@ export default function Reviews({ reviewQuery }: { reviewQuery: ReviewQuery }) {
     <div className="bg-white p-6">
       <div className="flex justify-between">
         <h1 className="text-lg font-semibold">이용자들은 이 프로그램을 이렇게 느꼈어요!</h1>
-
-        <SortButton
-          setSortType={handleSortChange}
-          sortOption={SORT_OPTIONS}
-          defaultSort={getInitialSort(searchParams)}
-        />
+        <SortButton setSortType={handleSortChange} sortOption={SORT_OPTIONS} defaultSort={getSortValue(searchParams)} />
       </div>
 
       <ReviewList reviewList={data.reviews} />
