@@ -10,6 +10,7 @@ import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useGetParticipants } from "@/app/(common)/gathering/_hooks/useGetParticipants";
 import type { GatheringType } from "@/types";
 import type { GatheringParticipantType } from "../types";
+import { useMemo } from "react";
 
 export type GatheringProps = {
   gatheringId: string;
@@ -21,7 +22,10 @@ export default function GatheringInfo({ gatheringId, gathering }: GatheringProps
   const MIN_COUNT = 5;
 
   const { data: participants } = useGetParticipants(gatheringId);
-  const profileImages = participants?.map((item: GatheringParticipantType) => item.User.image) || [];
+  const profileImages = useMemo(
+    () => participants?.map((item: GatheringParticipantType) => item.User.image) || [],
+    [participants],
+  );
 
   const { name, dateTime, location, participantCount, capacity } = gathering;
 

@@ -30,10 +30,3 @@ export const SORT_ORDER = {
   desc: "desc",
   asc: "asc",
 } as const;
-
-export const DEFAULT_QUERY_VALUES = {
-  [QUERY_PARAMS.limit]: REVIEW_LIMIT.toString(),
-  [QUERY_PARAMS.offset]: "0",
-  [QUERY_PARAMS.sortBy]: "createdAt",
-  [QUERY_PARAMS.sortOrder]: "desc",
-} as const;

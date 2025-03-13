@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import ListItem from "@/components/ListItem";
 import DashedLine from "@/components/DashedLine";
 import Score from "@/components/Score";
@@ -34,7 +35,7 @@ export default function AllReview({ children, defaultQuery }: AllReviewProps) {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
 
-  const paramsObj = useQueryParams();
+  const paramsObj = useQueryParams(searchParams);
   const query = Object.keys(paramsObj).length ? paramsObj : defaultQuery;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useAllReview(query);
@@ -45,52 +46,76 @@ export default function AllReview({ children, defaultQuery }: AllReviewProps) {
     isFetchingNextPage,
   });
 
+  // const handleTypeChange = useCallback(
+  //   (type: string | undefined) => {
+  //     if (type) {
+  //       params.set("type", type);
+  //     } else {
+  //       params.delete("type");
+  //     }
+  //     router.push(`${pathname}?${params.toString()}`, { scroll: false });
+
+  //     console.log(params.get("type"), "type 체인지");
+  //   },
+  //   [params.get("type")],
+  // );
+
   const handleTypeChange = (type: string | undefined) => {
     if (type) {
       params.set("type", type);
     } else {
       params.delete("type");
     }
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
+  console.log(handleTypeChange);
 
-  const handleSelect = (selected: string) => {
-    const sort = selected;
+  const handleSelect = useCallback(
+    (selected: string) => {
+      const sort = selected;
 
-    if (sort === "latest") {
-      params.set("sortBy", "createdAt");
-      params.set("sortOrder", "desc");
-    } else if (sort === "highScore") {
-      params.set("sortBy", "score");
-      params.set("sortOrder", "desc");
-    } else if (sort === "highParticipants") {
-      params.set("sortBy", "participantCount");
-      params.set("sortOrder", "desc");
-    }
+      if (sort === "latest") {
+        params.set("sortBy", "createdAt");
+        params.set("sortOrder", "desc");
+      } else if (sort === "highScore") {
+        params.set("sortBy", "score");
+        params.set("sortOrder", "desc");
+      } else if (sort === "highParticipants") {
+        params.set("sortBy", "participantCount");
+        params.set("sortOrder", "desc");
+      }
 
-    router.push(`${pathname}?${params.toString()}`);
-  };
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [params.get("sortBy")],
+  );
 
-  const handleDateSelect = (date: Date | null) => {
-    if (date) {
-      const dateFormat = format(date, "yyyy-MM-dd");
-      params.set("date", dateFormat);
-    } else {
-      params.delete("date");
-    }
+  const handleDateSelect = useCallback(
+    (date: Date | null) => {
+      if (date) {
+        const dateFormat = format(date, "yyyy-MM-dd");
+        params.set("date", dateFormat);
+      } else {
+        params.delete("date");
+      }
 
-    router.push(`${pathname}?${params.toString()}`);
-  };
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [params.get("date")],
+  );
 
-  const handleLocationSelect = (location: string | undefined) => {
-    if (location) {
-      params.set("location", location);
-    } else {
-      params.delete("location");
-    }
+  const handleLocationSelect = useCallback(
+    (location: string | undefined) => {
+      if (location) {
+        params.set("location", location);
+      } else {
+        params.delete("location");
+      }
 
-    router.push(`${pathname}?${params.toString()}`);
-  };
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [params.get("location")],
+  );
 
   useEffect(() => {
     Object.entries(defaultQuery).forEach(([key, value]) => {

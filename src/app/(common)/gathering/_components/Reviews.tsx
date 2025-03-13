@@ -1,33 +1,28 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import SortButton from "@/components/SortButton";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import ReviewList from "../_components/ReviewList";
 import Pagination from "../_components/Pagination";
 import { useGetReviews } from "@/hooks/useGetReviews";
-import {
-  QUERY_PARAMS,
-  SORT_VALUE,
-  DEFAULT_QUERY_VALUES,
-  REVIEW_LIMIT,
-  SORT_BY,
-  SORT_ORDER,
-  SORT_OPTIONS,
-} from "../_utils/constants";
+import { QUERY_PARAMS, SORT_VALUE, REVIEW_LIMIT, SORT_BY, SORT_ORDER, SORT_OPTIONS } from "../_utils/constants";
 import { getInitialSort } from "../_utils/queryUtils";
 import type { ReviewQuery } from "@/types";
 
-export default function Reviews({ gatheringId, reviewQuery }: { gatheringId: string; reviewQuery: ReviewQuery }) {
+export default function Reviews({ reviewQuery }: { reviewQuery: ReviewQuery }) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const paramsObj = useQueryParams();
-  const params = new URLSearchParams(searchParams.toString());
-  const query = Object.keys(paramsObj).length ? paramsObj : reviewQuery;
+  const paramsObj = useQueryParams(searchParams);
+  const params = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
 
-  const { data } = useGetReviews(gatheringId, query);
+  const query = Object.keys(paramsObj).length ? paramsObj : reviewQuery;
+  console.log("reviewQuery", reviewQuery);
+  console.log("paramsObj", paramsObj);
+
+  const { data } = useGetReviews(reviewQuery);
 
   const handlePageChange = (page: number) => {
     const limit = REVIEW_LIMIT;
@@ -36,7 +31,7 @@ export default function Reviews({ gatheringId, reviewQuery }: { gatheringId: str
     params.set(QUERY_PARAMS.offset, offset.toString());
     params.set(QUERY_PARAMS.limit, limit.toString());
 
-    router.push(`${pathname}?${params.toString()}`);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const handleSortChange = (selected: string) => {
@@ -56,20 +51,13 @@ export default function Reviews({ gatheringId, reviewQuery }: { gatheringId: str
       params.set(QUERY_PARAMS.sortOrder, SORT_ORDER.asc);
     }
 
-    router.push(`${pathname}?${params.toString()}`);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  // 기본 URL 쿼리 값을 설정하는 useEffect
   useEffect(() => {
-    if (!params.has(QUERY_PARAMS.gatheringId)) {
-      params.set(QUERY_PARAMS.gatheringId, gatheringId);
-    }
-
-    Object.entries(DEFAULT_QUERY_VALUES).forEach(([key, value]) => {
-      if (!params.has(key)) params.set(key, value);
+    Object.entries(reviewQuery).forEach(([key, value]) => {
+      if (!params.has(key)) params.set(key, value.toString());
     });
-
-    router.replace(`${pathname}?${params.toString()}`);
   }, []);
 
   if (data.reviews.length === 0) {
