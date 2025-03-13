@@ -19,52 +19,56 @@ export default function MypageContent() {
   const { selectedTab, setSelectedTab, selectedCategory, setSelectedCategory } = useMypageTab();
   const { data } = useGetUserInfo("");
   const id = data?.id;
-  useQuery({
-    queryKey: ["user", "reviews", "reviewable"],
-    queryFn: async () => {
-      const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
-        params: {
-          limit: 100,
-          completed: true,
-          reviewed: false,
-        },
-      });
-      const data = response.data.filter((gathering) => !gathering.canceledAt);
-      return data.sort((a, b) => dayjs(b.dateTime).valueOf() - dayjs(a.dateTime).valueOf());
-    },
-  });
-  useQuery({
-    queryKey: ["user", "reviews", "written"],
-    queryFn: async () => {
-      const user = queryClient.getQueryData<UserType>(["user"]);
-      const response = await axiosInstance.get<ReviewsResponse>("reviews", {
-        params: {
-          limit: 100,
-          userId: user?.id,
-        },
-      });
 
-      return response.data.data.sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf());
-    },
-    enabled: Boolean(id),
-  });
-  useQuery({
-    queryKey: ["user", "gatherings", "created"],
-    queryFn: async () => {
-      const user = queryClient.getQueryData<UserType>(["user"]);
-      const response = await axiosInstance.get<GatheringType[]>(`gatherings`, {
-        params: {
-          limit: 100,
-          sortBy: "dateTime",
-          sortOrder: "desc",
-          createdBy: user?.id,
-        },
-      });
+  Promise.all([
+    useQuery({
+      queryKey: ["user", "reviews", "reviewable"],
+      queryFn: async () => {
+        const response = await axiosInstance.get<MyGathering[]>("gatherings/joined", {
+          params: {
+            limit: 100,
+            completed: true,
+            reviewed: false,
+          },
+        });
+        const data = response.data.filter((gathering) => !gathering.canceledAt);
+        return data.sort((a, b) => dayjs(b.dateTime).valueOf() - dayjs(a.dateTime).valueOf());
+      },
+    }),
+    useQuery({
+      queryKey: ["user", "reviews", "written"],
+      queryFn: async () => {
+        const user = queryClient.getQueryData<UserType>(["user"]);
+        const response = await axiosInstance.get<ReviewsResponse>("reviews", {
+          params: {
+            limit: 100,
+            userId: user?.id,
+          },
+        });
 
-      return response.data;
-    },
-    enabled: Boolean(id),
-  });
+        return response.data.data.sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf());
+      },
+      enabled: Boolean(id),
+    }),
+    useQuery({
+      queryKey: ["user", "gatherings", "created"],
+      queryFn: async () => {
+        const user = queryClient.getQueryData<UserType>(["user"]);
+        const response = await axiosInstance.get<GatheringType[]>(`gatherings`, {
+          params: {
+            limit: 100,
+            sortBy: "dateTime",
+            sortOrder: "desc",
+            createdBy: user?.id,
+          },
+        });
+
+        return response.data;
+      },
+      enabled: Boolean(id),
+    }),
+  ]);
+
   return (
     <div className="flex flex-1 flex-col gap-6 border-t-2 border-gray-900 bg-white p-6">
       <MypageTab setSelectedCategory={setSelectedCategory} setSelectedTab={setSelectedTab} />
