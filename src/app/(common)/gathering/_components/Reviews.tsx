@@ -11,8 +11,8 @@ import { getSortValue } from "../_utils/queryUtils";
 import type { ReviewQuery } from "@/types";
 
 export default function Reviews({ reviewQuery }: { reviewQuery: ReviewQuery }) {
+  const { replace } = useRouter();
   const pathname = usePathname();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const params = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
 
@@ -25,7 +25,7 @@ export default function Reviews({ reviewQuery }: { reviewQuery: ReviewQuery }) {
     params.set(QUERY_PARAMS.offset, offset.toString());
     params.set(QUERY_PARAMS.limit, limit.toString());
 
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const handleSortChange = (selected: string) => {
@@ -35,7 +35,7 @@ export default function Reviews({ reviewQuery }: { reviewQuery: ReviewQuery }) {
     params.set(QUERY_PARAMS.sortBy, sortBy);
     params.set(QUERY_PARAMS.sortOrder, sortOrder);
 
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   useEffect(() => {
