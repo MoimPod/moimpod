@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import CategoryButton from "@/components/CategoryButton";
 import Tab from "@/components/Tab";
 import Dalaemfit from "@/images/dalaemfit.svg";
@@ -23,26 +24,24 @@ type ServiceTabProps = {
   isFilteringLoading?: boolean; // 필터링 중인지 판단하는 변수
 };
 
-export default function ServiceTab({ searchParams, onCategoryChange, isFilteringLoading }: ServiceTabProps) {
-  const [selectedTab, setSelectedTab] = useState<"DALLAEMFIT" | "WORKATION">(
-    () => (searchParams.get("type") || "DALLAEMFIT") as "DALLAEMFIT" | "WORKATION",
+export default function ServiceTab({ onCategoryChange, isFilteringLoading }: ServiceTabProps) {
+  const searchParams = useSearchParams();
+
+  const [selectedTab, setSelectedTab] = useState<string>(
+    () => SERVICE_TABS.find((t) => t.type === searchParams.get("type"))?.name || "DALLAEMFIT",
   );
-  const [selectedCategory, setSelectedCategory] = useState<string>("전체");
 
-  // URL이 변경되었을 때 필터링 로딩 상태 해제
-  useEffect(() => {
-    if (!isFilteringLoading) return;
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    () => CATEGORIES.find((c) => c.type === searchParams.get("type"))?.name || "전체",
+  );
 
-    const currentType = searchParams.get("type") || "DALLAEMFIT";
-    setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
-  }, [searchParams, isFilteringLoading]);
-
-  // searchParams 변경 감지해서 반영
+  //searchParams 변경 감지해서 반영
   useEffect(() => {
     const currentType = searchParams.get("type") || "DALLAEMFIT";
-
+    console.log("선택된 타입: ", currentType);
     if (currentType !== selectedTab) {
-      setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
+      //setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
+      setSelectedTab(SERVICE_TABS.find((t) => t.type === currentType)?.name || "달램핏");
     }
   }, [searchParams]);
 
@@ -53,8 +52,7 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
     const tabType = SERVICE_TABS.find((t) => t.name === tabName)?.type;
     if (!tabType) return;
 
-    setSelectedTab(tabType as "DALLAEMFIT" | "WORKATION");
-
+    setSelectedTab(tabName);
     onCategoryChange(tabType);
     handleCategoryReset();
   };
