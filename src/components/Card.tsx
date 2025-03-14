@@ -55,12 +55,18 @@ export default function Card({
     threshold: 0.1, // 10% 정도 보이면 감지
   });
 
+  const cardVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 60 }}
-      animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : -60 }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
+      variants={cardVariants}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      transition={{ duration: 0.7, ease: "easeInOut" }}
       className="relative my-5"
     >
       <div

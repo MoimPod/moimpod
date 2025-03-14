@@ -29,7 +29,7 @@ const GatheringList = ({ filters }: { filters: FiltersType }) => {
       {filteredCards.map((card) => (
         <Card key={card.id} {...card} registrationEnd={card.registrationEnd ?? ""} />
       ))}
-      <div ref={observerRef} className="h-10"></div>
+      {hasNextPage && <div ref={observerRef} className="h-10"></div>}
     </>
   );
 };
