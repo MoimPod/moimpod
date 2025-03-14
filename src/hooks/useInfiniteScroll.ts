@@ -7,8 +7,8 @@ type UseInfiniteScrollProps = {
 };
 
 export const useInfiniteScroll = ({ fetchNextPage, hasNextPage, isFetchingNextPage }: UseInfiniteScrollProps) => {
-  // 무한 스크롤을 감지할 ref
-  const ref = useRef<HTMLDivElement | null>(null);
+  // 감지할 요소의 ref
+  const observerRef = useRef<HTMLDivElement | null>(null);
 
   // IntersectionObserver 인스턴스를 저장할 ref
   const observerInstanceRef = useRef<IntersectionObserver | null>(null);
@@ -23,31 +23,24 @@ export const useInfiniteScroll = ({ fetchNextPage, hasNextPage, isFetchingNextPa
     [fetchNextPage, hasNextPage, isFetchingNextPage],
   );
 
-  // 콜백 ref를 사용해 DOM 요소가 할당될 때 observer를 설정
-  const observerRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (observerInstanceRef.current && ref.current) {
-        observerInstanceRef.current.unobserve(ref.current);
-      }
-      ref.current = node;
-
-      if (node && window.IntersectionObserver) {
-        const observer = new IntersectionObserver(handleObserver, { threshold: 1.0 });
-        observer.observe(node);
-        observerInstanceRef.current = observer;
-      }
-    },
-    [handleObserver],
-  );
-
   useEffect(() => {
-    // 컴포넌트 언마운트 시 observer 정리
-    return () => {
-      if (observerInstanceRef.current && ref.current) {
-        observerInstanceRef.current.unobserve(ref.current);
-      }
-    };
-  }, []);
+    const node = observerRef.current;
 
-  return { observerRef, isFetchingNextPage };
+    if (node && !observerInstanceRef.current) {
+      const observer = new IntersectionObserver(handleObserver, {
+        rootMargin: "50px", // 요소가 보이기 50px 전에 미리 감지
+        threshold: 0.5, // 50% 이상 보일 때만 실행
+      });
+
+      observer.observe(node);
+      observerInstanceRef.current = observer;
+    }
+
+    return () => {
+      observerInstanceRef.current?.disconnect(); // 클린업
+      observerInstanceRef.current = null;
+    };
+  }, [handleObserver]);
+
+  return { observerRef };
 };
