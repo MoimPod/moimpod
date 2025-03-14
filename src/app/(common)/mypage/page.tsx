@@ -12,6 +12,7 @@ export default async function Page() {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
   const queryClient = getQueryClient();
+
   await queryClient.prefetchQuery({
     queryKey: ["user"],
     queryFn: async () => {
