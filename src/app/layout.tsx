@@ -5,8 +5,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MoimPod: 취미 모임 플랫폼",
-  description: "취미 모임 플랫폼",
+  title: "Moimpod | 휴식 모임 플랫폼",
+  description: "휴식 모임 플랫폼",
   icons: "/images/icon.svg",
 };
 
