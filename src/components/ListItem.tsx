@@ -7,8 +7,11 @@ import { PropsWithChildren } from "react";
 import InactiveLayer from "@/components/InactiveLayer";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 dayjs.extend(utc);
+dayjs.extend(timezone);
+
 type ListItemProps = {
   CardImage?: React.ReactNode;
   canceledAt?: string | null;
@@ -104,8 +107,8 @@ type SubInfoProps = {
   capacity: number;
 };
 ListItem.SubInfo = ({ date, participantCount, capacity }: SubInfoProps) => {
-  const formatDate = dayjs(date).utc().format("M월 D일");
-  const formatTime = dayjs(date).utc().format("HH:mm");
+  const formatDate = dayjs(date).tz("Asia/Seoul").format("M월 D일");
+  const formatTime = dayjs(date).tz("Asia/Seoul").format("HH:mm");
   return (
     <div className="flex items-center gap-3 text-sm text-gray-700">
       <div>{`${formatDate} · ${formatTime}`}</div>
