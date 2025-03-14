@@ -39,18 +39,12 @@ export default function ServiceTab({ onCategoryChange, isFilteringLoading }: Ser
   useEffect(() => {
     const currentType = searchParams.get("type") || "DALLAEMFIT";
 
-    console.log("선택된 타입: ", currentType);
-
     if (currentType) {
       const tabName = SERVICE_TABS.find((t) => t.type === currentType)?.name;
 
-      console.log("찾은 탭 이름1:", tabName);
-      console.log("selectedTab은? ", selectedTab);
       if (tabName && tabName == selectedTab) {
         setSelectedTab(tabName);
-        console.log("찾은 탭 이름2:", tabName);
 
-        // 📌 `handleTabChange` 실행 (중복 실행 방지됨)
         handleTabChange(tabName);
       }
     }
@@ -65,7 +59,6 @@ export default function ServiceTab({ onCategoryChange, isFilteringLoading }: Ser
 
     // URL의 type 값을 가져와서 selectedTab 업데이트
     const currentType = searchParams.get("type") || tabType; // 없으면 클릭한 탭을 기본값으로
-    console.log("핸들러 실행됨11:", currentType);
     setSelectedTab(currentType);
 
     setSelectedTab(tabType);

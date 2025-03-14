@@ -70,7 +70,7 @@ export default function MainTab({ children, category, targetIndex, gap = "gap-4"
     setActiveIndex: (index: number) => {
       setActiveIndex(index);
 
-      // 📌 URL도 함께 업데이트 (뒤로 가기 대응)
+      // URL도 함께 업데이트
       const tabType = SERVICE_TABS[index].type;
       router.push(`${pathname}?type=${tabType}`);
     },
@@ -122,7 +122,7 @@ MainTab.Item = function ({ index, children }: ItemProps) {
   );
 };
 
-// 📌 서비스 탭 리스트 (예제)
+// 서비스 탭 리스트
 const SERVICE_TABS = [
   { name: "달램핏", type: "DALLAEMFIT" },
   { name: "워케이션", type: "WORKATION" },
