@@ -17,7 +17,7 @@ export default function AnimatedParticipantCount({ participantCount, capacity }:
 
   // 값이 변경될 때 애니메이션 적용
   useEffect(() => {
-    const controls = animate(count, participantCount, { duration: 1, ease: "easeOut" });
+    const controls = animate(count, participantCount, { duration: 0.6, ease: "easeOut" });
 
     return controls.stop; // 컴포넌트 언마운트 시 애니메이션 중지
   }, [participantCount]);

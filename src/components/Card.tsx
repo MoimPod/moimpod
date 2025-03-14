@@ -7,7 +7,7 @@ import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { GatheringType } from "@/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useMemo } from "react";
 import AnimatedParticipantCount from "./AnimateParticipantCount";
 import ChipInfo from "./ChipInfo";
 import LikeButton from "./LikeButton";
@@ -31,7 +31,11 @@ export default function Card({
   const router = useRouter();
   const { toggleFavorite, favorites } = useFavoritesStore();
 
-  const progress = capacity > 0 ? (participantCount / capacity) * 100 : 0;
+  const progress = useMemo(
+    () => (capacity > 0 ? (participantCount / capacity) * 100 : 0),
+    [participantCount, capacity],
+  );
+
   const now = dayjs().add(9, "hour").utc();
   const endDate = dayjs.utc(registrationEnd);
   const isClosed = Boolean(endDate && endDate.isBefore(now));
