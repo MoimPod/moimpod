@@ -10,6 +10,7 @@ import ImageUploadFiled from "@/app/(common)/_home/_components/ImageUploadFiled"
 import CategorySelectField from "@/app/(common)/_home/_components/CategorySelectField";
 import MeetingDateTimeValidator from "@/app/(common)/_home/_components/MeetingDateTimeValidator";
 import CapacityField from "@/app/(common)/_home/_components/CapacityField";
+import dayjs from "dayjs";
 
 type CreateGatheringFormProps = {
   onClose: () => void;
@@ -31,12 +32,14 @@ export default function CreateGatheringForm({ onClose }: CreateGatheringFormProp
   const { mutate: createGathering, isPending } = useCreateGathering();
 
   const onSubmit = async (data: FormDataType) => {
+    const adjustedMeetingDate = dayjs(data.dateTime).subtract(9, "hour").format("YYYY-MM-DDTHH:mm:ss");
+    const adjustedDeadlineDate = dayjs(data.registrationEnd).subtract(9, "hour").format("YYYY-MM-DDTHH:mm:ss");
     const requestData = new FormData();
     requestData.append("name", data.name);
     requestData.append("location", data.location);
     requestData.append("type", data.type);
-    requestData.append("dateTime", data.dateTime);
-    requestData.append("registrationEnd", data.registrationEnd);
+    requestData.append("dateTime", adjustedMeetingDate);
+    requestData.append("registrationEnd", adjustedDeadlineDate);
     requestData.append("capacity", String(data.capacity));
 
     if (data.image) {
