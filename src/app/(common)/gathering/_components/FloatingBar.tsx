@@ -9,8 +9,8 @@ import { useJoin } from "../_hooks/useJoin";
 import { useGetParticipants } from "../_hooks/useGetParticipants";
 import { useLeaveGathering } from "@/hooks/useLeaveGathering";
 import { useCancelGathering } from "../_hooks/useCancelGathering";
+import { isPastDate } from "@/utils/date";
 import type { GatheringType } from "@/types";
-import dayjs from "dayjs";
 
 type FloatingBarProps = {
   gatheringId: string;
@@ -41,7 +41,7 @@ export default function FloatingBar({ gatheringId, gathering, hostUserId }: Floa
 
   const isHost = user?.id === hostUserId;
   const isJoined = user ? participantIdList?.includes(user?.id) : false;
-  const isValid = dayjs().isBefore(dayjs(registrationEnd));
+  const isValid = !isPastDate(registrationEnd);
 
   const closeModal = () => setActiveModal(null);
 
