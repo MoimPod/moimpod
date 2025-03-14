@@ -10,7 +10,9 @@ export default function ProgressBar({ progress }: ProgressBarProps) {
   const [animatedProgress, setAnimatedProgress] = useState(0); // 초기값 0
 
   useEffect(() => {
-    setAnimatedProgress(progress); // progress 변경 시 애니메이션 적용
+    window.setTimeout(() => {
+      setAnimatedProgress(progress); // progress 변경 시 애니메이션 적용
+    }, 10); // 짧은 딜레이 추가
   }, [progress]);
 
   return (
