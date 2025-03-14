@@ -1,43 +1,34 @@
 "use client";
 
+import { useMemo, useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import Image from "next/image";
+import { format } from "date-fns";
 import ListItem from "@/components/ListItem";
 import DashedLine from "@/components/DashedLine";
 import Score from "@/components/Score";
 import SortButton from "@/components/SortButton";
 import LocationSelect from "@/components/Filtering/LocationSelect";
 import DateSelect from "@/components/Filtering/DateSelect";
-import { useAllReview } from "../_hooks/useAllReview";
-import { useEffect } from "react";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import Image from "next/image";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useQueryParams } from "@/hooks/useQueryParams";
 import ServiceTab from "@/components/ServiceTab";
-import { format } from "date-fns";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { useAllReview } from "../_hooks/useAllReview";
 import { GATHERING_TYPE } from "@/utils/constants";
+import { SORT_OPTION, SORT_MAP } from "../_utils/constants";
 import type { ReviewQuery } from "@/types";
-
-const SORT_OPTION = [
-  { label: "최신순", value: "latest" },
-  { label: "별점 높은순", value: "highScore" },
-  { label: "참여 인원순", value: "highParticipants" },
-];
 
 type AllReviewProps = {
   children: React.ReactNode;
-  defaultQuery: ReviewQuery;
+  reviewQuery: ReviewQuery;
 };
 
-export default function AllReview({ children, defaultQuery }: AllReviewProps) {
-  const router = useRouter();
+export default function AllReview({ children, reviewQuery }: AllReviewProps) {
+  const { replace } = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams.toString());
+  const params = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
 
-  const paramsObj = useQueryParams();
-  const query = Object.keys(paramsObj).length ? paramsObj : defaultQuery;
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useAllReview(query);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useAllReview(reviewQuery);
 
   const { observerRef } = useInfiniteScroll({
     fetchNextPage,
@@ -51,24 +42,19 @@ export default function AllReview({ children, defaultQuery }: AllReviewProps) {
     } else {
       params.delete("type");
     }
-    router.push(`${pathname}?${params.toString()}`);
+
+    replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const handleSelect = (selected: string) => {
-    const sort = selected;
+    const sortConfig = SORT_MAP[selected];
 
-    if (sort === "latest") {
-      params.set("sortBy", "createdAt");
-      params.set("sortOrder", "desc");
-    } else if (sort === "highScore") {
-      params.set("sortBy", "score");
-      params.set("sortOrder", "desc");
-    } else if (sort === "highParticipants") {
-      params.set("sortBy", "participantCount");
-      params.set("sortOrder", "desc");
+    if (sortConfig) {
+      params.set("sortBy", sortConfig.sortBy);
+      params.set("sortOrder", sortConfig.sortOrder);
     }
 
-    router.push(`${pathname}?${params.toString()}`);
+    replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const handleDateSelect = (date: Date | null) => {
@@ -79,7 +65,7 @@ export default function AllReview({ children, defaultQuery }: AllReviewProps) {
       params.delete("date");
     }
 
-    router.push(`${pathname}?${params.toString()}`);
+    replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const handleLocationSelect = (location: string | undefined) => {
@@ -89,15 +75,13 @@ export default function AllReview({ children, defaultQuery }: AllReviewProps) {
       params.delete("location");
     }
 
-    router.push(`${pathname}?${params.toString()}`);
+    replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   useEffect(() => {
-    Object.entries(defaultQuery).forEach(([key, value]) => {
+    Object.entries(reviewQuery).forEach(([key, value]) => {
       if (!params.has(key)) params.set(key, value.toString());
     });
-
-    router.replace(`${pathname}?${params.toString()}`);
   }, []);
 
   return (

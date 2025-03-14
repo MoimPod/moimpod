@@ -9,10 +9,14 @@ import type { ReviewQuery } from "@/types";
 export default async function Page({ searchParams }: { searchParams: Promise<ReviewQuery> }) {
   const query = await searchParams;
 
-  const type = query.type ?? "DALLAEMFIT";
-  const sortBy = query.sortBy ?? "createdAt";
-  const sortOrder = query.sortOrder ?? "desc";
-  const reviewParams = { type, sortBy, sortOrder };
+  const reviewParams = Object.assign(
+    {
+      type: "DALLAEMFIT",
+      sortBy: "createdAt",
+      sortOrder: "desc",
+    },
+    query,
+  );
 
   return (
     <div className="w-full">
@@ -25,7 +29,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Rev
       </div>
 
       <Suspense fallback={<Loading />}>
-        <AllReview defaultQuery={reviewParams}>
+        <AllReview reviewQuery={reviewParams}>
           <ReviewsAverage />
         </AllReview>
       </Suspense>

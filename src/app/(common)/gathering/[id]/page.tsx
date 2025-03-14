@@ -6,6 +6,8 @@ import Gathering from "../_components/Gathering";
 import Reviews from "../_components/Reviews";
 import FloatingBar from "../_components/FloatingBar";
 import { REVIEW_LIMIT } from "../_utils/constants";
+import { getParticipants } from "../_utils/apis";
+import { getReviews } from "@/hooks/useGetReviews";
 import type { GatheringType, ReviewQuery } from "@/types";
 
 export default async function Page({
@@ -17,13 +19,19 @@ export default async function Page({
 }) {
   const { id: gatheringId } = await params;
   const { data: gathering } = await axiosInstance.get<GatheringType>(`/gatherings/${gatheringId}`);
+
   const query = await searchParams;
 
-  const sortBy = query.sortBy ?? "createdAt";
-  const sortOrder = query.sortOrder ?? "desc";
-  const offset = query.offset ?? "0";
-  const limit = query.limit ?? REVIEW_LIMIT.toString();
-  const reviewParams = { limit, offset, sortBy, sortOrder };
+  const reviewParams = Object.assign(
+    {
+      gatheringId: gatheringId,
+      sortBy: "createdAt",
+      sortOrder: "desc",
+      offset: "0",
+      limit: REVIEW_LIMIT.toString(),
+    },
+    query,
+  );
 
   const queryClient = getQueryClient();
 
@@ -31,20 +39,12 @@ export default async function Page({
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: ["participants", gatheringId],
-      queryFn: async () => {
-        const { data } = await axiosInstance.get(`/gatherings/${gatheringId}/participants?limit=100`);
-        return data;
-      },
+      queryFn: () => getParticipants(gatheringId),
     }),
 
     queryClient.prefetchQuery({
-      queryKey: ["reviews", { gatheringId, ...reviewParams }],
-      queryFn: async () => {
-        const { data } = await axiosInstance.get(`/gatherings/${gatheringId}/reviews`, {
-          params: { gatheringId, ...reviewParams },
-        });
-        return data;
-      },
+      queryKey: ["reviews", reviewParams],
+      queryFn: () => getReviews(reviewParams),
     }),
   ]);
 
@@ -55,7 +55,7 @@ export default async function Page({
       <HydrationBoundary state={dehydratedState}>
         <Gathering gatheringId={gatheringId} gathering={gathering} />
         <ErrorBoundary>
-          <Reviews gatheringId={gatheringId} reviewQuery={reviewParams} />
+          <Reviews reviewQuery={reviewParams} />
         </ErrorBoundary>
       </HydrationBoundary>
 

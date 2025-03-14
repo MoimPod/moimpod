@@ -11,12 +11,10 @@ export const getReviews = async (query?: ReviewQuery): Promise<ReviewsResponse> 
   }
 };
 
-export const useGetReviews = (gatheringId?: string, query?: ReviewQuery) => {
-  const reviewQuery = { gatheringId, ...query };
-
+export const useGetReviews = (query?: ReviewQuery) => {
   return useSuspenseQuery({
-    queryKey: ["reviews", reviewQuery],
-    queryFn: () => getReviews(reviewQuery),
+    queryKey: ["reviews", query],
+    queryFn: () => getReviews(query),
     select: (data) => ({
       reviews: data.data.map((review) => ({
         id: review.id,
