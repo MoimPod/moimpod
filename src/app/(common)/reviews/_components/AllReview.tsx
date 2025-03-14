@@ -129,7 +129,7 @@ export default function AllReview({ children, reviewQuery }: AllReviewProps) {
                     </div>
 
                     <ListItem.MetaInfo
-                      imageUrl={item.user.image ?? "/images/default_image.png"}
+                      imageUrl={item.user.image}
                       primary={item.user.name}
                       secondary={item.gathering.dateTime}
                     />

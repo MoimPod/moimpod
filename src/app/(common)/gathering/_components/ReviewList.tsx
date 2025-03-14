@@ -14,7 +14,7 @@ export default function ReviewList({ reviewList }: { reviewList: Review[] }) {
                 <Score score={item.score} />
                 <ListItem.Body>{item.comment}</ListItem.Body>
               </div>
-              <ListItem.MetaInfo primary={item.user.name} secondary={item.createdAt} />
+              <ListItem.MetaInfo imageUrl={item.user.image} primary={item.user.name} secondary={item.createdAt} />
             </ListItem>
             <DashedLine className="mt-4" />
           </div>
