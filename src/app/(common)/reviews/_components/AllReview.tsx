@@ -3,6 +3,7 @@
 import { useMemo, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { format } from "date-fns";
 import ListItem from "@/components/ListItem";
 import DashedLine from "@/components/DashedLine";
@@ -109,31 +110,33 @@ export default function AllReview({ children, reviewQuery }: AllReviewProps) {
             {data?.reviews?.length > 0 ? (
               data.reviews.map((item, idx) => (
                 <div key={item.id}>
-                  <ListItem
-                    CardImage={
-                      <Image
-                        src={item.gathering.image}
-                        alt="모임 이미지"
-                        width={280}
-                        height={156}
-                        className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
-                      />
-                    }
-                  >
-                    <div className="mb-2 flex flex-col gap-3">
-                      <Score score={item.score} />
-                      <ListItem.Body>{item.comment}</ListItem.Body>
-                      <ListItem.ServiceInfo>
-                        {GATHERING_TYPE[item.gathering.type]} 이용 · {item.gathering.location}
-                      </ListItem.ServiceInfo>
-                    </div>
+                  <Link href={`/gathering/${item.gathering.id}`}>
+                    <ListItem
+                      CardImage={
+                        <Image
+                          src={item.gathering.image}
+                          alt="모임 이미지"
+                          width={280}
+                          height={156}
+                          className="h-[156px] w-full rounded-3xl md:max-w-[280px]"
+                        />
+                      }
+                    >
+                      <div className="mb-2 flex flex-col gap-3">
+                        <Score score={item.score} />
+                        <ListItem.Body>{item.comment}</ListItem.Body>
+                        <ListItem.ServiceInfo>
+                          {GATHERING_TYPE[item.gathering.type]} 이용 · {item.gathering.location}
+                        </ListItem.ServiceInfo>
+                      </div>
 
-                    <ListItem.MetaInfo
-                      imageUrl={item.user.image}
-                      primary={item.user.name}
-                      secondary={item.gathering.dateTime}
-                    />
-                  </ListItem>
+                      <ListItem.MetaInfo
+                        imageUrl={item.user.image}
+                        primary={item.user.name}
+                        secondary={item.gathering.dateTime}
+                      />
+                    </ListItem>
+                  </Link>
                   <DashedLine className="mt-4" />
                   {idx === data.reviews.length - 1 ? <div ref={observerRef} /> : null}
                 </div>
