@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import CategoryButton from "@/components/CategoryButton";
-import Tab from "@/components/Tab";
+import MainTab from "@/components/MainTab";
 import Dalaemfit from "@/images/dalaemfit.svg";
 import Workation from "@/images/workation.svg";
 
@@ -38,10 +38,21 @@ export default function ServiceTab({ onCategoryChange, isFilteringLoading }: Ser
   //searchParams 변경 감지해서 반영
   useEffect(() => {
     const currentType = searchParams.get("type") || "DALLAEMFIT";
+
     console.log("선택된 타입: ", currentType);
-    if (currentType !== selectedTab) {
-      //setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
-      setSelectedTab(SERVICE_TABS.find((t) => t.type === currentType)?.name || "달램핏");
+
+    if (currentType) {
+      const tabName = SERVICE_TABS.find((t) => t.type === currentType)?.name;
+
+      console.log("찾은 탭 이름1:", tabName);
+      console.log("selectedTab은? ", selectedTab);
+      if (tabName && tabName == selectedTab) {
+        setSelectedTab(tabName);
+        console.log("찾은 탭 이름2:", tabName);
+
+        // 📌 `handleTabChange` 실행 (중복 실행 방지됨)
+        handleTabChange(tabName);
+      }
     }
   }, [searchParams]);
 
@@ -52,7 +63,12 @@ export default function ServiceTab({ onCategoryChange, isFilteringLoading }: Ser
     const tabType = SERVICE_TABS.find((t) => t.name === tabName)?.type;
     if (!tabType) return;
 
-    setSelectedTab(tabName);
+    // URL의 type 값을 가져와서 selectedTab 업데이트
+    const currentType = searchParams.get("type") || tabType; // 없으면 클릭한 탭을 기본값으로
+    console.log("핸들러 실행됨11:", currentType);
+    setSelectedTab(currentType);
+
+    setSelectedTab(tabType);
     onCategoryChange(tabType);
     handleCategoryReset();
   };
@@ -75,7 +91,7 @@ export default function ServiceTab({ onCategoryChange, isFilteringLoading }: Ser
 
   return (
     <>
-      <Tab
+      <MainTab
         category={
           <CategoryButton
             categories={CATEGORIES.map((c) => c.name)}
@@ -91,7 +107,7 @@ export default function ServiceTab({ onCategoryChange, isFilteringLoading }: Ser
         targetIndex={0}
       >
         {SERVICE_TABS.map((tabItem, idx) => (
-          <Tab.Item key={tabItem.name} index={idx}>
+          <MainTab.Item key={tabItem.name} index={idx}>
             <button
               onClick={() => handleTabChange(tabItem.name)}
               className="flex items-center"
@@ -100,9 +116,9 @@ export default function ServiceTab({ onCategoryChange, isFilteringLoading }: Ser
               {tabItem.name}
               <tabItem.icon className="items-center" />
             </button>
-          </Tab.Item>
+          </MainTab.Item>
         ))}
-      </Tab>
+      </MainTab>
     </>
   );
 }
