@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import CategoryButton from "@/components/CategoryButton";
-import Tab from "@/components/Tab";
+import MainTab from "@/components/MainTab";
 import Dalaemfit from "@/images/dalaemfit.svg";
 import Workation from "@/images/workation.svg";
 
@@ -23,26 +24,29 @@ type ServiceTabProps = {
   isFilteringLoading?: boolean; // 필터링 중인지 판단하는 변수
 };
 
-export default function ServiceTab({ searchParams, onCategoryChange, isFilteringLoading }: ServiceTabProps) {
-  const [selectedTab, setSelectedTab] = useState<"DALLAEMFIT" | "WORKATION">(
-    () => (searchParams.get("type") || "DALLAEMFIT") as "DALLAEMFIT" | "WORKATION",
+export default function ServiceTab({ onCategoryChange, isFilteringLoading }: ServiceTabProps) {
+  const searchParams = useSearchParams();
+
+  const [selectedTab, setSelectedTab] = useState<string>(
+    () => SERVICE_TABS.find((t) => t.type === searchParams.get("type"))?.name || "DALLAEMFIT",
   );
-  const [selectedCategory, setSelectedCategory] = useState<string>("전체");
 
-  // URL이 변경되었을 때 필터링 로딩 상태 해제
-  useEffect(() => {
-    if (!isFilteringLoading) return;
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    () => CATEGORIES.find((c) => c.type === searchParams.get("type"))?.name || "전체",
+  );
 
-    const currentType = searchParams.get("type") || "DALLAEMFIT";
-    setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
-  }, [searchParams, isFilteringLoading]);
-
-  // searchParams 변경 감지해서 반영
+  //searchParams 변경 감지해서 반영
   useEffect(() => {
     const currentType = searchParams.get("type") || "DALLAEMFIT";
 
-    if (currentType !== selectedTab) {
-      setSelectedTab(currentType as "DALLAEMFIT" | "WORKATION");
+    if (currentType) {
+      const tabName = SERVICE_TABS.find((t) => t.type === currentType)?.name;
+
+      if (tabName && tabName == selectedTab) {
+        setSelectedTab(tabName);
+
+        handleTabChange(tabName);
+      }
     }
   }, [searchParams]);
 
@@ -53,8 +57,11 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
     const tabType = SERVICE_TABS.find((t) => t.name === tabName)?.type;
     if (!tabType) return;
 
-    setSelectedTab(tabType as "DALLAEMFIT" | "WORKATION");
+    // URL의 type 값을 가져와서 selectedTab 업데이트
+    const currentType = searchParams.get("type") || tabType; // 없으면 클릭한 탭을 기본값으로
+    setSelectedTab(currentType);
 
+    setSelectedTab(tabType);
     onCategoryChange(tabType);
     handleCategoryReset();
   };
@@ -77,7 +84,7 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
 
   return (
     <>
-      <Tab
+      <MainTab
         category={
           <CategoryButton
             categories={CATEGORIES.map((c) => c.name)}
@@ -93,7 +100,7 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
         targetIndex={0}
       >
         {SERVICE_TABS.map((tabItem, idx) => (
-          <Tab.Item key={tabItem.name} index={idx}>
+          <MainTab.Item key={tabItem.name} index={idx}>
             <button
               onClick={() => handleTabChange(tabItem.name)}
               className="flex items-center"
@@ -102,9 +109,9 @@ export default function ServiceTab({ searchParams, onCategoryChange, isFiltering
               {tabItem.name}
               <tabItem.icon className="items-center" />
             </button>
-          </Tab.Item>
+          </MainTab.Item>
         ))}
-      </Tab>
+      </MainTab>
     </>
   );
 }

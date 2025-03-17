@@ -70,7 +70,7 @@ export default function Card({
       variants={cardVariants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
-      transition={{ duration: 0.7, ease: "easeInOut" }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
       className="relative my-5"
     >
       <div
