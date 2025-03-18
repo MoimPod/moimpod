@@ -20,7 +20,7 @@
 
   
 ### 🔹 데모
-[MoimPod](https://moimpod-chi.vercel.app/)
+[MoimPod](https://moimpod.vercel.app/)
 
 ### 🔹 스크린샷
 ![스크린샷 2025-03-17 오후 3 16 05](https://github.com/user-attachments/assets/4b383c23-27da-4d30-88f0-57147208eab6)
